@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FOAD PILOT 85</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout : navigation latérale bleu nuit + espace de travail en cartes légères ; pile verticale sous 900px */
+:root{
+  --nav:#12203a; --nav-2:#1b2c4d; --nav-fg:#c3cde0; --nav-on:#ffffff;
+  --bg:#f2f4f8; --surface:#ffffff; --surface-2:#f7f8fb; --line:#dce1ea; --line-2:#c7cfdc;
+  --fg:#18202f; --muted:#5b6578; --faint:#8790a1;
+  --red:#c0142f; --red-soft:#fbe9ec;
+  --ok:#1d7f47; --ok-soft:#e5f4ea; --warn:#b4620a; --warn-soft:#fdf1e1;
+  --bad:#c62828; --bad-soft:#fdeaea; --info:#1f5ea8; --info-soft:#e7effa;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"Public Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --nav:#0a111d; --nav-2:#15223a; --nav-fg:#a9b5ca; --nav-on:#ffffff;
+  --bg:#0e1522; --surface:#151e2e; --surface-2:#1a2436; --line:#27334a; --line-2:#36445f;
+  --fg:#e6eaf1; --muted:#9aa5b8; --faint:#6f7a8f;
+  --red:#e9495f; --red-soft:#3a1c24;
+  --ok:#47bd7c; --ok-soft:#163324; --warn:#f0a443; --warn-soft:#3a2a14;
+  --bad:#f06060; --bad-soft:#3b1c1e; --info:#6ea6ec; --info-soft:#17283f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --nav:#0a111d; --nav-2:#15223a; --nav-fg:#a9b5ca; --nav-on:#ffffff;
+  --bg:#0e1522; --surface:#151e2e; --surface-2:#1a2436; --line:#27334a; --line-2:#36445f;
+  --fg:#e6eaf1; --muted:#9aa5b8; --faint:#6f7a8f;
+  --red:#e9495f; --red-soft:#3a1c24;
+  --ok:#47bd7c; --ok-soft:#163324; --warn:#f0a443; --warn-soft:#3a2a14;
+  --bad:#f06060; --bad-soft:#3b1c1e; --info:#6ea6ec; --info-soft:#17283f; color-scheme:dark}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.45}
+*{box-sizing:border-box}
+#root{min-height:100%}
+.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.side{background:var(--nav);color:var(--nav-fg);display:flex;flex-direction:column;gap:18px;padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:16px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;flex-direction:column;gap:2px;padding:0 6px}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:.02em;color:var(--nav-on)}
+.brand b em{font-style:normal;color:var(--red)}
+.brand span{font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav .grp{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:12px 8px 4px}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;color:var(--nav-fg);font-weight:500}
+.nav button:hover{background:var(--nav-2);color:var(--nav-on)}
+.nav button.on{background:var(--nav-2);color:var(--nav-on);box-shadow:inset 3px 0 0 var(--red)}
+.nav button:focus-visible{outline:2px solid var(--nav-on);outline-offset:1px}
+.nav .count{margin-left:auto;font-family:var(--f-mono);font-size:11px;background:var(--red);color:#fff;border-radius:9px;padding:0 6px}
+.ico{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.side-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;font-size:12px}
+.side-foot select{width:100%;background:var(--nav-2);color:var(--nav-on);border:1px solid var(--nav-2);border-radius:6px;padding:7px}
+.side-foot small{color:var(--faint);line-height:1.35}
+.mode{display:flex;gap:6px;align-items:flex-start;padding:8px;border-radius:6px;background:var(--nav-2);line-height:1.3}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;margin-top:4px}
+main{min-width:0;padding-block:22px 60px;padding-left:28px;padding-right:max(28px,env(safe-area-inset-right,0px))}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.top h1{font-family:var(--f-display);font-weight:700;font-size:24px;margin:0;letter-spacing:-.005em;text-wrap:balance}
+.top p{margin:2px 0 0;color:var(--muted);max-width:70ch}
+.eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;min-width:0}
+.card h2,.card h3{font-family:var(--f-display);margin:0 0 10px;font-weight:700}
+.card h2{font-size:16px}.card h3{font-size:14px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:4px;text-align:left;font:inherit;color:inherit}
+button.kpi{cursor:pointer}button.kpi:hover{border-color:var(--line-2)}
+.kpi .v{font-family:var(--f-display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi.t-ok{border-top:3px solid var(--ok)}.kpi.t-warn{border-top:3px solid var(--warn)}.kpi.t-bad{border-top:3px solid var(--bad)}.kpi.t-info{border-top:3px solid var(--info)}.kpi.t-n{border-top:3px solid var(--line-2)}.kpi.t-red{border-top:3px solid var(--red)}
+.btn{font:inherit;font-weight:600;font-size:13px;border-radius:6px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg);padding:7px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.p{background:var(--red);border-color:var(--red);color:#fff}.btn.p:hover{filter:brightness(1.06)}
+.btn.q{border-color:transparent;background:transparent;color:var(--info)}
+.btn.sm{padding:4px 8px;font-size:12px}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--info);outline-offset:1px}
+input,select,textarea{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line-2);border-radius:6px;padding:7px 9px;width:100%;min-width:0}
+textarea{min-height:68px;resize:vertical}
+input[type=checkbox]{width:auto}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:10px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.badge.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.badge.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.badge.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.badge.info{background:var(--info-soft);color:var(--info);border-color:transparent}
+.badge.red{background:var(--red-soft);color:var(--red);border-color:transparent}
+.mono{font-family:var(--f-mono);font-size:12px}
+.muted{color:var(--muted)}.small{font-size:12px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);white-space:nowrap;position:sticky;top:0}
+th.sort{cursor:pointer}th.sort:hover{color:var(--fg)}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.filters{display:grid;grid-template-columns:2fr repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tabs button{all:unset;cursor:pointer;padding:9px 12px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--fg);border-color:var(--red)}
+.tabs button:focus-visible{outline:2px solid var(--info)}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field.wide{grid-column:1/-1}
+.flabel{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.flabel label{font-size:12px;font-weight:600;color:var(--muted)}
+.req{color:var(--red);margin-left:2px}
+.conf{font-size:10.5px;font-weight:600;border-radius:9px;padding:1px 6px;border:1px solid transparent;width:auto;min-width:0}
+select.conf{padding:1px 4px;cursor:pointer}
+.c-connu{background:var(--ok-soft);color:var(--ok)}.c-suppose{background:var(--info-soft);color:var(--info)}.c-a_confirmer{background:var(--warn-soft);color:var(--warn)}
+.c-none{background:transparent;color:var(--faint);border:1px dashed var(--line-2)}
+.field.empty input,.field.empty textarea,.field.empty select:not(.conf){border-style:dashed}
+.hint{font-size:11.5px;color:var(--faint)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg);border-radius:14px;padding:3px 10px;cursor:pointer}
+.chip.on{background:var(--info-soft);color:var(--info);border-color:var(--info)}
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar-row{display:grid;grid-template-columns:minmax(90px,38%) 1fr 44px;gap:8px;align-items:center;font-size:12.5px}
+.bar-l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.bar-t{height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.bar-t i{display:block;height:100%;border-radius:5px}
+.bar-v{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-size:12px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:6px;background:var(--surface-2);border-left:3px solid var(--line-2)}
+.alert.bad{border-color:var(--bad);background:var(--bad-soft)}.alert.warn{border-color:var(--warn);background:var(--warn-soft)}.alert.info{border-color:var(--info);background:var(--info-soft)}
+.alert b{font-weight:600}
+.list{display:flex;flex-direction:column;gap:8px}
+.kanban{display:grid;grid-auto-flow:column;grid-auto-columns:250px;gap:10px;overflow-x:auto;padding-bottom:10px;align-items:start}
+.col{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:8px;display:flex;flex-direction:column;gap:8px;min-height:120px}
+.col.over{border-color:var(--info);background:var(--info-soft)}
+.col h4{margin:2px 4px;font-family:var(--f-display);font-size:13px;display:flex;justify-content:space-between}
+.kcard{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px;display:flex;flex-direction:column;gap:6px;cursor:grab}
+.kcard.p-Haute{border-left:3px solid var(--red)}.kcard.p-Moyenne{border-left:3px solid var(--warn)}.kcard.p-Basse{border-left:3px solid var(--line-2)}
+.kcard b{font-size:13px;line-height:1.3}
+.prog{height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden}.prog i{display:block;height:100%;background:var(--info)}
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:6px;max-width:420px;z-index:50;font-size:13px}
+.empty-state{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line-2);border-radius:var(--r)}
+.sim-out td,.sim-out th{padding:6px 8px}
+.scale{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.scale button{font:inherit;text-align:left;border:1px solid var(--line-2);border-radius:6px;background:var(--surface);color:var(--fg);padding:10px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.scale button.on{border-color:var(--info);box-shadow:inset 0 0 0 1px var(--info)}
+.scale .lv{font-weight:700;display:flex;gap:6px;align-items:center}
+.sw{width:10px;height:10px;border-radius:50%}
+.range3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.range3 div{border:1px solid var(--line);border-radius:6px;padding:10px;background:var(--surface-2)}
+.range3 .c{background:var(--info-soft);border-color:var(--info)}
+.range3 b{font-family:var(--f-display);font-size:22px;font-variant-numeric:tabular-nums;display:block}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.cat-card{display:flex;flex-direction:column;gap:8px}
+.cat-card .pic{width:40px;height:40px;border-radius:8px;background:var(--nav);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:13px}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;counter-reset:s}
+.steps div{border:1px solid var(--line);border-radius:6px;padding:10px;background:var(--surface);font-size:12.5px}
+.steps div::before{counter-increment:s;content:counter(s);display:block;font-family:var(--f-mono);color:var(--red);font-weight:600}
+.circuit{display:flex;flex-direction:column;gap:6px}
+.circuit .st{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:6px}
+.report{max-width:900px}
+.report h2{font-family:var(--f-display);font-size:17px;margin:22px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--red)}
+.report p,.report li{max-width:75ch}
+.split{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px}
+.backbtn{all:unset;cursor:pointer;color:var(--info);font-weight:600;font-size:13px}
+.note{font-size:12.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.compl{display:flex;align-items:center;gap:8px}.compl .prog{width:90px}
+.check{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--line)}
+.check span small{display:block;color:var(--faint)}
+@media (max-width:1100px){.filters{grid-template-columns:repeat(3,minmax(0,1fr))}.filters>:first-child{grid-column:1/-1}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.split{grid-template-columns:1fr}}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:10px}
+  .nav{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:4px}
+  .nav .grp{display:none}.nav button{white-space:nowrap}
+  .side-foot{flex-direction:row;flex-wrap:wrap;align-items:center}.side-foot select{width:auto}.side-foot small{display:none}
+  main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .g2,.g3,.form{grid-template-columns:1fr}.scale{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){.filters{grid-template-columns:1fr 1fr}.range3{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+</head>
+<body>
+<div id="root"><div style="padding:40px;font-family:var(--f-body);color:var(--muted)">Chargement de FOAD PILOT 85…</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+<script>
+(function(){
+"use strict";
+const {useState,useEffect,useMemo,useRef}=React;
+const html=htm.bind(React.createElement);
+
+/* ============ RÉFÉRENTIELS PAR DÉFAUT (modifiables dans Paramètres) ============ */
+const ETAPES=['À qualifier','Idée','Demande déposée','Cadrage','Arbitrage','Conception','Relecture métier','Expérimentation','Corrections','Validation','Publication','Exploitation','Révision','Archivage','Abandonné'];
+const TERMINAUX=['Exploitation','Archivage','Abandonné'];
+const G_DISCUSSION=['Idée','Demande déposée','Cadrage','Arbitrage'];
+const G_CONCEPTION=['Conception','Relecture métier','Corrections'];
+const TYPES=['Parcours','Module','Microlearning','Ressource','Évaluation','Thème à préciser'];
+const NATURES=['Formation initiale / intégration','Adaptation à l\'emploi','FMPA (maintien et perfectionnement)','Révision','Nouvelle compétence','Outil numérique','Évolution réglementaire'];
+const CARACTERES=['Obligatoire','Recommandé','Facultatif'];
+const AUTONOMIES=['Autonome','Préalable à un présentiel','Complément d\'un présentiel'];
+const PUBLICS=['SPP','SPV','PATS','SSSM','Autres'];
+const ST_CONCEPTION=['Non démarrée','En cours','Terminée','Suspendue'];
+const ST_PUBLICATION=['Non publiée','En préparation','Publiée','Retirée'];
+const ST_VALID=['Non sollicité','En attente','Accordé','Accordé avec réserves','Refusé','À reprendre'];
+const CIRCUIT=['Cadrage validé','Contenu technique validé','Contenu pédagogique validé','Conformité réglementaire vérifiée','Tests fonctionnels réalisés','Expérimentation terminée','Corrections intégrées','Autorisation de diffusion délivrée'];
+const PRIORITES=['Haute','Moyenne','Basse'];
+const REVISIONS=['Correction mineure','Actualisation documentaire','Révision pédagogique','Révision réglementaire','Refonte complète'];
+const NATURE_REGLE=['Texte réglementaire vérifié','Décision locale validée','Procédure interne formalisée','Recommandation de bonne pratique','Proposition à arbitrer','Information à vérifier'];
+const CAT_REGLE=['Textes et références','Modalités de formation','Indemnisation et valorisation','Qualité et validation'];
+const FAMILLES=['Bannières','Blocs d\'information','Blocs importants','Alertes','Accordéons','Cartes','Chronologies','Quiz','Mises en situation','Schémas','Images annotées','Tableaux','Vidéos','Animations','Infographies','Arbres décisionnels','Composants HTML','Composants Storyline','Modèles Rise','Badges','Attestations','Charte graphique'];
+const ST_DEMANDE=['Brouillon','Déposée','En instruction','Acceptée','Réorientée','Refusée'];
+const ENASIS_CHECK=[
+ ['scorm','Export SCORM','Rise'],['config','Configuration du cours','Moodle'],['inscr','Paramètres d\'inscription','Moodle'],['groupes','Groupes','Moodle'],
+ ['restr','Restrictions d\'accès','Moodle'],['achev','Conditions d\'achèvement','Moodle + Rise'],['quiz','Paramètres des quiz','Rise'],['progr','Progression','Rise'],
+ ['durees','Durées affichées','Rise + Moodle'],['videos','Vidéos (lecture, poids, sous-titres)','Rise'],['badges','Badges ou attestations','Moodle'],['notif','Notifications','Moodle'],
+ ['devices','Tests ordinateur / tablette / mobile','Rise'],['liens','Vérification des liens','Rise'],['acces','Contrôle des accès','ENASIS'],['publi','Publication','ENASIS'],
+ ['comm','Communication aux agents','ENASIS'],['rapports','Suivi des rapports','Moodle']];
+const DEFAULT_PARAMS={
+ domaines:['NexSIS 18-112','Incendie','SSUAP','Opérations diverses','Encadrement / commandement','SIC','Prévention / prévision','Outils numériques','Administration / RH','Tronc commun'],
+ fonctions:['Équipier incendie','Équipier SSUAP','Équipier opérations diverses','Chef d\'agrès une équipe','Chef d\'agrès tout engin','Chef de groupe','Opérateur CTA-CODIS','Référent CIS','Référent départemental','Formateur'],
+ ratios:{simple:30,intermediaire:60,avance:110,expert:180},
+ phases:{cadrage:8,scenarisation:15,redaction:25,rise:25,tests:7,corrections:8,publication:4,documentation:5,maintenance:3},
+ unit:{video:5,interaction:1,quiz:2,html:4,storyline:16,sequence:1,audioMin:0.5,relecteur:2,cycle:12,integrationBase:2,integrationHtml:0.5,graphLeger:6,graphFort:20},
+ qualite:{bonnes:0.8,partielles:1,absentes:1.35},
+ fourchette:{bas:0.8,haut:1.35},
+ tauxHoraire:null,
+ seuilAlerte:30,
+ revisionMois:12
+};
+const COLS=['foad','demandes','validations','regles','composants','journal'];
+
+/* ============ OUTILS ============ */
+const today=()=>new Date().toISOString().slice(0,10);
+const nowIso=()=>new Date().toISOString();
+const uid=p=>p+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const isEmpty=v=>v===undefined||v===null||v===''||(Array.isArray(v)&&v.length===0);
+const fmtD=d=>d?new Date(d+(d.length===10?'T12:00:00':'')).toLocaleDateString('fr-FR'):'—';
+const fmtDT=d=>d?new Date(d).toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'}):'—';
+const fmtH=h=>h==null||h===''||isNaN(h)?'—':(Math.round(h*10)/10).toLocaleString('fr-FR')+' h';
+const fmtMin=m=>{if(isEmpty(m))return '—';m=+m;return m>=60?(Math.floor(m/60)+' h'+(m%60?' '+String(m%60).padStart(2,'0'):'')):m+' min'};
+const num=v=>isEmpty(v)?null:+v;
+const daysTo=d=>d?Math.round((new Date(d+'T12:00:00')-new Date(today()+'T12:00:00'))/864e5):null;
+const merge=(a,b)=>{const o={...a};for(const k in b){o[k]=(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k]))?{...(a[k]||{}),...b[k]}:b[k]}return o};
+const clone=o=>JSON.parse(JSON.stringify(o));
+const LS='foadpilot85.local.v1';
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+const validTone=v=>({'Accordé':'ok','Accordé avec réserves':'warn','Refusé':'bad','À reprendre':'bad','En attente':'info'})[v]||'';
+const pubTone=v=>({'Publiée':'ok','En préparation':'info','Retirée':'bad'})[v]||'';
+const etapeTone=e=>e==='Exploitation'?'ok':e==='Abandonné'||e==='Archivage'?'':e==='À qualifier'?'warn':G_DISCUSSION.includes(e)?'':'info';
+const diffusionOk=f=>['Accordé','Accordé avec réserves'].includes((f.valid||{})['Autorisation de diffusion délivrée']);
+
+/* ============ ICÔNES ============ */
+const P={
+ dash:'M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z',
+ reg:'M4 4h16v16H4zM4 9h16M4 14h16M9 4v16',
+ kan:'M4 4h4v16H4zM10 4h4v10h-4zM16 4h4v7h-4z',
+ dem:'M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M9 14h6M9 18h4',
+ sim:'M4 4h16v16H4zM8 8h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h4',
+ gov:'M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7zM9 12l2 2 4-4',
+ cmp:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',
+ cat:'M4 6h16M4 12h16M4 18h10',
+ rep:'M5 20V10M12 20V4M19 20v-7',
+ set:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.7-1.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z',
+ log:'M12 8v4l3 2M21 12a9 9 0 1 1-9-9 9 9 0 0 1 9 9z',
+ plus:'M12 5v14M5 12h14',
+ dl:'M12 3v12M7 10l5 5 5-5M5 21h14'
+};
+const Ico=({n})=>html`<svg className="ico" viewBox="0 0 24 24" aria-hidden="true"><path d=${P[n]}/></svg>`;
+const Badge=({tone,children,title})=>html`<span className=${'badge '+(tone||'')} title=${title||undefined}>${children}</span>`;
+
+/* ============ STORE : base Supabase du SDIS 85 ============ */
+const SB_URL='https://jsekwnezjbphdchoonrq.supabase.co';
+const SB_KEY='sb_publishable_fwDEURtKdlIwWG4XD_LWMA_xiO6pKy7';
+const sb=window.supabase.createClient(SB_URL,SB_KEY);
+function useStore(){
+ const blank={foad:[],demandes:[],validations:[],regles:[],composants:[],journal:[]};
+ const [st,setSt]=useState({mode:'loading',data:blank,params:null,me:null,canWrite:false,stale:false,dbError:null,canDownload:true});
+ const R=useRef({me:null,editor:false});
+ useEffect(()=>{
+  let alive=true;
+  const load=async()=>{let all=[],from=0;for(;;){const {data,error}=await sb.from('records').select('col,id,data').range(from,from+999);if(error)throw error;all=all.concat(data);if(data.length<1000)break;from+=1000}return all};
+  load().then(rows=>{if(!alive)return;const data={...blank};let params=null;
+    rows.forEach(r=>{if(r.col==='config'){if(r.id==='params')params=r.data}else data[r.col]=(data[r.col]||[]).concat([{...r.data,id:r.id}])});
+    setSt(s=>({...s,mode:'db',data,params}))}).catch(e=>setSt(s=>({...s,mode:'error',dbError:e.message||'connexion impossible'})));
+  const ch=sb.channel('records-live').on('postgres_changes',{event:'*',schema:'public',table:'records'},p=>{
+    setSt(s=>{const row=p.eventType==='DELETE'?p.old:p.new;if(!row||!row.col)return s;const col=row.col,id=row.id;
+     if(col==='config')return id==='params'?{...s,params:p.eventType==='DELETE'?null:row.data}:s;
+     const arr=(s.data[col]||[]).filter(r=>r.id!==id);if(p.eventType!=='DELETE')arr.push({...row.data,id});
+     return {...s,data:{...s.data,[col]:arr}}})
+   }).subscribe(status=>{if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')setSt(s=>({...s,stale:true}));if(status==='SUBSCRIBED')setSt(s=>({...s,stale:false}))});
+  const onAuth=async session=>{const email=(session&&session.user&&session.user.email)||null;let ed=false;
+   if(email){try{const {data}=await sb.rpc('is_editor');ed=!!data}catch(e){}}
+   R.current.me=email;R.current.editor=ed;if(alive)setSt(s=>({...s,me:email,canWrite:ed}))};
+  sb.auth.getSession().then(({data})=>onAuth(data.session));
+  const {data:sub}=sb.auth.onAuthStateChange((_e,session)=>{setTimeout(()=>onAuth(session),0)});
+  return ()=>{alive=false;sb.removeChannel(ch);sub.subscription.unsubscribe()};
+ },[]);
+ const api=useMemo(()=>{
+  const fail=error=>{throw {code:error.code,message:error.message}};
+  const save=async(col,id,body)=>{
+   const b=clone(body);delete b.id;
+   if(col!=='journal'&&col!=='validations'){b.updatedAt=nowIso();b.updatedBy=R.current.me}
+   const appendOnly=col==='journal'||col==='validations'||!R.current.editor;
+   const q=appendOnly?sb.from('records').insert({col,id,data:b}):sb.from('records').upsert({col,id,data:b},{onConflict:'col,id'});
+   const {error}=await q;if(error)fail(error);
+   setSt(s=>({...s,data:{...s.data,[col]:s.data[col].filter(r=>r.id!==id).concat([{...b,id}])}}));
+  };
+  const remove=async(col,id)=>{const {error}=await sb.from('records').delete().eq('col',col).eq('id',id);if(error)fail(error);
+   setSt(s=>({...s,data:{...s.data,[col]:s.data[col].filter(r=>r.id!==id)}}))};
+  const log=async(foad,type,texte)=>{try{await save('journal',uid('J'),{at:nowIso(),by:R.current.me,foad:foad||null,type,texte})}catch(e){}};
+  const saveParams=async p=>{const {error}=await sb.from('records').upsert({col:'config',id:'params',data:clone(p)},{onConflict:'col,id'});if(error)fail(error);setSt(s=>({...s,params:clone(p)}))};
+  const download=async(filename,data)=>{const blob=new Blob([data],{type:filename.endsWith('.json')?'application/json':filename.endsWith('.csv')?'text/csv':'text/html'});
+   const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);return {status:'saved'}};
+  const names=async()=>({});
+  const login=async email=>{const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});if(error)fail(error)};
+  const logout=async()=>{await sb.auth.signOut()};
+  return {save,remove,log,saveParams,download,names,login,logout};
+ },[]);
+ return [st,api];
+}
+function Login({S,api,toast}){
+ const [open,setOpen]=useState(false);const [em,setEm]=useState('');const [sent,setSent]=useState(false);
+ if(S.me)return html`<div className="mode" style=${{flexDirection:'column'}}><span>${S.me}</span><span style=${{color:S.canWrite?'var(--ok)':'var(--warn)'}}>${S.canWrite?'Éditeur : modification autorisée':'Adresse non autorisée : lecture seule'}</span><button className="btn sm" onClick=${api.logout}>Se déconnecter</button></div>`;
+ if(sent)return html`<div className="mode">Lien de connexion envoyé à ${em}. Ouvrez-le dans ce navigateur.</div>`;
+ if(!open)return html`<button className="btn sm" onClick=${()=>setOpen(true)}>Connexion éditeur</button>`;
+ return html`<form className="mode" style=${{flexDirection:'column'}} onSubmit=${async e=>{e.preventDefault();try{await api.login(em.trim());setSent(true)}catch(x){toast('Envoi impossible : '+(x.message||x.code))}}}>
+  <label htmlFor="login-em">Adresse mail d'éditeur</label><input id="login-em" type="email" required value=${em} onChange=${e=>setEm(e.target.value)}/><button className="btn sm p" type="submit">Recevoir le lien</button></form>`;
+}
+
+/* ============ CALCULS MÉTIER ============ */
+const KEY_FIELDS=[['titre','Intitulé'],['domaine','Domaine'],['type','Type'],['objectifs','Objectifs'],['publics','Public'],['caractere','Caractère'],['dureeTheo','Durée théorique'],['respPeda','Responsable pédagogique'],['expert','Expert métier'],['concepteur','Concepteur'],['version','Version'],['evaluation','Modalités d\'évaluation'],['achevement','Conditions d\'achèvement']];
+function completeness(f){
+ const keys=KEY_FIELDS.slice();
+ if(f.statutPublication==='Publiée'){keys.push(['datePublication','Date de publication'],['lienEnasis','Lien ENASIS'],['prochaineRevision','Prochaine révision'],['autoriteDiffusion','Autorité de diffusion'])}
+ const miss=keys.filter(([k])=>isEmpty(f[k]));
+ const toConfirm=Object.entries(f.conf||{}).filter(([k,v])=>v==='a_confirmer'&&!isEmpty(f[k])).length;
+ return {pct:Math.round((keys.length-miss.length)/keys.length*100),miss,toConfirm};
+}
+function alertsFor(f,vals,params){
+ const a=[];const s=params.seuilAlerte||30;
+ if(['Archivage','Abandonné'].includes(f.etape))return a;
+ const dc=daysTo(f.dateCible);
+ if(dc!=null&&dc<0&&!TERMINAUX.includes(f.etape))a.push({l:'bad',t:'Date cible dépassée de '+(-dc)+' j'});
+ else if(dc!=null&&dc<=s&&!TERMINAUX.includes(f.etape))a.push({l:'warn',t:'Date cible dans '+dc+' j'});
+ if(!isEmpty(f.blocages))a.push({l:'bad',t:'Point bloquant : '+f.blocages});
+ const dr=daysTo(f.prochaineRevision);
+ if(dr!=null&&dr<0)a.push({l:'bad',t:'Révision dépassée ('+fmtD(f.prochaineRevision)+')'});
+ else if(dr!=null&&dr<=s)a.push({l:'warn',t:'Révision à prévoir le '+fmtD(f.prochaineRevision)});
+ if(f.revisionNecessaire)a.push({l:'warn',t:'Révision identifiée'+(f.typeRevision?' : '+f.typeRevision:'')});
+ if(f.statutPublication==='Publiée'&&!diffusionOk(f))a.push({l:'bad',t:'Publiée sans autorisation de diffusion tracée'});
+ if(f.etape==='Exploitation'&&f.statutPublication!=='Publiée')a.push({l:'warn',t:'En exploitation mais statut de publication ≠ « Publiée »'});
+ if(f.statutPublication==='Publiée'&&isEmpty(f.prochaineRevision))a.push({l:'warn',t:'Publiée sans date de prochaine révision'});
+ if(!['Non publiée',''].includes(f.statutPublication||'')&&isEmpty(f.autoriteDiffusion)&&!['À qualifier','Idée'].includes(f.etape))a.push({l:'warn',t:'Autorité de diffusion non désignée pour cette FOAD'});
+ Object.entries(f.valid||{}).forEach(([k,v])=>{if(v==='Refusé'||v==='À reprendre')a.push({l:'bad',t:k+' : '+v.toLowerCase()})});
+ const vv=f.validVersion||{};
+ Object.entries(vv).forEach(([k,v])=>{if(v&&f.version&&v!==f.version&&['Accordé','Accordé avec réserves'].includes((f.valid||{})[k]))a.push({l:'warn',t:k+' portait sur la version '+v+', version actuelle '+f.version})});
+ return a;
+}
+function nextCode(list){const n=list.map(f=>parseInt((f.code||'').replace(/\D/g,''),10)).filter(x=>!isNaN(x));return 'F85-'+String((n.length?Math.max(...n):0)+1).padStart(4,'0')}
+
+/* ============ SIMULATEUR : moteur de calcul ============ */
+const COMPLEX=[
+ {k:'simple',lv:'Simple',c:'var(--ok)',d:'Texte, images, quiz standards'},
+ {k:'intermediaire',lv:'Intermédiaire',c:'#d4a106',d:'Interactions multiples, scénarisation spécifique'},
+ {k:'avance',lv:'Avancé',c:'var(--warn)',d:'Vidéos, composants personnalisés, évaluations élaborées'},
+ {k:'expert',lv:'Expert',c:'var(--bad)',d:'Simulations, programmation avancée, validations multiples'}];
+const PHASES=[['cadrage','Cadrage'],['scenarisation','Scénarisation'],['redaction','Rédaction'],['rise','Développement Rise'],['sl','Développement Storyline / HTML'],['graph','Création graphique'],['av','Audio / vidéo'],['integration','Intégration'],['tests','Tests'],['corrections','Corrections'],['publication','Publication'],['documentation','Documentation'],['maintenance','Maintenance initiale']];
+function simulate(inp,p,comps){
+ const R=p.ratios,U=p.unit,Q=p.qualite,PH=p.phases;
+ const dureeH=(+inp.duree||0)/60;
+ const base=dureeH*(R[inp.complexite]||0);
+ const lines={};const why={};
+ const add=(k,v,t)=>{lines[k]=(lines[k]||0)+v;(why[k]=why[k]||[]).push(t)};
+ const q=Q[inp.qualite]||1;
+ const reuse=1-(+inp.reutil||0)/100;
+ Object.entries(PH).forEach(([k,pct])=>{
+  let v=base*pct/100,t=`${pct} % × base ${fmtH(base)}`;
+  if(k==='scenarisation'||k==='redaction'){v*=q;t+=` × ressources ${q}`}
+  if(k==='rise'){v*=reuse;if(inp.reutil>0)t+=` × réutilisation ${reuse.toFixed(2)}`}
+  add(k,v,t)});
+ if(+inp.sequences){add('scenarisation',inp.sequences*U.sequence,`${inp.sequences} séquences × ${U.sequence} h`)}
+ if(+inp.interactions){add('rise',inp.interactions*U.interaction*reuse,`${inp.interactions} interactions × ${U.interaction} h`)}
+ if(+inp.quiz){add('rise',inp.quiz*U.quiz,`${inp.quiz} quiz × ${U.quiz} h`)}
+ if(+inp.html){add('sl',inp.html*U.html*reuse,`${inp.html} composants HTML × ${U.html} h${inp.reutil>0?' × réutilisation':''}`);add('integration',inp.html*U.integrationHtml,`${inp.html} × ${U.integrationHtml} h`)}
+ if(inp.storyline){add('sl',U.storyline,`Storyline : forfait ${U.storyline} h`)}
+ if(inp.graph==='leger')add('graph',U.graphLeger,`Graphisme léger : ${U.graphLeger} h`);
+ if(inp.graph==='fort')add('graph',U.graphFort,`Graphisme important : ${U.graphFort} h`);
+ if(+inp.videos)add('av',inp.videos*U.video,`${inp.videos} vidéos × ${U.video} h`);
+ if(+inp.audio)add('av',inp.audio*U.audioMin,`${inp.audio} min d'audio × ${U.audioMin} h`);
+ add('integration',U.integrationBase,`Forfait ${U.integrationBase} h`);
+ if(+inp.relecteurs)add('corrections',inp.relecteurs*U.relecteur,`${inp.relecteurs} relecteurs × ${U.relecteur} h`);
+ const cyc=Math.max(0,(+inp.cycles||1)-1);
+ if(cyc)add('corrections',base*cyc*U.cycle/100,`${cyc} cycle(s) suppl. × ${U.cycle} % de la base`);
+ (comps||[]).forEach(c=>{const h=num(c.tempsReutil)??num(c.tempsCreation);if(h)add(c.format==='Storyline'?'sl':c.format==='HTML/CSS/JS'?'sl':'rise',h,`Composant « ${c.nom} » : ${h} h`)});
+ const central=Object.values(lines).reduce((a,b)=>a+b,0);
+ return {base,lines,why,central,bas:central*p.fourchette.bas,haut:central*p.fourchette.haut,ratio:dureeH?central/dureeH:null};
+}
+
+/* ============ CHAMPS DE FICHE ============ */
+const F={
+ ident:[{k:'code',l:'Identifiant',t:'text',ro:true,noConf:true},{k:'titre',l:'Intitulé',t:'text',req:true},{k:'domaine',l:'Domaine',t:'select',opts:'domaines',req:true},{k:'sousDomaine',l:'Sous-domaine',t:'text'},{k:'type',l:'Type',t:'select',opts:TYPES,req:true},{k:'version',l:'Version',t:'text',hint:'Ex. 1.0 — les validations sont rattachées à une version'},
+  {k:'description',l:'Description',t:'ta',wide:true},{k:'objectifs',l:'Objectifs',t:'ta',wide:true,req:true},{k:'competences',l:'Compétences visées',t:'ta',wide:true},{k:'referentiel',l:'Référentiel associé',t:'text',wide:true,hint:'GDO, GTO, RIOFE, référentiel de compétences…'},
+  {k:'service',l:'Service porteur',t:'text'},{k:'respPeda',l:'Responsable pédagogique',t:'text',req:true},{k:'expert',l:'Expert métier',t:'text',req:true},{k:'concepteur',l:'Concepteur',t:'text',req:true}],
+ public:[{k:'publics',l:'Statuts concernés',t:'multi',opts:PUBLICS,req:true},{k:'fonctions',l:'Fonctions concernées',t:'multi',opts:'fonctions'},{k:'prerequis',l:'Prérequis',t:'ta'},{k:'niveau',l:'Niveau de formation',t:'text'},
+  {k:'nature',l:'Nature de la formation',t:'select',opts:NATURES},{k:'caractere',l:'Caractère',t:'select',opts:CARACTERES,req:true},{k:'dureeTheo',l:'Durée théorique (min)',t:'number',req:true},{k:'dureeMin',l:'Durée minimale exigée (min)',t:'number'},
+  {k:'autonomie',l:'Articulation',t:'select',opts:AUTONOMIES},{k:'dureePresentiel',l:'Durée présentielle associée (h)',t:'number'},{k:'evaluation',l:'Modalités d\'évaluation',t:'ta',req:true},{k:'seuil',l:'Seuil de réussite',t:'text'},{k:'achevement',l:'Conditions d\'achèvement',t:'ta',wide:true,req:true}],
+ projet:[{k:'etape',l:'Étape du cycle',t:'select',opts:ETAPES,noConf:true},{k:'statutConception',l:'Statut de conception',t:'select',opts:ST_CONCEPTION},{k:'priorite',l:'Priorité',t:'select',opts:PRIORITES},{k:'dateCible',l:'Date cible',t:'date'},
+  {k:'progression',l:'Progression (%)',t:'number'},{k:'chargeRestante',l:'Charge restante estimée (h)',t:'number'},{k:'prochaineDecision',l:'Prochaine décision',t:'text'},{k:'decisionAttendue',l:'Décision hiérarchique attendue',t:'ta',hint:'Renseigné = apparaît dans les arbitrages du tableau de bord'},
+  {k:'blocages',l:'Points bloquants',t:'ta',hint:'Renseigné = alerte rouge'},{k:'risques',l:'Risques',t:'ta'},{k:'difficultes',l:'Difficultés',t:'ta',wide:true}],
+ publication:[{k:'statutPublication',l:'Statut de publication',t:'select',opts:ST_PUBLICATION},{k:'autoriteDiffusion',l:'Autorité délivrant l\'autorisation de diffusion',t:'text',hint:'Propre à chaque FOAD'},{k:'decisionDiffusion',l:'Décision de diffusion',t:'text'},{k:'dateValidation',l:'Date de validation',t:'date'},{k:'dateExperimentation',l:'Date d\'expérimentation',t:'date'},
+  {k:'datePublication',l:'Date de publication',t:'date'},{k:'dateMiseService',l:'Date de mise en service',t:'date'},{k:'lienEnasis',l:'Lien ENASIS',t:'text',wide:true},{k:'versionDiffusee',l:'Version diffusée',t:'text'},{k:'respPublication',l:'Responsable de publication',t:'text'},
+  {k:'respTechnique',l:'Responsable technique',t:'text'},{k:'dateVerif',l:'Date de vérification',t:'date'},{k:'acces',l:'Conditions d\'accès',t:'ta'},{k:'incidents',l:'Incidents et corrections',t:'ta'},
+  {k:'publicCatalogue',l:'Afficher dans le catalogue public',t:'bool',noConf:true},{k:'lienPublic',l:'Lien ENASIS visible dans le catalogue',t:'bool',noConf:true}],
+ economie:[{k:'tempsPrevu',l:'Temps de conception prévu (h)',t:'number'},{k:'tempsReel',l:'Temps réellement mobilisé (h)',t:'number'},{k:'contributeurs',l:'Nombre de contributeurs',t:'number'},{k:'coutEstime',l:'Coût estimatif de production (€)',t:'number',hint:'Laissé vide : calculé si un taux horaire est paramétré'},
+  {k:'cibleApprenants',l:'Volume d\'apprenants cible',t:'number'},{k:'modalites',l:'Modalités de réalisation',t:'ta',hint:'Temps de service, hors service, préalable…'},{k:'indemnisation',l:'Principes d\'indemnisation applicables ou à arbitrer',t:'ta',wide:true},{k:'sourceIndemnisation',l:'Source validant les dispositions retenues',t:'text',wide:true,hint:'Sans source : la disposition reste « à arbitrer »'}],
+ usage:[{k:'usageSource',l:'Nature des données',t:'select',opts:['Réelles (export ENASIS)','Estimées'],noConf:true},{k:'usageDate',l:'Date de l\'export',t:'date'},{k:'inscrits',l:'Inscrits',t:'number'},{k:'demarrages',l:'Démarrages',t:'number'},{k:'actifs',l:'Participants actifs',t:'number'},{k:'acheves',l:'Achèvements',t:'number'},
+  {k:'abandons',l:'Abandons',t:'number'},{k:'reussite',l:'Taux de réussite (%)',t:'number'},{k:'dureeObservee',l:'Durée de réalisation observée (min)',t:'number'},{k:'retours',l:'Retours qualitatifs',t:'ta',wide:true}],
+ maintenance:[{k:'derniereVerif',l:'Dernière vérification',t:'date'},{k:'prochaineRevision',l:'Prochaine révision',t:'date'},{k:'versionTravail',l:'Version de travail',t:'text'},{k:'revisionNecessaire',l:'Révision identifiée comme nécessaire',t:'bool',noConf:true},
+  {k:'typeRevision',l:'Type de révision',t:'select',opts:REVISIONS},{k:'expertMaintenance',l:'Expert métier responsable',t:'text'},{k:'depReglementaires',l:'Dépendances réglementaires',t:'ta',hint:'Utilisées par l\'assistant de révision'},{k:'depTechniques',l:'Dépendances techniques',t:'ta'},
+  {k:'anomalies',l:'Anomalies connues',t:'ta'},{k:'modifsAttente',l:'Modifications en attente',t:'ta'}]
+};
+const ALL_FIELDS=Object.values(F).flat();
+
+function Field({def,value,conf,onChange,onConf,params,ro}){
+ const empty=def.t==='bool'?false:isEmpty(value);
+ const id='f_'+def.k;const dis=ro||def.ro;
+ const opts=typeof def.opts==='string'?(params[def.opts]||[]):def.opts;
+ let input;
+ if(def.t==='ta')input=html`<textarea id=${id} value=${value||''} disabled=${dis} onChange=${e=>onChange(e.target.value)}></textarea>`;
+ else if(def.t==='select')input=html`<select id=${id} value=${value||''} disabled=${dis} onChange=${e=>onChange(e.target.value)}><option value="">— non renseigné —</option>${(opts||[]).concat(value&&!(opts||[]).includes(value)?[value]:[]).map(o=>html`<option key=${o}>${o}</option>`)}</select>`;
+ else if(def.t==='multi'){const arr=value||[];input=html`<div className="chips" id=${id}>${opts.map(o=>html`<button type="button" key=${o} className=${'chip'+(arr.includes(o)?' on':'')} disabled=${dis} aria-pressed=${arr.includes(o)} onClick=${()=>onChange(arr.includes(o)?arr.filter(x=>x!==o):arr.concat([o]))}>${o}</button>`)}</div>`}
+ else if(def.t==='bool')input=html`<label className="row small"><input type="checkbox" id=${id} checked=${!!value} disabled=${dis} onChange=${e=>onChange(e.target.checked)}/> Oui</label>`;
+ else input=html`<input id=${id} type=${def.t==='number'?'number':def.t==='date'?'date':'text'} value=${value??''} disabled=${dis} onChange=${e=>onChange(def.t==='number'?(e.target.value===''?'':+e.target.value):e.target.value)}/>`;
+ return html`<div className=${'field'+(def.wide?' wide':'')+(empty?' empty':'')}>
+  <div className="flabel"><label htmlFor=${id}>${def.l}${def.req?html`<b className="req" title="Information clé">*</b>`:null}</label>
+   ${def.noConf?null:empty?html`<span className="conf c-none">Non renseigné</span>`:
+    dis?html`<span className=${'conf c-'+(conf||'connu')}>${({connu:'Connu',suppose:'Supposé',a_confirmer:'À confirmer'})[conf||'connu']}</span>`:
+    html`<select className=${'conf c-'+(conf||'connu')} aria-label=${'Fiabilité : '+def.l} value=${conf||'connu'} onChange=${e=>onConf(e.target.value)}><option value="connu">Connu</option><option value="suppose">Supposé</option><option value="a_confirmer">À confirmer</option></select>`}
+  </div>${input}${def.hint?html`<div className="hint">${def.hint}</div>`:null}</div>`;
+}
+function FieldGrid({defs,obj,set,setConf,params,ro}){
+ return html`<div className="form">${defs.map(d=>html`<${Field} key=${d.k} def=${d} value=${obj[d.k]} conf=${(obj.conf||{})[d.k]} params=${params} ro=${ro} onChange=${v=>set(d.k,v)} onConf=${v=>setConf(d.k,v)}/>`)}</div>`;
+}
+
+/* ============ COMPOSANTS D'AFFICHAGE ============ */
+function Bars({rows,unit,color}){
+ const m=Math.max(1,...rows.map(r=>r.v));
+ if(!rows.length)return html`<div className="muted small">Aucune donnée renseignée.</div>`;
+ return html`<div className="bars">${rows.map(r=>html`<div className="bar-row" key=${r.k}><span className="bar-l" title=${r.k}>${r.k}</span><span className="bar-t"><i style=${{width:(r.v/m*100)+'%',background:r.c||color||'var(--info)'}}></i></span><span className="bar-v">${unit?fmtH(r.v):r.v}</span></div>`)}</div>`;
+}
+function Kpi({v,l,tone,onClick}){return html`<${onClick?'button':'div'} className=${'kpi t-'+(tone||'n')} onClick=${onClick}><span className="v">${v}</span><span className="l">${l}</span><//>`}
+function Head({eyebrow,title,sub,children}){return html`<div className="top"><div><div className="eyebrow">${eyebrow}</div><h1>${title}</h1>${sub?html`<p>${sub}</p>`:null}</div><div className="row">${children}</div></div>`}
+
+/* ============ MODULE 1 — TABLEAU DE BORD ============ */
+function Dashboard({S,params,go,openFiche,vue}){
+ const fo=S.data.foad,act=fo.filter(f=>!['Archivage','Abandonné'].includes(f.etape));
+ const cnt=fn=>fo.filter(fn).length;
+ const alerts=fo.flatMap(f=>alertsFor(f,S.data.validations,params).map(a=>({...a,f})));
+ const retards=alerts.filter(a=>a.t.startsWith('Date cible dépassée')).length;
+ const charge=act.reduce((s,f)=>s+(num(f.chargeRestante)||0),0);
+ const chargeN=act.filter(f=>!isEmpty(f.chargeRestante)).length;
+ const demNew=S.data.demandes.filter(d=>['Déposée','En instruction'].includes(d.statut)).length;
+ const parDomaine=Object.entries(fo.reduce((m,f)=>{const k=f.domaine||'Non renseigné';m[k]=(m[k]||0)+1;return m},{})).map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v);
+ const parEtape=ETAPES.map(e=>({k:e,v:fo.filter(f=>f.etape===e).length})).filter(r=>r.v);
+ const year=String(new Date().getFullYear());
+ const pubYear=fo.filter(f=>(f.datePublication||'').startsWith(year)).length;
+ const sansDate=fo.filter(f=>f.statutPublication==='Publiée'&&!f.datePublication).length;
+ const parAn=Object.entries(fo.filter(f=>f.datePublication).reduce((m,f)=>{const y=f.datePublication.slice(0,4);m[y]=(m[y]||0)+1;return m},{})).sort().map(([k,v])=>({k,v}));
+ const heuresForm=fo.filter(f=>f.statutPublication==='Publiée'&&!isEmpty(f.dureeTheo)).reduce((s,f)=>s+f.dureeTheo/60,0);
+ const tps=fo.filter(f=>!isEmpty(f.tempsReel)||!isEmpty(f.tempsPrevu)).map(f=>({f,p:num(f.tempsPrevu),r:num(f.tempsReel)}));
+ const heuresConc=tps.reduce((s,x)=>s+(x.r||0),0);
+ const echeances=act.filter(f=>f.dateCible&&!TERMINAUX.includes(f.etape)).sort((a,b)=>a.dateCible.localeCompare(b.dateCible)).slice(0,6);
+ const decisions=act.filter(f=>!isEmpty(f.decisionAttendue));
+ const questions=S.data.regles.filter(r=>r.kind==='question'&&r.statut!=='Tranchée');
+ const direction=vue==='direction';
+ const K=[
+  [fo.length,'FOAD et thèmes recensés','n','registre'],[cnt(f=>f.statutPublication==='Publiée'),'Publiées sur ENASIS','ok','registre'],
+  [cnt(f=>diffusionOk(f)&&f.statutPublication!=='Publiée'),'Validées, non publiées','info'],[cnt(f=>f.etape==='Expérimentation'),'En expérimentation','info','projets'],
+  [cnt(f=>G_CONCEPTION.includes(f.etape)),'En conception','info','projets'],[cnt(f=>G_DISCUSSION.includes(f.etape)),'En discussion','n','projets'],
+  [cnt(f=>f.etape==='Validation'),'En attente de validation','warn','projets'],[cnt(f=>f.etape==='Révision'||f.revisionNecessaire||(daysTo(f.prochaineRevision)??1)<0),'Révision nécessaire','warn'],
+  [cnt(f=>f.etape==='Archivage'),'Archivées','n'],[cnt(f=>f.etape==='À qualifier'),'Fiches à qualifier','warn','registre'],[demNew,'Demandes à instruire','red','demandes'],
+  [chargeN?fmtH(charge):'—','Charge restante ('+chargeN+' projets chiffrés)','n'],[retards,'Retards identifiés',retards?'bad':'ok']];
+ const KD=[K[1],K[2],[act.filter(f=>!G_DISCUSSION.includes(f.etape)&&!TERMINAUX.includes(f.etape)&&f.etape!=='À qualifier').length,'Projets en cours','info','projets'],K[10],[pubYear,'Publiées en '+year,'ok'],[heuresConc?fmtH(heuresConc):'—','Heures de conception tracées','n'],[heuresForm?fmtH(heuresForm):'—','Heures de formation publiées (durée théorique)','n'],K[12],[decisions.length+questions.length,'Arbitrages attendus',decisions.length+questions.length?'red':'ok']];
+ return html`<div>
+  <${Head} eyebrow=${direction?'Vue direction':'Vue pilote'} title="Tableau de bord" sub=${'Indicateurs calculés à partir des '+fo.length+' fiches du registre. Les champs non renseignés ne sont jamais extrapolés.'}>
+   ${direction?html`<button className="btn p" onClick=${()=>go('bilan')}><${Ico} n="rep"/> Préparer le bilan</button>`:html`<button className="btn p" onClick=${()=>go('fiche-new')}><${Ico} n="plus"/> Nouvelle fiche</button>`}
+  <//>
+  ${fo.length===0?html`<div className="empty-state">Le registre est vide. Créez une première fiche ou importez une sauvegarde depuis <b>Paramètres</b>.</div>`:null}
+  <div className="kpis">${(direction?KD:K).map((k,i)=>html`<${Kpi} key=${i} v=${k[0]} l=${k[1]} tone=${k[2]} onClick=${k[3]?()=>go(k[3]):null}/>`)}</div>
+  <div className="grid g2">
+   <div className="card"><h2>Alertes prioritaires</h2><div className="list">
+    ${alerts.length?alerts.sort((a,b)=>(a.l==='bad'?0:1)-(b.l==='bad'?0:1)).slice(0,direction?6:12).map((a,i)=>html`<div key=${i} className=${'alert '+a.l}><div className="grow"><b>${a.f.titre}</b><div className="small">${a.t}</div></div><button className="btn sm q" onClick=${()=>openFiche(a.f.id)}>Ouvrir</button></div>`):html`<div className="muted small">Aucune alerte sur les données renseignées.</div>`}
+    ${alerts.length>12&&!direction?html`<div className="small muted">+ ${alerts.length-12} autres alertes dans le registre (filtre « avec alertes »).</div>`:null}</div></div>
+   <div className="card"><h2>Décisions attendues</h2><div className="list">
+    ${decisions.map(f=>html`<div key=${f.id} className="alert info"><div className="grow"><b>${f.titre}</b><div className="small">${f.decisionAttendue}</div></div><button className="btn sm q" onClick=${()=>openFiche(f.id)}>Ouvrir</button></div>`)}
+    ${questions.map(q=>html`<div key=${q.id} className="alert warn"><div className="grow"><b>Gouvernance : ${q.titre}</b><div className="small">${q.categorie||''} · ${q.nature||''}</div></div><button className="btn sm q" onClick=${()=>go('gouvernance')}>Voir</button></div>`)}
+    ${!decisions.length&&!questions.length?html`<div className="muted small">Aucun arbitrage en attente.</div>`:null}</div></div>
+   <div className="card"><h2>Répartition par domaine</h2><${Bars} rows=${parDomaine}/></div>
+   <div className="card"><h2>Avancement du portefeuille</h2><${Bars} rows=${parEtape.map(r=>({...r,c:r.k==='Exploitation'?'var(--ok)':r.k==='À qualifier'?'var(--warn)':'var(--info)'}))}/></div>
+   <div className="card"><h2>Publications par année</h2><${Bars} rows=${parAn} color="var(--ok)"/>${sansDate?html`<p className="small muted">${sansDate} FOAD publiée(s) sans date de publication renseignée, non comptée(s).</p>`:null}</div>
+   <div className="card"><h2>Prochaines échéances</h2>${echeances.length?html`<div className="tbl-wrap"><table><tbody>${echeances.map(f=>{const d=daysTo(f.dateCible);return html`<tr key=${f.id} className="click" onClick=${()=>openFiche(f.id)}><td>${f.titre}<div className="small muted">${f.etape}</div></td><td className="num">${fmtD(f.dateCible)}<div><${Badge} tone=${d<0?'bad':d<=params.seuilAlerte?'warn':''}>${d<0?'dépassée':'J-'+d}<//></div></td></tr>`})}</tbody></table></div>`:html`<div className="muted small">Aucune date cible renseignée.</div>`}</div>
+  </div>
+  ${!direction?html`<div className="card" style=${{marginTop:14}}><h2>Temps de conception : prévu et réel</h2>
+   ${tps.length?html`<div className="tbl-wrap"><table><thead><tr><th>FOAD</th><th className="num">Prévu</th><th className="num">Réel</th><th className="num">Écart</th></tr></thead><tbody>${tps.map(x=>html`<tr key=${x.f.id}><td>${x.f.titre}</td><td className="num">${fmtH(x.p)}</td><td className="num">${fmtH(x.r)}</td><td className="num">${x.p&&x.r?html`<${Badge} tone=${x.r>x.p*1.15?'bad':x.r<x.p*.85?'info':'ok'}>${(x.r-x.p>0?'+':'')+Math.round((x.r-x.p)/x.p*100)} %<//>`:'—'}</td></tr>`)}</tbody></table></div>`:html`<div className="muted small">Aucun temps de conception renseigné. Le simulateur de charge permet de fixer un temps prévu, le temps réel se saisit dans l'onglet Économie de chaque fiche.</div>`}</div>`:null}
+ </div>`;
+}
+
+/* ============ MODULE 2 — REGISTRE ============ */
+function Registre({S,params,openFiche,go,toast,api,ro}){
+ const [q,setQ]=useState(lsGet('fp.reg.q',''));
+ const [fl,setFl]=useState({domaine:'',etape:'',pub:'',public:'',alertes:false});
+ const [sort,setSort]=useState({k:'code',d:1});
+ useEffect(()=>lsSet('fp.reg.q',q),[q]);
+ const rows=useMemo(()=>{
+  const s=q.trim().toLowerCase();
+  let r=S.data.foad.map(f=>({...f,_a:alertsFor(f,S.data.validations,params),_c:completeness(f)}));
+  if(s)r=r.filter(f=>[f.code,f.titre,f.domaine,f.sousDomaine,f.description,f.objectifs,f.concepteur,f.expert,f.referentiel].join(' ').toLowerCase().includes(s));
+  if(fl.domaine)r=r.filter(f=>f.domaine===fl.domaine);
+  if(fl.etape)r=r.filter(f=>f.etape===fl.etape);
+  if(fl.pub)r=r.filter(f=>(f.statutPublication||'Non publiée')===fl.pub);
+  if(fl.public)r=r.filter(f=>(f.publics||[]).includes(fl.public));
+  if(fl.alertes)r=r.filter(f=>f._a.length);
+  const get=f=>sort.k==='_c'?f._c.pct:sort.k==='_a'?f._a.length:(f[sort.k]??'');
+  r.sort((a,b)=>{const x=get(a),y=get(b);return (typeof x==='number'&&typeof y==='number'?x-y:String(x).localeCompare(String(y),'fr'))*sort.d});
+  return r;
+ },[S.data.foad,S.data.validations,q,fl,sort,params]);
+ const th=(k,l,c)=>html`<th className=${'sort '+(c||'')} onClick=${()=>setSort(s=>({k,d:s.k===k?-s.d:1}))} aria-sort=${sort.k===k?(sort.d>0?'ascending':'descending'):'none'}>${l}${sort.k===k?(sort.d>0?' ▲':' ▼'):''}</th>`;
+ const exportCsv=async()=>{
+  const keys=['code',...ALL_FIELDS.map(f=>f.k).filter(k=>k!=='code')];
+  const esc=v=>{v=Array.isArray(v)?v.join(', '):v==null?'':String(v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const lines=[keys.map(k=>(ALL_FIELDS.find(f=>f.k===k)||{l:k}).l).join(';')].concat(rows.map(f=>keys.map(k=>esc(f[k])).join(';')));
+  try{await api.download('registre-foad-'+today()+'.csv','﻿'+lines.join('\r\n'));toast('Export CSV proposé au téléchargement')}catch(e){if(e.code!=='declined')toast(e.message||'Téléchargement impossible')}
+ };
+ return html`<div>
+  <${Head} eyebrow="Module 2" title="Registre central des FOAD" sub=${rows.length+' fiche(s) affichée(s) sur '+S.data.foad.length+'. Étape du cycle, statut de publication et autorisation de diffusion sont suivis séparément.'}>
+   <button className="btn" onClick=${exportCsv} disabled=${!S.canDownload}><${Ico} n="dl"/> Export CSV</button>
+   ${ro?null:html`<button className="btn p" onClick=${()=>go('fiche-new')}><${Ico} n="plus"/> Nouvelle fiche</button>`}
+  <//>
+  <div className="filters">
+   <input id="reg-q" placeholder="Rechercher : intitulé, objectif, concepteur, référentiel…" value=${q} onChange=${e=>setQ(e.target.value)} aria-label="Recherche"/>
+   <select id="reg-dom" value=${fl.domaine} onChange=${e=>setFl({...fl,domaine:e.target.value})} aria-label="Domaine"><option value="">Tous domaines</option>${params.domaines.map(d=>html`<option key=${d}>${d}</option>`)}</select>
+   <select id="reg-et" value=${fl.etape} onChange=${e=>setFl({...fl,etape:e.target.value})} aria-label="Étape"><option value="">Toutes étapes</option>${ETAPES.map(d=>html`<option key=${d}>${d}</option>`)}</select>
+   <select id="reg-pub" value=${fl.pub} onChange=${e=>setFl({...fl,pub:e.target.value})} aria-label="Publication"><option value="">Toute publication</option>${ST_PUBLICATION.map(d=>html`<option key=${d}>${d}</option>`)}</select>
+   <select id="reg-publ" value=${fl.public} onChange=${e=>setFl({...fl,public:e.target.value})} aria-label="Public"><option value="">Tous publics</option>${PUBLICS.map(d=>html`<option key=${d}>${d}</option>`)}</select>
+   <label className="row small"><input type="checkbox" id="reg-al" checked=${fl.alertes} onChange=${e=>setFl({...fl,alertes:e.target.checked})}/> Avec alertes</label>
+  </div>
+  ${rows.length?html`<div className="tbl-wrap"><table>
+   <thead><tr>${th('code','Code')}${th('titre','Intitulé')}${th('domaine','Domaine')}${th('type','Type')}${th('etape','Étape')}${th('statutPublication','Publication')}<th>Diffusion</th>${th('dureeTheo','Durée','num')}${th('prochaineRevision','Révision')}${th('_c','Complétude')}${th('_a','Alertes','num')}</tr></thead>
+   <tbody>${rows.map(f=>html`<tr key=${f.id} className="click" onClick=${()=>openFiche(f.id)}>
+    <td className="mono">${f.code}</td><td style=${{minWidth:220}}><b>${f.titre}</b>${f._c.toConfirm?html`<div className="small" style=${{color:'var(--warn)'}}>${f._c.toConfirm} info. à confirmer</div>`:null}</td>
+    <td>${f.domaine||html`<span className="muted">—</span>`}</td><td>${f.type||'—'}</td><td><${Badge} tone=${etapeTone(f.etape)}>${f.etape||'—'}<//></td>
+    <td><${Badge} tone=${pubTone(f.statutPublication)}>${f.statutPublication||'Non publiée'}<//></td>
+    <td><${Badge} tone=${validTone((f.valid||{})['Autorisation de diffusion délivrée'])}>${(f.valid||{})['Autorisation de diffusion délivrée']||'Non sollicité'}<//></td>
+    <td className="num">${fmtMin(f.dureeTheo)}</td><td>${fmtD(f.prochaineRevision)}</td>
+    <td><div className="compl"><span className="prog"><i style=${{width:f._c.pct+'%',background:f._c.pct>=80?'var(--ok)':f._c.pct>=50?'var(--warn)':'var(--bad)'}}></i></span><span className="mono">${f._c.pct}%</span></div></td>
+    <td className="num">${f._a.length?html`<${Badge} tone=${f._a.some(a=>a.l==='bad')?'bad':'warn'}>${f._a.length}<//>`:'—'}</td></tr>`)}</tbody></table></div>`
+   :html`<div className="empty-state">Aucune fiche ne correspond aux filtres.</div>`}
+ </div>`;
+}
+
+/* ============ FICHE FOAD ============ */
+function blankFoad(list){return {code:nextCode(list),titre:'',etape:'À qualifier',statutConception:'Non démarrée',statutPublication:'Non publiée',version:'',valid:{},validVersion:{},conf:{},actions:[],enasis:{},histEtapes:[]}}
+function Fiche({S,params,id,api,toast,close,ro,openFiche}){
+ const src=id==='new'?null:S.data.foad.find(f=>f.id===id);
+ const [d,setD]=useState(()=>src?clone(src):blankFoad(S.data.foad));
+ const [tab,setTab]=useState('ident');
+ const [dirty,setDirty]=useState(false);
+ const [confirmDel,setConfirmDel]=useState(false);
+ const fid=id==='new'?null:id;
+ useEffect(()=>{if(src&&!dirty)setD(clone(src))},[src&&src.updatedAt]);
+ if(id!=='new'&&!src)return html`<div className="empty-state">Fiche introuvable. <button className="btn q" onClick=${close}>Retour au registre</button></div>`;
+ const set=(k,v)=>{setD(x=>{const n={...x,[k]:v};if((k==='statutPublication'&&v==='Publiée')||(k==='datePublication'&&n.statutPublication==='Publiée')){if(isEmpty(x.prochaineRevision)||(x.conf||{}).prochaineRevision==='suppose'){const b=new Date((n.datePublication||today())+'T12:00:00');b.setMonth(b.getMonth()+(+params.revisionMois||12));n.prochaineRevision=b.toISOString().slice(0,10);n.conf={...(n.conf||{}),prochaineRevision:'suppose'}}}return n});setDirty(true)};
+ const setConf=(k,v)=>{setD(x=>({...x,conf:{...(x.conf||{}),[k]:v}}));setDirty(true)};
+ const c=completeness(d);const al=alertsFor(d,S.data.validations,params);
+ const save=async()=>{
+  if(!d.titre.trim()){toast('L\'intitulé est obligatoire pour enregistrer.');setTab('ident');return}
+  const nid=fid||uid('F');
+  const changed=src?ALL_FIELDS.filter(f=>JSON.stringify(src[f.k]??'')!==JSON.stringify(d[f.k]??'')).map(f=>f.l):['création'];
+  const body={...d};
+  if(src&&src.etape!==d.etape){body.histEtapes=(d.histEtapes||[]).concat([{de:src.etape,a:d.etape,at:nowIso(),by:S.me}])}
+  try{await api.save('foad',nid,body);
+   await api.log(nid,src?'modification':'création',src?('Champs modifiés : '+changed.join(', ')):'Création de la fiche « '+d.titre+' »');
+   if(src&&src.etape!==d.etape)await api.log(nid,'étape',src.etape+' → '+d.etape);
+   setDirty(false);toast('Fiche enregistrée');if(!fid)openFiche(nid,true);
+  }catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}
+ };
+ const dup=async()=>{const n=clone(d);n.code=nextCode(S.data.foad);n.titre=d.titre+' (copie)';n.valid={};n.validVersion={};n.statutPublication='Non publiée';n.etape='Idée';n.histEtapes=[];n.datePublication='';n.lienEnasis='';const nid=uid('F');
+  try{await api.save('foad',nid,n);await api.log(nid,'création','Duplication de '+d.code);toast('Fiche dupliquée');openFiche(nid,true)}catch(e){toast('Duplication refusée : '+(e.message||e.code))}};
+ const del=async()=>{try{await api.remove('foad',fid);await api.log(fid,'suppression','Suppression de la fiche '+d.code+' « '+d.titre+' »');toast('Fiche supprimée');close()}catch(e){toast('Suppression refusée : '+(e.message||e.code))}};
+ const tabs=[['ident','Identification'],['public','Public et formation'],['projet','Projet'],['valid','Validation'],['publication','Publication ENASIS'],['economie','Économie'],['usage','Utilisation'],['maintenance','Maintenance'],['histo','Historique']];
+ const vals=S.data.validations.filter(v=>v.foad===fid).sort((a,b)=>(b.at||'').localeCompare(a.at||''));
+ const journal=S.data.journal.filter(j=>j.foad===fid).sort((a,b)=>(b.at||'').localeCompare(a.at||''));
+ const cout=!isEmpty(d.coutEstime)?d.coutEstime:(params.tauxHoraire&&(d.tempsReel||d.tempsPrevu))?Math.round((d.tempsReel||d.tempsPrevu)*params.tauxHoraire):null;
+ return html`<div>
+  <button className="backbtn" onClick=${close}>← Registre</button>
+  <${Head} eyebrow=${d.code+(d.version?' · v'+d.version:'')} title=${d.titre||'Nouvelle fiche FOAD'}>
+   ${ro?null:html`${fid?html`<button className="btn" onClick=${dup}>Dupliquer</button>`:null}
+   <button className="btn p" onClick=${save} disabled=${!dirty&&!!fid}>${dirty||!fid?'Enregistrer':'Enregistré'}</button>`}
+  <//>
+  <div className="row" style=${{marginBottom:12}}>
+   <${Badge} tone=${etapeTone(d.etape)}>Étape : ${d.etape}<//><${Badge}>Conception : ${d.statutConception||'—'}<//><${Badge} tone=${pubTone(d.statutPublication)}>Publication : ${d.statutPublication||'Non publiée'}<//>
+   <${Badge} tone=${validTone((d.valid||{})['Autorisation de diffusion délivrée'])}>Diffusion : ${(d.valid||{})['Autorisation de diffusion délivrée']||'Non sollicité'}<//>
+   <span className="compl small"><span className="prog"><i style=${{width:c.pct+'%',background:c.pct>=80?'var(--ok)':c.pct>=50?'var(--warn)':'var(--bad)'}}></i></span>Complétude ${c.pct} %</span>
+  </div>
+  ${al.length?html`<div className="list" style=${{marginBottom:12}}>${al.map((a,i)=>html`<div key=${i} className=${'alert '+a.l}><span className="small">${a.t}</span></div>`)}</div>`:null}
+  <div className="tabs" role="tablist">${tabs.map(([k,l])=>html`<button key=${k} role="tab" aria-selected=${tab===k} className=${tab===k?'on':''} onClick=${()=>setTab(k)}>${l}</button>`)}</div>
+  ${F[tab]?html`<div className="card"><${FieldGrid} defs=${F[tab]} obj=${d} set=${set} setConf=${setConf} params=${params} ro=${ro}/>
+   ${tab==='projet'?html`<${Actions} d=${d} set=${set} ro=${ro}/>`:null}
+   ${tab==='publication'?html`<${EnasisCheck} d=${d} set=${set} ro=${ro}/>`:null}
+   ${tab==='economie'?html`<div className="note" style=${{marginTop:12}}>Coût affiché : ${cout!=null?cout.toLocaleString('fr-FR')+' €'+(isEmpty(d.coutEstime)?' (calculé : temps × taux horaire paramétré)':' (saisi)'):'non calculable : renseignez un coût ou un taux horaire dans Paramètres'}.
+     ${d.estimation?html`<br/>Dernière estimation du simulateur (${fmtD(d.estimation.date)}) : ${fmtH(d.estimation.bas)} / <b>${fmtH(d.estimation.central)}</b> / ${fmtH(d.estimation.haut)}, complexité ${d.estimation.complexite}.`:null}</div>`:null}
+   ${tab==='usage'?html`<div className="note" style=${{marginTop:12}}>Taux d'achèvement : ${d.inscrits&&!isEmpty(d.acheves)?Math.round(d.acheves/d.inscrits*100)+' %':'non calculable'} · Les données marquées « Estimées » sont exclues des bilans de résultats.</div>`:null}
+   ${tab==='ident'&&fid&&!ro?html`<div className="row" style=${{marginTop:16}}>${confirmDel?html`<span className="small">Supprimer définitivement cette fiche ? L'historique du journal est conservé.</span><button className="btn sm danger" onClick=${del}>Confirmer la suppression</button><button className="btn sm" onClick=${()=>setConfirmDel(false)}>Annuler</button>`:html`<button className="btn sm danger" onClick=${()=>setConfirmDel(true)}>Supprimer la fiche</button>`}</div>`:null}
+  </div>`:null}
+  ${tab==='valid'?html`<${Validations} S=${S} d=${d} fid=${fid} api=${api} toast=${toast} ro=${ro} dirty=${dirty}/>`:null}
+  ${tab==='histo'?html`<div className="grid g2"><div className="card"><h3>Changements d'étape</h3>${(d.histEtapes||[]).length?html`<div className="list">${d.histEtapes.slice().reverse().map((h,i)=>html`<div key=${i} className="small"><span className="mono">${fmtDT(h.at)}</span> · ${h.de} → <b>${h.a}</b></div>`)}</div>`:html`<div className="muted small">Aucun changement d'étape tracé.</div>`}</div>
+   <div className="card"><h3>Journal de la fiche</h3><${JournalList} S=${S} api=${api} rows=${journal}/></div></div>`:null}
+  ${dirty&&!ro?html`<div className="note" style=${{marginTop:12}}>Modifications non enregistrées.</div>`:null}
+ </div>`;
+}
+function Actions({d,set,ro}){
+ const [t,setT]=useState('');const a=d.actions||[];
+ return html`<div style=${{marginTop:16}}><h3>Actions restantes</h3><div className="list">
+  ${a.map((x,i)=>html`<label key=${i} className="check"><input type="checkbox" checked=${x.done} disabled=${ro} onChange=${()=>set('actions',a.map((y,j)=>j===i?{...y,done:!y.done}:y))}/><span style=${{textDecoration:x.done?'line-through':'none'}} className="grow">${x.t}</span>${ro?null:html`<button className="btn sm q" onClick=${e=>{e.preventDefault();set('actions',a.filter((y,j)=>j!==i))}}>Retirer</button>`}</label>`)}
+  ${ro?null:html`<div className="row"><input id="act-new" className="grow" style=${{width:'auto',flex:1}} placeholder="Nouvelle action" value=${t} onChange=${e=>setT(e.target.value)} onKeyDown=${e=>{if(e.key==='Enter'&&t.trim()){set('actions',a.concat([{t:t.trim(),done:false}]));setT('')}}}/><button className="btn sm" onClick=${()=>{if(t.trim()){set('actions',a.concat([{t:t.trim(),done:false}]));setT('')}}}>Ajouter</button></div>`}
+ </div></div>`;
+}
+function EnasisCheck({d,set,ro}){
+ const e=d.enasis||{};const n=ENASIS_CHECK.filter(([k])=>e[k]).length;
+ return html`<div style=${{marginTop:16}}><h3>Checklist de publication ENASIS · ${n}/${ENASIS_CHECK.length}</h3>
+  <p className="small muted">La colonne de droite distingue ce qui relève de l'export Rise, du paramétrage Moodle et de l'environnement ENASIS.</p>
+  <div className="grid g2" style=${{gap:'0 16px'}}>${ENASIS_CHECK.map(([k,l,w])=>html`<label key=${k} className="check"><input type="checkbox" checked=${!!e[k]} disabled=${ro} onChange=${()=>set('enasis',{...e,[k]:!e[k]})}/><span className="grow">${l}</span><${Badge} tone=${w.includes('Rise')?'info':w==='ENASIS'?'red':''}>${w}<//></label>`)}</div></div>`;
+}
+
+/* ============ MODULE 9 — VALIDATION ============ */
+function Validations({S,d,fid,api,toast,ro,dirty}){
+ const blank={etapeValidation:CIRCUIT[0],date:today(),validateur:'',fonction:'',version:d.version||'',decision:'Accordé',reserves:'',justificatif:'',commentaire:''};
+ const [v,setV]=useState(blank);
+ const vals=S.data.validations.filter(x=>x.foad===fid).sort((a,b)=>(b.at||'').localeCompare(a.at||''));
+ const add=async()=>{
+  if(!fid){toast('Enregistrez la fiche avant de tracer une validation.');return}
+  if(dirty){toast('Enregistrez d\'abord les modifications en cours de la fiche.');return}
+  if(!v.validateur.trim()||!v.version.trim()){toast('Validateur et version sont obligatoires : une validation porte sur une version précise.');return}
+  const src=S.data.foad.find(f=>f.id===fid);
+  try{await api.save('validations',uid('V'),{...v,foad:fid,at:nowIso(),by:S.me});
+   await api.save('foad',fid,{...src,valid:{...(src.valid||{}),[v.etapeValidation]:v.decision},validVersion:{...(src.validVersion||{}),[v.etapeValidation]:v.version}});
+   await api.log(fid,'validation',v.etapeValidation+' : '+v.decision+' (v'+v.version+', '+v.validateur+')');
+   setV(blank);toast('Validation tracée');
+  }catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}
+ };
+ const sv=(k,x)=>setV(o=>({...o,[k]:x}));
+ return html`<div className="split">
+  <div className="card"><h2>Circuit de validation</h2><div className="circuit">
+   ${CIRCUIT.map(c=>{const s=(d.valid||{})[c]||'Non sollicité';const ver=(d.validVersion||{})[c];return html`<div key=${c} className="st"><span>${c}</span><span className="mono small muted">${ver?'v'+ver:''}</span><${Badge} tone=${validTone(s)}>${s}<//></div>`})}
+  </div>
+  <h3 style=${{marginTop:18}}>Historique des décisions</h3>
+  ${vals.length?html`<div className="tbl-wrap"><table><thead><tr><th>Date</th><th>Étape</th><th>Version</th><th>Décision</th><th>Validateur</th></tr></thead><tbody>${vals.map(x=>html`<tr key=${x.id}><td>${fmtD(x.date)}</td><td>${x.etapeValidation}${x.reserves?html`<div className="small muted">Réserves : ${x.reserves}</div>`:null}${x.commentaire?html`<div className="small muted">${x.commentaire}</div>`:null}</td><td className="mono">${x.version}</td><td><${Badge} tone=${validTone(x.decision)}>${x.decision}<//></td><td>${x.validateur}<div className="small muted">${x.fonction}</div>${x.justificatif?html`<div className="small muted">Justificatif : ${x.justificatif}</div>`:null}</td></tr>`)}</tbody></table></div>`:html`<div className="muted small">Aucune décision tracée.</div>`}
+  <p className="small muted">Les décisions sont ajoutées, jamais modifiées depuis l'interface. Une nouvelle décision sur la même étape remplace le statut courant sans effacer l'historique.</p></div>
+  ${ro?null:html`<div className="card"><h2>Tracer une décision</h2><div className="form">
+   <div className="field wide"><label className="small muted" htmlFor="v-et">Étape</label><select id="v-et" value=${v.etapeValidation} onChange=${e=>sv('etapeValidation',e.target.value)}>${CIRCUIT.map(c=>html`<option key=${c}>${c}</option>`)}</select></div>
+   <div className="field"><label className="small muted" htmlFor="v-dec">Décision</label><select id="v-dec" value=${v.decision} onChange=${e=>sv('decision',e.target.value)}>${ST_VALID.map(c=>html`<option key=${c}>${c}</option>`)}</select></div>
+   <div className="field"><label className="small muted" htmlFor="v-ver">Version concernée *</label><input id="v-ver" value=${v.version} onChange=${e=>sv('version',e.target.value)}/></div>
+   <div className="field"><label className="small muted" htmlFor="v-date">Date</label><input id="v-date" type="date" value=${v.date} onChange=${e=>sv('date',e.target.value)}/></div>
+   <div className="field"><label className="small muted" htmlFor="v-val">Validateur *</label><input id="v-val" value=${v.validateur} onChange=${e=>sv('validateur',e.target.value)}/></div>
+   <div className="field wide"><label className="small muted" htmlFor="v-fct">Fonction</label><input id="v-fct" value=${v.fonction} onChange=${e=>sv('fonction',e.target.value)}/></div>
+   <div className="field wide"><label className="small muted" htmlFor="v-res">Réserves</label><textarea id="v-res" value=${v.reserves} onChange=${e=>sv('reserves',e.target.value)}></textarea></div>
+   <div className="field wide"><label className="small muted" htmlFor="v-just">Document justificatif (référence)</label><input id="v-just" value=${v.justificatif} onChange=${e=>sv('justificatif',e.target.value)}/></div>
+   <div className="field wide"><label className="small muted" htmlFor="v-com">Commentaires</label><textarea id="v-com" value=${v.commentaire} onChange=${e=>sv('commentaire',e.target.value)}></textarea></div>
+  </div><div className="row" style=${{marginTop:12}}><button className="btn p" onClick=${add}>Tracer la décision</button></div></div>`}
+ </div>`;
+}
+
+/* ============ JOURNAL ============ */
+function useNames(api,ids){
+ const [n,setN]=useState({});const key=ids.join(',');
+ useEffect(()=>{let ok=true;api.names(ids).then(r=>{if(ok)setN(r||{})});return ()=>{ok=false}},[key]);
+ return n;
+}
+function JournalList({S,api,rows,showFoad}){
+ const ids=[...new Set(rows.map(r=>r.by).filter(Boolean))];
+ const names=useNames(api,ids);
+ const fmap=Object.fromEntries(S.data.foad.map(f=>[f.id,f]));
+ if(!rows.length)return html`<div className="muted small">Aucune entrée.</div>`;
+ return html`<div className="list">${rows.slice(0,200).map(r=>html`<div key=${r.id} className="small" style=${{borderBottom:'1px solid var(--line)',paddingBottom:6}}>
+  <span className="mono">${fmtDT(r.at)}</span> · <${Badge}>${r.type}<//> ${showFoad&&r.foad?html`<b>${(fmap[r.foad]||{}).titre||'(fiche supprimée)'}</b> · `:null}${r.texte}
+  <span className="muted"> — ${r.by||'système'}</span></div>`)}</div>`;
+}
+function JournalPage({S,api}){
+ const rows=S.data.journal.slice().sort((a,b)=>(b.at||'').localeCompare(a.at||''));
+ return html`<div><${Head} eyebrow="Traçabilité" title="Journal des modifications" sub="Chaque création, modification, changement d'étape et décision de validation ajoute une entrée. Les 200 plus récentes sont affichées."/><div className="card"><${JournalList} S=${S} api=${api} rows=${rows} showFoad=${true}/></div></div>`;
+}
+
+/* ============ MODULE 3 — KANBAN ============ */
+function Kanban({S,params,api,toast,openFiche,ro}){
+ const [hide,setHide]=useState(true);const [over,setOver]=useState(null);const [who,setWho]=useState(lsGet('fp.kan.who',''));
+ useEffect(()=>lsSet('fp.kan.who',who),[who]);
+ const cols=ETAPES.filter(e=>!hide||!['Archivage','Abandonné'].includes(e));
+ let fo=S.data.foad;if(who.trim())fo=fo.filter(f=>[f.concepteur,f.respPeda,f.expert].join(' ').toLowerCase().includes(who.trim().toLowerCase()));
+ const move=async(id,et)=>{const f=S.data.foad.find(x=>x.id===id);if(!f||f.etape===et)return;
+  try{await api.save('foad',id,{...f,etape:et,histEtapes:(f.histEtapes||[]).concat([{de:f.etape,a:et,at:nowIso(),by:S.me}])});await api.log(id,'étape',f.etape+' → '+et);toast('« '+f.titre+' » : '+et)}catch(e){toast('Déplacement refusé : '+(e.message||e.code))}};
+ return html`<div>
+  <${Head} eyebrow="Module 3" title="Portefeuille de projets" sub="Glissez une carte pour changer d'étape, ou utilisez le menu de la carte. Chaque déplacement est tracé.">
+   <input id="kan-who" style=${{width:220}} placeholder="Filtrer par personne (concepteur…)" value=${who} onChange=${e=>setWho(e.target.value)} aria-label="Filtrer par personne"/>
+   <label className="row small"><input type="checkbox" id="kan-hide" checked=${hide} onChange=${e=>setHide(e.target.checked)}/> Masquer archivées et abandonnées</label>
+  <//>
+  <div className="kanban">${cols.map(c=>{const items=fo.filter(f=>f.etape===c);return html`<div key=${c} className=${'col'+(over===c?' over':'')}
+    onDragOver=${e=>{if(ro)return;e.preventDefault();setOver(c)}} onDragLeave=${()=>setOver(null)} onDrop=${e=>{e.preventDefault();setOver(null);move(e.dataTransfer.getData('text/plain'),c)}}>
+    <h4>${c}<span className="mono muted">${items.length}</span></h4>
+    ${items.map(f=>{const al=alertsFor(f,S.data.validations,params);return html`<div key=${f.id} className=${'kcard p-'+(f.priorite||'none')} draggable=${!ro} onDragStart=${e=>e.dataTransfer.setData('text/plain',f.id)}>
+     <div className="row"><span className="mono small muted">${f.code}</span>${f.priorite?html`<${Badge} tone=${f.priorite==='Haute'?'red':f.priorite==='Moyenne'?'warn':''}>${f.priorite}<//>`:null}</div>
+     <b>${f.titre}</b>
+     <div className="small muted">${f.concepteur||'Concepteur non renseigné'}${f.dateCible?' · '+fmtD(f.dateCible):''}</div>
+     ${!isEmpty(f.progression)?html`<div className="prog"><i style=${{width:Math.min(100,f.progression)+'%'}}></i></div>`:null}
+     ${!isEmpty(f.chargeRestante)?html`<div className="small">Reste ${fmtH(f.chargeRestante)}</div>`:null}
+     ${al.length?html`<div className="small" style=${{color:al.some(a=>a.l==='bad')?'var(--bad)':'var(--warn)'}}>${al[0].t}${al.length>1?' (+'+(al.length-1)+')':''}</div>`:null}
+     ${!isEmpty(f.decisionAttendue)?html`<${Badge} tone="info">Décision attendue<//>`:null}
+     <div className="row"><button className="btn sm q" onClick=${()=>openFiche(f.id)}>Ouvrir</button>${ro?null:html`<select className="grow" style=${{width:'auto',fontSize:12,padding:'3px 6px'}} value=${f.etape} aria-label="Changer d'étape" onChange=${e=>move(f.id,e.target.value)}>${ETAPES.map(x=>html`<option key=${x}>${x}</option>`)}</select>`}</div>
+    </div>`})}
+   </div>`})}</div>
+ </div>`;
+}
+
+/* ============ MODULE 4 — DEMANDES ============ */
+const DEM_FIELDS=[
+ {k:'titre',l:'Intitulé provisoire du besoin',t:'text',req:true,wide:true},
+ {k:'service',l:'1. Service demandeur',t:'text',req:true},{k:'contact',l:'2. Contact',t:'text',req:true},{k:'expert',l:'2. Expert métier proposé',t:'text'},
+ {k:'probleme',l:'3. Problème initial',t:'ta',req:true,wide:true},{k:'justification',l:'4. Justification du besoin',t:'ta',req:true,wide:true},
+ {k:'publics',l:'5. Public concerné',t:'multi',opts:PUBLICS,req:true},{k:'fonctions',l:'5. Fonctions concernées',t:'multi',opts:'fonctions'},{k:'nbAgents',l:'6. Nombre d\'agents visés',t:'number',req:true},
+ {k:'objectifs',l:'7. Objectifs opérationnels',t:'ta',req:true,wide:true},{k:'competences',l:'8. Compétences à acquérir',t:'ta',wide:true},{k:'competencesRev',l:'9. Compétences à réviser',t:'ta',wide:true},
+ {k:'contenu',l:'10. Contenu souhaité',t:'ta',wide:true},{k:'ressources',l:'11. Ressources existantes (référence ou lien)',t:'ta',wide:true},{k:'references',l:'12. Références réglementaires',t:'ta',wide:true},
+ {k:'echeance',l:'13. Échéance souhaitée',t:'date',req:true},{k:'caractere',l:'14. Caractère',t:'select',opts:CARACTERES,req:true},{k:'modalites',l:'15. Modalités envisagées',t:'text'},
+ {k:'evaluation',l:'16. Évaluation attendue',t:'ta'},{k:'criteres',l:'17. Critères de réussite',t:'ta'},{k:'autonomie',l:'18. Articulation',t:'select',opts:AUTONOMIES},
+ {k:'suivi',l:'19. Modalités de suivi des apprenants',t:'ta'},{k:'contraintes',l:'20. Contraintes particulières',t:'ta'},{k:'respValidation',l:'21. Responsable de validation',t:'text',req:true}];
+const IDEA_FIELDS=['titre','service','contact','probleme','publics','objectifs'];
+function demCompl(d,fields){const req=fields.filter(f=>f.req);const miss=req.filter(f=>isEmpty(d[f.k]));return {pct:Math.round((req.length-miss.length)/req.length*100),miss}}
+function Demandes({S,params,api,toast,go,openFiche,vue,idea}){
+ const [sel,setSel]=useState(idea?'new':null);
+ const rows=S.data.demandes.slice().sort((a,b)=>(b.updatedAt||'').localeCompare(a.updatedAt||''));
+ if(sel)return html`<${DemandeForm} key=${sel} S=${S} params=${params} api=${api} toast=${toast} id=${sel} close=${()=>idea?go('catalogue'):setSel(null)} openFiche=${openFiche} vue=${vue} idea=${idea&&sel==='new'}/>`;
+ return html`<div>
+  <${Head} eyebrow="Module 4" title=${vue==='demandeur'?'Mes demandes':'Demandes de création'} sub="Un brouillon peut être repris à tout moment. Une demande acceptée génère une fiche dans le registre.">
+   <button className="btn p" onClick=${()=>setSel('new')}><${Ico} n="plus"/> Nouvelle demande</button>
+  <//>
+  ${rows.length?html`<div className="tbl-wrap"><table><thead><tr><th>Intitulé</th><th>Service</th><th>Échéance</th><th>Statut</th><th>Complétude</th><th></th></tr></thead><tbody>
+   ${rows.map(d=>{const c=demCompl(d,d.idee?DEM_FIELDS.filter(f=>IDEA_FIELDS.includes(f.k)):DEM_FIELDS);return html`<tr key=${d.id} className="click" onClick=${()=>setSel(d.id)}><td><b>${d.titre||'(sans titre)'}</b>${d.idee?html` <${Badge}>Idée<//>`:null}</td><td>${d.service||'—'}</td><td>${fmtD(d.echeance)}</td>
+    <td><${Badge} tone=${d.statut==='Acceptée'?'ok':d.statut==='Refusée'?'bad':d.statut==='Brouillon'?'':'info'}>${d.statut}<//></td><td className="mono">${c.pct} %</td><td>${d.foadId?html`<button className="btn sm q" onClick=${e=>{e.stopPropagation();openFiche(d.foadId)}}>Fiche</button>`:null}</td></tr>`})}</tbody></table></div>`
+  :html`<div className="empty-state">Aucune demande enregistrée.</div>`}
+ </div>`;
+}
+function DemandeForm({S,params,api,toast,id,close,openFiche,vue,idea}){
+ const src=id==='new'?null:S.data.demandes.find(d=>d.id===id);
+ const [d,setD]=useState(()=>src?clone(src):{statut:'Brouillon',idee:!!idea,conf:{}});
+ const fields=d.idee?DEM_FIELDS.filter(f=>IDEA_FIELDS.includes(f.k)):DEM_FIELDS;
+ const c=demCompl(d,fields);
+ const pilot=vue==='pilote';
+ const set=(k,v)=>setD(x=>({...x,[k]:v}));
+ const persist=async(statut,msg)=>{const nid=src?src.id:uid('D');const body={...d,statut:statut||d.statut};
+  try{await api.save('demandes',nid,body);await api.log(null,'demande',(d.titre||'Demande')+' : '+body.statut);toast(msg||'Demande enregistrée');close()}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
+ const deposer=()=>{if(!S.canWrite&&!src&&!d.titre){toast('Indiquez au moins un intitulé.');return}if(c.miss.length){toast('Éléments indispensables manquants : '+c.miss.map(f=>f.l.replace(/^\d+\.\s/,'')).join(', '));return}persist('Déposée','Demande déposée')};
+ const accepter=async()=>{
+  const nid=uid('F');const f={...blankFoad(S.data.foad),titre:d.titre||'',service:d.service||'',expert:d.expert||'',objectifs:d.objectifs||'',competences:[d.competences,d.competencesRev].filter(Boolean).join('\n'),
+   publics:d.publics||[],fonctions:d.fonctions||[],caractere:d.caractere||'',autonomie:d.autonomie||'',referentiel:d.references||'',evaluation:d.evaluation||'',dateCible:d.echeance||'',cibleApprenants:d.nbAgents??'',
+   description:d.probleme||'',etape:'Demande déposée',origineDemande:src&&src.id,conf:{}};
+  Object.keys(f).forEach(k=>{if(!isEmpty(f[k])&&ALL_FIELDS.some(x=>x.k===k&&!x.noConf))f.conf[k]='suppose'});
+  try{await api.save('foad',nid,f);await api.log(nid,'création','Fiche créée depuis la demande « '+(d.titre||'')+' » (informations du demandeur, marquées « supposé »)');
+   await api.save('demandes',src.id,{...d,statut:'Acceptée',foadId:nid});await api.log(null,'demande',(d.titre||'')+' : Acceptée → fiche '+f.code);toast('Fiche '+f.code+' créée');openFiche(nid)}catch(e){toast('Création refusée : '+(e.message||e.code))}};
+ return html`<div>
+  <button className="backbtn" onClick=${close}>← Demandes</button>
+  <${Head} eyebrow=${d.idee?'Proposer une idée':'Demande de création de FOAD'} title=${d.titre||'Nouvelle demande'} sub=${'Statut : '+d.statut}>
+   ${S.canWrite?html`<button className="btn" onClick=${()=>persist(null,'Brouillon enregistré')}>Enregistrer le brouillon</button>`:null}
+   ${d.statut==='Brouillon'&&(S.canWrite||!src)?html`<button className="btn p" onClick=${deposer}>Déposer la demande</button>`:null}
+  <//>
+  <div className="card" style=${{marginBottom:12}}><div className="compl"><span className="prog" style=${{width:160}}><i style=${{width:c.pct+'%',background:c.pct===100?'var(--ok)':'var(--warn)'}}></i></span><b>Complétude ${c.pct} %</b></div>
+   ${c.miss.length?html`<p className="small" style=${{margin:'6px 0 0',color:'var(--warn)'}}>Indispensable avant dépôt : ${c.miss.map(f=>f.l.replace(/^\d+\.\s/,'')).join(' · ')}</p>`:html`<p className="small muted" style=${{margin:'6px 0 0'}}>Tous les éléments indispensables sont renseignés.</p>`}</div>
+  <div className="card"><div className="form">${fields.map(f=>html`<${Field} key=${f.k} def=${{...f,noConf:true}} value=${d[f.k]} params=${params} onChange=${v=>set(f.k,v)}/>`)}</div></div>
+  ${pilot&&S.canWrite&&src&&d.statut!=='Brouillon'?html`<div className="card" style=${{marginTop:12}}><h2>Instruction (pilote)</h2>
+   <div className="form"><div className="field wide"><label className="small muted" htmlFor="dem-instr">Avis d'instruction</label><textarea id="dem-instr" value=${d.avis||''} onChange=${e=>set('avis',e.target.value)}></textarea></div></div>
+   <div className="row" style=${{marginTop:10}}>
+    ${['En instruction','Réorientée','Refusée'].map(s=>html`<button key=${s} className="btn" onClick=${()=>persist(s,'Demande : '+s)}>${s==='En instruction'?'Passer en instruction':s==='Réorientée'?'Réorienter (autre format)':'Refuser'}</button>`)}
+    ${d.foadId?html`<button className="btn q" onClick=${()=>openFiche(d.foadId)}>Ouvrir la fiche créée</button>`:html`<button className="btn p" onClick=${accepter}>Accepter et créer la fiche</button>`}
+   </div></div>`:null}
+ </div>`;
+}
+
+/* ============ MODULE 5 — AIDE À LA DÉCISION ============ */
+const FORMATS={
+ doc:['Document ou fiche réflexe','Rappel ponctuel d\'une procédure, sans apprentissage nouveau.','Production rapide, consultable en intervention ou en garde.','Aucune trace d\'apprentissage ni d\'évaluation.'],
+ micro:['Microlearning','Une notion isolée, à diffuser largement et rapidement.','Format court (5 à 10 min), facile à actualiser.','Ne construit pas une compétence complexe.'],
+ court:['FOAD courte','Connaissances déclaratives pour un public large.','Traçabilité ENASIS, évaluation simple.','Peu adaptée aux gestes et aux situations dynamiques.'],
+ struct:['FOAD structurée','Plusieurs séquences, objectifs multiples, évaluation formalisée.','Homogénéise le niveau sur tout le département.','Charge de conception et de maintenance plus forte.'],
+ parcours:['Parcours complet','Montée en compétence d\'une fonction, plusieurs modules liés.','Cohérence d\'ensemble, suivi par profil.','Long à produire, nécessite un pilotage et des validations multiples.'],
+ cv:['Classe virtuelle','Besoin d\'échanges, de questions-réponses, de retours d\'expérience.','Interaction avec un formateur sans déplacement.','Dépend de la disponibilité des formateurs et des agents en même temps.'],
+ pres:['Présentiel','Gestes, matériels, sécurité, mise en situation réelle.','Seul format permettant d\'évaluer une compétence opérationnelle.','Mobilise formateurs, plateaux techniques et disponibilités.'],
+ hyb:['Formation hybride','Apports théoriques à distance, pratique en présentiel.','Réduit le temps présentiel, arrive avec des acquis homogènes.','Exige d\'articuler les deux temps et de vérifier le préalable.']};
+function Assistant(){
+ const [a,setA]=useState({pratique:'non',risque:'faible',complexite:'simple',volume:'large',echanges:'non',duree:'court',ressources:'oui'});
+ const sc={doc:0,micro:0,court:0,struct:0,parcours:0,cv:0,pres:0,hyb:0};
+ const w=(k,v)=>sc[k]+=v;
+ if(a.pratique==='oui'){w('pres',4);w('hyb',4);w('court',-2);w('micro',-2);w('doc',-2)}
+ if(a.pratique==='partiel'){w('hyb',3);w('struct',1)}
+ if(a.risque==='eleve'){w('pres',3);w('hyb',2);w('doc',-3);w('micro',-2)}
+ if(a.risque==='moyen'){w('hyb',1);w('struct',1)}
+ if(a.complexite==='simple'){w('doc',2);w('micro',3);w('court',2)}
+ if(a.complexite==='moyenne'){w('court',1);w('struct',3)}
+ if(a.complexite==='forte'){w('struct',2);w('parcours',3);w('hyb',1)}
+ if(a.volume==='large'){w('court',2);w('micro',1);w('struct',1);w('pres',-1)}
+ if(a.volume==='restreint'){w('pres',1);w('cv',1)}
+ if(a.echanges==='oui'){w('cv',4);w('hyb',1)}
+ if(a.duree==='court'){w('micro',2);w('doc',1);w('court',1)}
+ if(a.duree==='long'){w('parcours',2);w('struct',1)}
+ if(a.ressources==='non'){w('doc',-1);w('parcours',-1)}
+ const rank=Object.entries(sc).sort((x,y)=>y[1]-x[1]);
+ const Q=(k,l,o)=>html`<div className="field"><label className="small muted" htmlFor=${'as-'+k}>${l}</label><select id=${'as-'+k} value=${a[k]} onChange=${e=>setA({...a,[k]:e.target.value})}>${o.map(([v,t])=>html`<option key=${v} value=${v}>${t}</option>`)}</select></div>`;
+ return html`<div>
+  <${Head} eyebrow="Module 5" title="Aide au choix du format" sub="Une orientation, pas une décision. La pertinence finale relève du cadrage pédagogique et de l'avis métier."/>
+  <div className="split"><div className="card"><div className="form">
+   ${Q('pratique','Besoin de pratique gestuelle ou matérielle',[['non','Non'],['partiel','Partiel'],['oui','Oui, indispensable']])}
+   ${Q('risque','Niveau de risque opérationnel',[['faible','Faible'],['moyen','Moyen'],['eleve','Élevé']])}
+   ${Q('complexite','Complexité du contenu',[['simple','Simple, une notion'],['moyenne','Plusieurs notions liées'],['forte','Forte, compétence globale']])}
+   ${Q('volume','Nombre d\'apprenants',[['restreint','Restreint (< 50)'],['moyen','Moyen'],['large','Large (tout le département)']])}
+   ${Q('echanges','Besoin d\'échanges avec un formateur',[['non','Non'],['oui','Oui']])}
+   ${Q('duree','Temps apprenant disponible',[['court','Moins de 30 min'],['moyen','30 min à 2 h'],['long','Plus de 2 h']])}
+   ${Q('ressources','Ressources de référence existantes',[['oui','Oui, validées'],['non','Non ou à produire']])}
+  </div></div>
+  <div className="card"><h2>Formats suggérés</h2><div className="list">${rank.slice(0,3).map(([k],i)=>{const f=FORMATS[k];return html`<div key=${k} className=${'alert '+(i===0?'info':'')}><div><b>${i+1}. ${f[0]}</b><div className="small">Pertinent si : ${f[1]}</div><div className="small">Avantage : ${f[2]}</div><div className="small">Limite : ${f[3]}</div></div></div>`})}</div>
+   ${a.pratique==='oui'||a.risque==='eleve'?html`<div className="alert bad" style=${{marginTop:10}}><span className="small"><b>Garde-fou :</b> une FOAD ne remplace ni la mise en pratique ni l'évaluation d'une compétence opérationnelle. Elle peut au mieux la préparer.</span></div>`:null}
+  </div></div></div>`;
+}
+
+/* ============ MODULE 6 — SIMULATEUR ============ */
+function Simulateur({S,params,api,toast,selComps,setSelComps,ro}){
+ const [inp,setInp]=useState(()=>lsGet('fp.sim',{duree:45,sequences:4,complexite:'intermediaire',qualite:'partielles',videos:0,interactions:8,quiz:2,html:0,storyline:false,graph:'leger',audio:0,relecteurs:2,cycles:2,reutil:0}));
+ const [target,setTarget]=useState('');
+ useEffect(()=>lsSet('fp.sim',inp),[inp]);
+ const comps=S.data.composants.filter(c=>selComps.includes(c.id));
+ const r=simulate(inp,params,comps);
+ const s=(k,v)=>setInp(o=>({...o,[k]:v}));
+ const N=(k,l,h)=>html`<div className="field"><label className="small muted" htmlFor=${'sim-'+k}>${l}</label><input id=${'sim-'+k} type="number" min="0" value=${inp[k]} onChange=${e=>s(k,e.target.value===''?0:+e.target.value)}/>${h?html`<div className="hint">${h}</div>`:null}</div>`;
+ const attach=async()=>{const f=S.data.foad.find(x=>x.id===target);if(!f)return;
+  const est={date:today(),bas:Math.round(r.bas),central:Math.round(r.central),haut:Math.round(r.haut),complexite:inp.complexite,entrees:inp,composants:comps.map(c=>c.nom)};
+  try{await api.save('foad',f.id,{...f,estimation:est,tempsPrevu:Math.round(r.central),conf:{...(f.conf||{}),tempsPrevu:'suppose'}});await api.log(f.id,'estimation','Simulateur : '+est.bas+' / '+est.central+' / '+est.haut+' h (temps prévu fixé à '+est.central+' h)');toast('Estimation rattachée à '+f.code)}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
+ return html`<div>
+  <${Head} eyebrow="Module 6" title="Simulateur de charge de conception" sub="Hypothèses de gestion paramétrables dans Paramètres. Ce ne sont pas des normes réglementaires."/>
+  <div className="card" style=${{marginBottom:14}}><h2>Niveau de complexité</h2><div className="scale">${COMPLEX.map(c=>html`<button key=${c.k} className=${inp.complexite===c.k?'on':''} aria-pressed=${inp.complexite===c.k} onClick=${()=>s('complexite',c.k)}><span className="lv"><span className="sw" style=${{background:c.c}}></span>${c.lv}</span><span className="small muted">${c.d}</span><span className="mono small">${params.ratios[c.k]} h / h de FOAD</span></button>`)}</div></div>
+  <div className="split"><div className="card"><h2>Caractéristiques</h2><div className="form">
+   ${N('duree','Durée finale de la FOAD (min)')}${N('sequences','Nombre de séquences')}
+   <div className="field"><label className="small muted" htmlFor="sim-q">Qualité des ressources initiales</label><select id="sim-q" value=${inp.qualite} onChange=${e=>s('qualite',e.target.value)}><option value="bonnes">Bonnes, validées</option><option value="partielles">Partielles</option><option value="absentes">Absentes, à produire</option></select></div>
+   <div className="field"><label className="small muted" htmlFor="sim-g">Besoin de graphismes</label><select id="sim-g" value=${inp.graph} onChange=${e=>s('graph',e.target.value)}><option value="aucun">Aucun</option><option value="leger">Léger</option><option value="fort">Important</option></select></div>
+   ${N('videos','Nombre de vidéos')}${N('interactions','Nombre d\'interactions')}${N('quiz','Nombre de quiz')}${N('html','Composants HTML personnalisés')}
+   ${N('audio','Audio à enregistrer (min)')}${N('relecteurs','Nombre de relecteurs')}${N('cycles','Cycles de correction')}
+   <div className="field"><label className="small muted" htmlFor="sim-r">Blocs réutilisables disponibles</label><select id="sim-r" value=${inp.reutil} onChange=${e=>s('reutil',+e.target.value)}><option value="0">Aucun</option><option value="15">Quelques-uns (−15 %)</option><option value="30">Nombreux (−30 %)</option></select></div>
+   <label className="row small"><input type="checkbox" id="sim-sl" checked=${inp.storyline} onChange=${e=>s('storyline',e.target.checked)}/> Besoin Storyline</label>
+  </div>
+  ${comps.length?html`<div style=${{marginTop:12}}><h3>Composants sélectionnés dans le catalogue</h3><div className="chips">${comps.map(c=>html`<button key=${c.id} className="chip on" onClick=${()=>setSelComps(selComps.filter(x=>x!==c.id))}>${c.nom} ×</button>`)}</div></div>`:html`<p className="small muted" style=${{marginTop:12}}>Astuce : sélectionnez des composants dans le catalogue pour les ajouter au calcul.</p>`}
+  </div>
+  <div className="card"><h2>Estimation</h2>
+   <div className="range3"><div><span className="small muted">Basse</span><b>${fmtH(r.bas)}</b></div><div className="c"><span className="small muted">Centrale</span><b>${fmtH(r.central)}</b></div><div><span className="small muted">Haute</span><b>${fmtH(r.haut)}</b></div></div>
+   <p className="small muted">Base : ${fmtMin(inp.duree)} × ${params.ratios[inp.complexite]} h/h = ${fmtH(r.base)}${r.ratio?' · ratio global '+Math.round(r.ratio)+' h par heure de FOAD':''}${params.tauxHoraire?' · coût central ≈ '+Math.round(r.central*params.tauxHoraire).toLocaleString('fr-FR')+' €':''}</p>
+   <div className="tbl-wrap sim-out"><table><thead><tr><th>Phase</th><th className="num">Basse</th><th className="num">Centrale</th><th className="num">Haute</th></tr></thead><tbody>
+    ${PHASES.filter(([k])=>r.lines[k]).map(([k,l])=>html`<tr key=${k}><td>${l}<div className="small muted">${r.why[k].join(' + ')}</div></td><td className="num">${fmtH(r.lines[k]*params.fourchette.bas)}</td><td className="num"><b>${fmtH(r.lines[k])}</b></td><td className="num">${fmtH(r.lines[k]*params.fourchette.haut)}</td></tr>`)}
+   </tbody></table></div>
+   ${ro?null:html`<div className="row" style=${{marginTop:12}}><select id="sim-target" className="grow" style=${{width:'auto'}} value=${target} onChange=${e=>setTarget(e.target.value)} aria-label="FOAD cible"><option value="">Rattacher à une fiche…</option>${S.data.foad.filter(f=>!TERMINAUX.includes(f.etape)).map(f=>html`<option key=${f.id} value=${f.id}>${f.code} · ${f.titre}</option>`)}</select><button className="btn p" disabled=${!target} onClick=${attach}>Rattacher</button></div>`}
+  </div></div></div>`;
+}
+
+/* ============ MODULE 7 — COMPOSANTS ============ */
+const CMP_FIELDS=[{k:'nom',l:'Nom',t:'text',req:true},{k:'famille',l:'Famille',t:'select',opts:FAMILLES},{k:'format',l:'Format',t:'select',opts:['Bloc Rise natif','HTML/CSS/JS','Storyline','H5P','Image / média','Modèle Rise']},{k:'complexite',l:'Complexité',t:'select',opts:COMPLEX.map(c=>c.lv)},
+ {k:'description',l:'Description',t:'ta',wide:true},{k:'tempsCreation',l:'Temps de création (h)',t:'number'},{k:'tempsReutil',l:'Temps de réutilisation (h)',t:'number'},{k:'compat',l:'Compatibilité',t:'multi',opts:['Rise','Storyline','ENASIS / Moodle','Mobile']},{k:'version',l:'Version',t:'text'},
+ {k:'limites',l:'Limites techniques',t:'ta'},{k:'consignes',l:'Consignes d\'intégration',t:'ta'},{k:'responsable',l:'Responsable de maintenance',t:'text'},{k:'lien',l:'Lien vers le modèle ou le code',t:'text'}];
+function Composants({S,params,api,toast,selComps,setSelComps,go,ro}){
+ const [ed,setEd]=useState(null);const [q,setQ]=useState('');const [fam,setFam]=useState('');
+ let rows=S.data.composants.slice().sort((a,b)=>(a.nom||'').localeCompare(b.nom||''));
+ if(q)rows=rows.filter(c=>[c.nom,c.description,c.famille].join(' ').toLowerCase().includes(q.toLowerCase()));
+ if(fam)rows=rows.filter(c=>c.famille===fam);
+ const save=async()=>{if(!(ed.nom||'').trim()){toast('Le nom est obligatoire.');return}const id=ed.id||uid('C');try{await api.save('composants',id,ed);await api.log(null,'composant',(ed.id?'Modification':'Ajout')+' du composant « '+ed.nom+' »');setEd(null);toast('Composant enregistré')}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
+ const del=async()=>{try{await api.remove('composants',ed.id);await api.log(null,'composant','Suppression du composant « '+ed.nom+' »');setEd(null)}catch(e){toast(e.message||e.code)}};
+ if(ed)return html`<div><button className="backbtn" onClick=${()=>setEd(null)}>← Catalogue des composants</button><${Head} eyebrow="Composant" title=${ed.nom||'Nouveau composant'}>${ro?null:html`${ed.id?html`<button className="btn danger" onClick=${del}>Supprimer</button>`:null}<button className="btn p" onClick=${save}>Enregistrer</button>`}<//>
+  <div className="card"><div className="form">${CMP_FIELDS.map(f=>html`<${Field} key=${f.k} def=${{...f,noConf:true}} value=${ed[f.k]} params=${params} ro=${ro} onChange=${v=>setEd({...ed,[f.k]:v})}/>`)}</div></div></div>`;
+ return html`<div>
+  <${Head} eyebrow="Module 7" title="Composants et ressources" sub=${S.data.composants.length+' composant(s). Sélectionnez-en pour les intégrer au simulateur de charge.'}>
+   ${selComps.length?html`<button className="btn" onClick=${()=>go('simulateur')}>Simuler avec ${selComps.length} composant(s)</button>`:null}
+   ${ro?null:html`<button className="btn p" onClick=${()=>setEd({compat:[]})}><${Ico} n="plus"/> Nouveau composant</button>`}
+  <//>
+  <div className="row" style=${{marginBottom:12}}><input id="cmp-q" className="grow" style=${{width:'auto',flex:1}} placeholder="Rechercher un composant" value=${q} onChange=${e=>setQ(e.target.value)}/><select id="cmp-f" style=${{width:'auto'}} value=${fam} onChange=${e=>setFam(e.target.value)} aria-label="Famille"><option value="">Toutes familles</option>${FAMILLES.map(f=>html`<option key=${f}>${f}</option>`)}</select></div>
+  ${rows.length?html`<div className="tbl-wrap"><table><thead><tr><th></th><th>Nom</th><th>Famille</th><th>Format</th><th>Complexité</th><th className="num">Création</th><th className="num">Réutilisation</th><th>Compatibilité</th><th>Version</th></tr></thead><tbody>
+   ${rows.map(c=>html`<tr key=${c.id} className="click" onClick=${()=>setEd(clone(c))}><td onClick=${e=>e.stopPropagation()}><input type="checkbox" aria-label=${'Sélectionner '+c.nom} checked=${selComps.includes(c.id)} onChange=${()=>setSelComps(selComps.includes(c.id)?selComps.filter(x=>x!==c.id):selComps.concat([c.id]))}/></td>
+    <td><b>${c.nom}</b><div className="small muted">${c.description||''}</div></td><td>${c.famille||'—'}</td><td>${c.format||'—'}</td><td>${c.complexite||'—'}</td><td className="num">${fmtH(c.tempsCreation)}</td><td className="num">${fmtH(c.tempsReutil)}</td><td>${(c.compat||[]).join(', ')||'—'}</td><td className="mono">${c.version||'—'}</td></tr>`)}</tbody></table></div>`
+  :html`<div className="empty-state">Aucun composant.</div>`}
+ </div>`;
+}
+
+/* ============ MODULE 8 — GOUVERNANCE ============ */
+const REG_FIELDS=[{k:'titre',l:'Intitulé',t:'text',req:true,wide:true},{k:'categorie',l:'Rubrique',t:'select',opts:CAT_REGLE},{k:'nature',l:'Nature de l\'information',t:'select',opts:NATURE_REGLE,req:true},
+ {k:'source',l:'Source',t:'text'},{k:'reference',l:'Référence',t:'text'},{k:'date',l:'Date du texte',t:'date'},{k:'version',l:'Version',t:'text'},{k:'champ',l:'Champ d\'application',t:'ta'},{k:'autorite',l:'Autorité compétente',t:'text'},
+ {k:'verif',l:'Statut de vérification',t:'select',opts:['Non vérifié','En cours de vérification','Vérifié','Obsolète']},{k:'dateVerif',l:'Date de dernière vérification',t:'date'},{k:'lien',l:'Lien documentaire',t:'text',wide:true},{k:'contenu',l:'Contenu de la règle ou doctrine locale',t:'ta',wide:true}];
+const Q_FIELDS=[{k:'titre',l:'Question à trancher',t:'text',req:true,wide:true},{k:'categorie',l:'Rubrique',t:'select',opts:CAT_REGLE},{k:'nature',l:'Nature',t:'select',opts:['Proposition à arbitrer','Information à vérifier']},{k:'statut',l:'Statut',t:'select',opts:['Ouverte','En cours d\'arbitrage','Tranchée']},
+ {k:'autorite',l:'Autorité appelée à trancher',t:'text'},{k:'echeance',l:'Échéance',t:'date'},{k:'contexte',l:'Contexte et options',t:'ta',wide:true},{k:'decision',l:'Décision retenue',t:'ta',wide:true},{k:'sourceDecision',l:'Source de la décision',t:'text',wide:true,hint:'Note de service, délibération, compte rendu…'}];
+const NAT_TONE={'Texte réglementaire vérifié':'ok','Décision locale validée':'ok','Procédure interne formalisée':'info','Recommandation de bonne pratique':'','Proposition à arbitrer':'warn','Information à vérifier':'bad'};
+function Gouvernance({S,params,api,toast,ro,openFiche}){
+ const [tab,setTab]=useState('regles');const [ed,setEd]=useState(null);const [nat,setNat]=useState('');const [rev,setRev]=useState('');
+ const regles=S.data.regles.filter(r=>r.kind!=='question'&&(!nat||r.nature===nat));
+ const qs=S.data.regles.filter(r=>r.kind==='question');
+ const save=async()=>{if(!(ed.titre||'').trim()){toast('L\'intitulé est obligatoire.');return}
+  if(ed.kind!=='question'&&ed.nature==='Texte réglementaire vérifié'&&(isEmpty(ed.source)||isEmpty(ed.reference))){toast('Un texte réglementaire « vérifié » doit avoir une source et une référence.');return}
+  if(ed.kind==='question'&&ed.statut==='Tranchée'&&isEmpty(ed.sourceDecision)){toast('Une question tranchée doit citer la source de la décision.');return}
+  const id=ed.id||uid('R');try{await api.save('regles',id,ed);await api.log(null,'gouvernance',(ed.id?'Modification':'Ajout')+' : '+ed.titre+(ed.statut?' ('+ed.statut+')':''));setEd(null);toast('Enregistré')}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
+ const hits=rev.trim()?S.data.foad.filter(f=>[f.referentiel,f.depReglementaires,f.depTechniques].join(' ').toLowerCase().includes(rev.trim().toLowerCase())):[];
+ const flag=async()=>{try{for(const f of hits){await api.save('foad',f.id,{...f,revisionNecessaire:true,typeRevision:f.typeRevision||'Révision réglementaire'});await api.log(f.id,'révision','Révision identifiée suite à l\'évolution de « '+rev+' »')}toast(hits.length+' fiche(s) marquée(s) « révision nécessaire »')}catch(e){toast(e.message||e.code)}};
+ if(ed){const defs=ed.kind==='question'?Q_FIELDS:REG_FIELDS;return html`<div><button className="backbtn" onClick=${()=>setEd(null)}>← Référentiel de gouvernance</button>
+  <${Head} eyebrow=${ed.kind==='question'?'Question à trancher':'Règle ou référence'} title=${ed.titre||'Nouvelle entrée'}>${ro?null:html`${ed.id?html`<button className="btn danger" onClick=${async()=>{await api.remove('regles',ed.id);await api.log(null,'gouvernance','Suppression : '+ed.titre);setEd(null)}}>Supprimer</button>`:null}<button className="btn p" onClick=${save}>Enregistrer</button>`}<//>
+  <div className="card"><div className="form">${defs.map(f=>html`<${Field} key=${f.k} def=${{...f,noConf:true}} value=${ed[f.k]} params=${params} ro=${ro} onChange=${v=>setEd({...ed,[f.k]:v})}/>`)}</div></div></div>`}
+ return html`<div>
+  <${Head} eyebrow="Module 8" title="Référentiel de gouvernance" sub="Toute règle porte sa nature et sa source. Aucune disposition n'est considérée comme acquise sans source identifiable.">
+   ${ro?null:html`<button className="btn" onClick=${()=>setEd({kind:'question',statut:'Ouverte',nature:'Proposition à arbitrer'})}>Nouvelle question</button><button className="btn p" onClick=${()=>setEd({nature:'Information à vérifier',verif:'Non vérifié'})}><${Ico} n="plus"/> Nouvelle règle</button>`}
+  <//>
+  <div className="tabs">${[['regles','Règles et références ('+S.data.regles.filter(r=>r.kind!=='question').length+')'],['questions','Questions à trancher ('+qs.filter(q=>q.statut!=='Tranchée').length+' ouvertes)'],['revision','Assistant de révision']].map(([k,l])=>html`<button key=${k} className=${tab===k?'on':''} onClick=${()=>setTab(k)}>${l}</button>`)}</div>
+  ${tab==='regles'?html`<div><div className="chips" style=${{marginBottom:12}}><button className=${'chip'+(!nat?' on':'')} onClick=${()=>setNat('')}>Toutes</button>${NATURE_REGLE.map(n=>html`<button key=${n} className=${'chip'+(nat===n?' on':'')} onClick=${()=>setNat(n)}>${n}</button>`)}</div>
+   ${regles.length?CAT_REGLE.concat(['']).map(cat=>{const rs=regles.filter(r=>(r.categorie||'')===cat);if(!rs.length)return null;return html`<div key=${cat} style=${{marginBottom:14}}><h3 style=${{fontFamily:'var(--f-display)',margin:'0 0 8px'}}>${cat||'Sans rubrique'}</h3><div className="tbl-wrap"><table><thead><tr><th>Intitulé</th><th>Nature</th><th>Source / référence</th><th>Vérification</th></tr></thead><tbody>
+    ${rs.map(r=>html`<tr key=${r.id} className="click" onClick=${()=>setEd(clone(r))}><td><b>${r.titre}</b>${r.contenu?html`<div className="small muted">${r.contenu.slice(0,160)}${r.contenu.length>160?'…':''}</div>`:null}</td><td><${Badge} tone=${NAT_TONE[r.nature]}>${r.nature||'—'}<//></td><td>${r.source||html`<span style=${{color:'var(--bad)'}}>Source manquante</span>`}<div className="small muted">${r.reference||''}</div></td><td>${r.verif||'Non vérifié'}<div className="small muted">${fmtD(r.dateVerif)}</div></td></tr>`)}</tbody></table></div></div>`}):html`<div className="empty-state">Aucune règle pour ce filtre.</div>`}</div>`:null}
+  ${tab==='questions'?html`${qs.length?html`<div className="tbl-wrap"><table><thead><tr><th>Question</th><th>Rubrique</th><th>Autorité</th><th>Statut</th></tr></thead><tbody>${qs.sort((a,b)=>(a.statut==='Tranchée')-(b.statut==='Tranchée')).map(r=>html`<tr key=${r.id} className="click" onClick=${()=>setEd(clone(r))}><td><b>${r.titre}</b>${r.decision?html`<div className="small">Décision : ${r.decision}</div>`:null}</td><td>${r.categorie||'—'}</td><td>${r.autorite||'—'}</td><td><${Badge} tone=${r.statut==='Tranchée'?'ok':'warn'}>${r.statut}<//></td></tr>`)}</tbody></table></div>`:html`<div className="empty-state">Aucune question enregistrée.</div>`}`:null}
+  ${tab==='revision'?html`<div className="card"><h2>Quelles FOAD dépendent d'un texte ou d'une procédure modifiée ?</h2>
+   <p className="small muted">Recherche dans les champs « Référentiel associé », « Dépendances réglementaires » et « Dépendances techniques » des fiches.</p>
+   <input id="rev-q" placeholder="Ex. GDO SSUAP, RIOFE, NexSIS…" value=${rev} onChange=${e=>setRev(e.target.value)}/>
+   ${rev.trim()?html`<div className="list" style=${{marginTop:12}}>${hits.length?hits.map(f=>html`<div key=${f.id} className="alert"><div className="grow"><b>${f.titre}</b><div className="small muted">${[f.referentiel,f.depReglementaires].filter(Boolean).join(' · ')}</div></div><button className="btn sm q" onClick=${()=>openFiche(f.id)}>Ouvrir</button></div>`):html`<div className="muted small">Aucune fiche ne déclare cette dépendance. Vérifiez que les dépendances sont renseignées dans l'onglet Maintenance.</div>`}
+    ${hits.length&&!ro?html`<div><button className="btn p" onClick=${flag}>Marquer ${hits.length} fiche(s) « révision nécessaire »</button></div>`:null}</div>`:null}</div>`:null}
+ </div>`;
+}
+
+/* ============ MODULE 14 — CATALOGUE PUBLIC ============ */
+function Catalogue({S,params,go,vue}){
+ const [q,setQ]=useState('');const [dom,setDom]=useState('');
+ let rows=S.data.foad.filter(f=>f.publicCatalogue&&!['Archivage','Abandonné'].includes(f.etape));
+ if(q)rows=rows.filter(f=>[f.titre,f.objectifs,f.domaine].join(' ').toLowerCase().includes(q.toLowerCase()));
+ if(dom)rows=rows.filter(f=>f.domaine===dom);
+ const dispo=rows.filter(f=>f.statutPublication==='Publiée'),venir=rows.filter(f=>f.statutPublication!=='Publiée');
+ const initials=t=>(t||'?').split(/[\s\-–]+/).filter(w=>w.length>2).slice(0,2).map(w=>w[0].toUpperCase()).join('')||'F';
+ const Card=f=>html`<div key=${f.id} className="card cat-card"><div className="row"><span className="pic" aria-hidden="true">${initials(f.domaine||f.titre)}</span><div className="grow"><div className="small muted">${f.domaine||''}</div><b style=${{fontSize:14}}>${f.titre}</b></div></div>
+  <div className="row">${(f.publics||[]).map(p=>html`<${Badge} key=${p}>${p}<//>`)}${f.dureeTheo?html`<${Badge} tone="info">${fmtMin(f.dureeTheo)}<//>`:null}${f.caractere?html`<${Badge} tone=${f.caractere==='Obligatoire'?'red':''}>${f.caractere}<//>`:null}</div>
+  ${f.objectifs?html`<p className="small" style=${{margin:0}}>${f.objectifs.slice(0,220)}${f.objectifs.length>220?'…':''}</p>`:null}
+  ${f.autonomie?html`<div className="small muted">${f.autonomie}</div>`:null}
+  <div className="row"><${Badge} tone=${f.statutPublication==='Publiée'?'ok':''}>${f.statutPublication==='Publiée'?'Disponible':'À venir'}<//>${f.statutPublication==='Publiée'&&f.lienPublic&&f.lienEnasis&&/^https?:/.test(f.lienEnasis)?html`<a className="btn sm" href=${f.lienEnasis} target="_blank" rel="noopener">Accéder sur ENASIS</a>`:null}</div></div>`;
+ return html`<div>
+  <${Head} eyebrow="Catalogue" title="Formations à distance du SDIS 85" sub="Seules les fiches dont la diffusion au catalogue est autorisée apparaissent ici, sans les informations internes de pilotage.">
+   <button className="btn p" onClick=${()=>go('idee')}>Proposer une idée</button>
+  <//>
+  <div className="row" style=${{marginBottom:12}}><input id="cat-q" className="grow" style=${{width:'auto',flex:1}} placeholder="Rechercher une formation" value=${q} onChange=${e=>setQ(e.target.value)}/><select id="cat-d" style=${{width:'auto'}} value=${dom} onChange=${e=>setDom(e.target.value)} aria-label="Domaine"><option value="">Tous domaines</option>${params.domaines.map(d=>html`<option key=${d}>${d}</option>`)}</select></div>
+  <h2 style=${{fontFamily:'var(--f-display)',fontSize:17}}>Disponibles</h2>
+  ${dispo.length?html`<div className="cat-grid">${dispo.map(Card)}</div>`:html`<div className="empty-state">Aucune formation n'est encore affichée au catalogue. Le pilote active l'affichage dans l'onglet « Publication ENASIS » de chaque fiche.</div>`}
+  ${venir.length?html`<h2 style=${{fontFamily:'var(--f-display)',fontSize:17,marginTop:22}}>À venir</h2><div className="cat-grid">${venir.map(Card)}</div>`:null}
+  <div className="card" style=${{marginTop:22}}><h2>Comment proposer une FOAD ?</h2>
+   <div className="steps"><div>Vous déposez une idée ou une demande complète.</div><div>Le pilote FOAD instruit le besoin et choisit le format avec vous.</div><div>Arbitrage hiérarchique si nécessaire.</div><div>Conception avec un expert métier de votre service.</div><div>Relecture, expérimentation, corrections.</div><div>Validation et autorisation de diffusion.</div><div>Mise en ligne sur ENASIS et suivi.</div></div>
+   <div className="row" style=${{marginTop:12}}><button className="btn p" onClick=${()=>go('idee')}>Proposer une idée</button>${vue!=='visiteur'?html`<button className="btn" onClick=${()=>go('demandes')}>Déposer une demande complète</button>`:null}</div></div>
+ </div>`;
+}
+
+/* ============ MODULE 13 — BILAN ============ */
+function Bilan({S,params,api,toast}){
+ const [per,setPer]=useState('annee');
+ const y=new Date().getFullYear(),m=new Date().getMonth();
+ const start=per==='mois'?new Date(y,m,1):per==='trimestre'?new Date(y,Math.floor(m/3)*3,1):per==='annee'?new Date(y,0,1):new Date(2000,0,1);
+ const s0=start.toISOString().slice(0,10);
+ const inP=d=>d&&d>=s0;
+ const fo=S.data.foad;
+ const pub=fo.filter(f=>f.statutPublication==='Publiée'&&inP(f.datePublication));
+ const pubSans=fo.filter(f=>f.statutPublication==='Publiée'&&!f.datePublication).length;
+ const moves=S.data.journal.filter(j=>j.type==='étape'&&inP((j.at||'').slice(0,10)));
+ const pubsCnt=PUBLICS.map(p=>({k:p,v:pub.filter(f=>(f.publics||[]).includes(p)).length})).filter(r=>r.v);
+ const tReel=fo.filter(f=>!isEmpty(f.tempsReel)),tPrev=fo.filter(f=>!isEmpty(f.tempsPrevu));
+ const sumR=tReel.reduce((s,f)=>s+f.tempsReel,0),sumP=tPrev.reduce((s,f)=>s+f.tempsPrevu,0);
+ const reel=fo.filter(f=>f.usageSource==='Réelles (export ENASIS)'&&!isEmpty(f.inscrits));
+ const ins=reel.reduce((s,f)=>s+(+f.inscrits||0),0),ach=reel.reduce((s,f)=>s+(+f.acheves||0),0);
+ const encours=fo.filter(f=>!TERMINAUX.includes(f.etape)&&!['À qualifier','Idée'].includes(f.etape));
+ const dec=fo.filter(f=>!isEmpty(f.decisionAttendue)),qs=S.data.regles.filter(r=>r.kind==='question'&&r.statut!=='Tranchée');
+ const al=fo.flatMap(f=>alertsFor(f,S.data.validations,params).filter(a=>a.l==='bad').map(a=>({...a,f})));
+ const perLabel={mois:'mois en cours',trimestre:'trimestre en cours',annee:'année '+y,tout:'toute la période'}[per];
+ const sections=[
+  ['Qu\'avons-nous produit ?',[pub.length+' FOAD publiée(s) sur la période ('+perLabel+')'+(pub.length?' : '+pub.map(f=>f.titre).join(', '):'')+'.', moves.length+' changement(s) d\'étape tracé(s) sur la période.', pubSans?pubSans+' FOAD publiée(s) sans date de publication renseignée, non rattachable(s) à une période.':null]],
+  ['Pour quels publics ?',[pubsCnt.length?pubsCnt.map(r=>r.k+' : '+r.v).join(' · '):'Publics non renseignés sur les FOAD publiées de la période.']],
+  ['À quel coût et avec quels moyens ?',[tReel.length?'Temps de conception réellement mobilisé : '+fmtH(sumR)+' ('+tReel.length+' fiche(s) renseignée(s) sur '+fo.length+').':'Aucun temps de conception réel renseigné.', tPrev.length?'Temps prévu cumulé : '+fmtH(sumP)+' ('+tPrev.length+' fiche(s)).':null, params.tauxHoraire&&tReel.length?'Valorisation au taux paramétré ('+params.tauxHoraire+' €/h) : '+Math.round(sumR*params.tauxHoraire).toLocaleString('fr-FR')+' €.':'Valorisation financière non calculée : taux horaire non paramétré.']],
+  ['Quels résultats avons-nous obtenus ?',[reel.length?ins+' inscrits et '+ach+' achèvements sur '+reel.length+' FOAD disposant de données réelles ENASIS (taux d\'achèvement '+(ins?Math.round(ach/ins*100):0)+' %).':'Aucune donnée d\'utilisation réelle importée. Les données estimées sont exclues.']],
+  ['Que reste-t-il à faire ?',encours.length?encours.map(f=>f.titre+' — '+f.etape+(f.dateCible?', cible '+fmtD(f.dateCible):'')+(isEmpty(f.chargeRestante)?'':', reste '+fmtH(f.chargeRestante))):['Aucun projet en cours.']],
+  ['Quels arbitrages sont nécessaires ?',(dec.map(f=>f.titre+' : '+f.decisionAttendue)).concat(qs.map(q=>'Gouvernance : '+q.titre+(q.autorite?' ('+q.autorite+')':''))).concat(dec.length||qs.length?[]:['Aucun arbitrage en attente.'])],
+  ['Quels sont les risques à venir ?',al.length?al.map(a=>a.f.titre+' : '+a.t):['Aucune alerte bloquante sur les données renseignées.']]];
+ const text='FOAD PILOT 85 — Bilan ('+perLabel+') — édité le '+fmtD(today())+'\n\n'+sections.map(([t,l])=>t.toUpperCase()+'\n'+l.filter(Boolean).map(x=>'- '+x).join('\n')).join('\n\n');
+ const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c]);
+ const dl=async()=>{const h='<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Bilan FOAD SDIS 85</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:30px auto;color:#18202f;line-height:1.45}h1{color:#12203a;border-bottom:3px solid #c0142f;padding-bottom:6px}h2{color:#12203a;font-size:16px;margin-top:22px}li{margin:3px 0}.m{color:#5b6578;font-size:12px}</style></head><body><h1>Bilan des FOAD — '+esc(perLabel)+'</h1><p class="m">SDIS de la Vendée · FOAD PILOT 85 · édité le '+fmtD(today())+'. Indicateurs calculés sur les seules données renseignées.</p>'+sections.map(([t,l])=>'<h2>'+esc(t)+'</h2><ul>'+l.filter(Boolean).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>').join('')+'</body></html>';
+  try{await api.download('bilan-foad-'+per+'-'+today()+'.html',h);toast('Bilan proposé au téléchargement (à ouvrir puis imprimer depuis le navigateur)')}catch(e){if(e.code!=='declined')toast(e.message||'Téléchargement impossible')}};
+ const copy=()=>{navigator.clipboard.writeText(text).then(()=>toast('Bilan copié'),()=>toast('Copie refusée par cette vue : sélectionnez le texte manuellement'))};
+ return html`<div className="report">
+  <${Head} eyebrow="Module 13" title="Bilan pour la hiérarchie" sub="Synthèse générée à partir du registre. Les données absentes sont signalées, jamais estimées.">
+   <select id="bil-per" style=${{width:'auto'}} value=${per} onChange=${e=>setPer(e.target.value)} aria-label="Période"><option value="mois">Bilan mensuel</option><option value="trimestre">Bilan trimestriel</option><option value="annee">Bilan annuel</option><option value="tout">Depuis l'origine</option></select>
+   <button className="btn" onClick=${copy}>Copier le texte</button><button className="btn p" onClick=${dl} disabled=${!S.canDownload}><${Ico} n="dl"/> Bilan imprimable</button>
+  <//>
+  <div className="card">${sections.map(([t,l])=>html`<div key=${t}><h2>${t}</h2><ul>${l.filter(Boolean).map((x,i)=>html`<li key=${i}>${x}</li>`)}</ul></div>`)}</div>
+ </div>`;
+}
+
+/* ============ MODULE 15 — PARAMÈTRES ============ */
+function Parametres({S,params,api,toast,ro}){
+ const [p,setP]=useState(clone(params));const [imp,setImp]=useState(null);const [busy,setBusy]=useState(false);
+ useEffect(()=>setP(clone(params)),[JSON.stringify(params)]);
+ const list=(k,l)=>html`<div className="field"><label className="small muted" htmlFor=${'par-'+k}>${l} (une valeur par ligne)</label><textarea id=${'par-'+k} style=${{minHeight:160}} value=${(p[k]||[]).join('\n')} onChange=${e=>setP({...p,[k]:e.target.value.split('\n').map(s=>s.trim()).filter(Boolean)})}></textarea></div>`;
+ const n=(grp,k,l)=>html`<div className="field"><label className="small muted" htmlFor=${'par-'+grp+k}>${l}</label><input id=${'par-'+grp+k} type="number" step="0.05" value=${p[grp][k]} onChange=${e=>setP({...p,[grp]:{...p[grp],[k]:+e.target.value}})}/></div>`;
+ const phSum=Object.values(p.phases).reduce((a,b)=>a+b,0);
+ const save=async()=>{if(phSum!==100){toast('La répartition des phases doit totaliser 100 % (actuellement '+phSum+' %).');return}try{await api.saveParams(p);await api.log(null,'paramètres','Paramètres modifiés');toast('Paramètres enregistrés')}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
+ const backup=()=>JSON.stringify({app:'FOAD PILOT 85',schema:1,exportedAt:nowIso(),params,data:S.data},null,1);
+ const exp=async()=>{try{await api.download('foad-pilot-85-sauvegarde-'+today()+'.json',backup());toast('Sauvegarde proposée au téléchargement')}catch(e){if(e.code!=='declined')toast(e.message||'Téléchargement impossible')}};
+ const onFile=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j.data)throw 0;setImp(j)}catch(x){toast('Fichier non reconnu : il doit s\'agir d\'une sauvegarde FOAD PILOT 85 (JSON).')}};r.readAsText(f)};
+ const doImport=async()=>{setBusy(true);let n=0;try{for(const c of COLS){for(const row of (imp.data[c]||[])){const {id,...b}=row;if((c==='journal'||c==='validations')&&S.data[c].some(r=>r.id===id))continue;await api.save(c,id||uid('X'),b);n++}}if(imp.params)await api.saveParams(imp.params);await api.log(null,'import','Import de sauvegarde : '+n+' enregistrement(s)');toast(n+' enregistrement(s) importé(s)');setImp(null)}catch(e){toast('Import interrompu après '+n+' enregistrement(s) : '+(e.message||e.code))}setBusy(false)};
+ return html`<div>
+  <${Head} eyebrow="Module 15" title="Paramètres et administration" sub="Les listes et barèmes sont stockés dans la base et s'appliquent à toute l'application sans modifier le code.">${ro?null:html`<button className="btn p" onClick=${save}>Enregistrer les paramètres</button>`}<//>
+  <div className="grid g2">
+   <div className="card"><h2>Listes de référence</h2><div className="grid g2">${list('domaines','Domaines')}${list('fonctions','Fonctions / publics')}</div></div>
+   <div className="card"><h2>Barème du simulateur</h2><p className="small muted">Heures de conception par heure de FOAD finale, selon la complexité.</p>
+    <div className="grid g2">${n('ratios','simple','Simple')}${n('ratios','intermediaire','Intermédiaire')}${n('ratios','avance','Avancé')}${n('ratios','expert','Expert')}</div>
+    <h3 style=${{marginTop:12}}>Fourchette et coût</h3><div className="grid g2">${n('fourchette','bas','Coefficient bas')}${n('fourchette','haut','Coefficient haut')}
+     <div className="field"><label className="small muted" htmlFor="par-taux">Taux horaire chargé (€/h)</label><input id="par-taux" type="number" value=${p.tauxHoraire??''} placeholder="Non paramétré" onChange=${e=>setP({...p,tauxHoraire:e.target.value===''?null:+e.target.value})}/></div>
+     <div className="field"><label className="small muted" htmlFor="par-rev">Périodicité de révision par défaut (mois)</label><input id="par-rev" type="number" value=${p.revisionMois} onChange=${e=>setP({...p,revisionMois:+e.target.value})}/></div>
+     <div className="field"><label className="small muted" htmlFor="par-seuil">Seuil d'alerte des échéances (jours)</label><input id="par-seuil" type="number" value=${p.seuilAlerte} onChange=${e=>setP({...p,seuilAlerte:+e.target.value})}/></div></div></div>
+   <div className="card"><h2>Répartition de la base par phase <span className=${'badge '+(phSum===100?'ok':'bad')}>${phSum} %</span></h2><div className="grid g3">${Object.keys(p.phases).map(k=>n('phases',k,(PHASES.find(x=>x[0]===k)||[k,k])[1]+' (%)'))}</div></div>
+   <div className="card"><h2>Temps unitaires (h)</h2><div className="grid g3">
+    ${[['sequence','Par séquence'],['interaction','Par interaction'],['quiz','Par quiz'],['html','Par composant HTML'],['storyline','Forfait Storyline'],['video','Par vidéo'],['audioMin','Par minute d\'audio'],['graphLeger','Graphisme léger'],['graphFort','Graphisme important'],['relecteur','Par relecteur'],['cycle','Cycle de correction (% base)'],['integrationBase','Intégration forfait'],['integrationHtml','Intégration par HTML']].map(([k,l])=>n('unit',k,l))}
+    ${n('qualite','bonnes','Ressources bonnes ×')}${n('qualite','partielles','Ressources partielles ×')}${n('qualite','absentes','Ressources absentes ×')}</div></div>
+   <div className="card"><h2>Sauvegarde et import</h2><p className="small muted">La sauvegarde JSON contient toutes les fiches, demandes, validations, règles, composants, le journal et les paramètres.</p>
+    <div className="row"><button className="btn" onClick=${exp} disabled=${!S.canDownload}><${Ico} n="dl"/> Exporter la sauvegarde</button>${ro?null:html`<label className="btn">Importer une sauvegarde<input type="file" accept=".json,application/json" hidden onChange=${onFile}/></label>`}</div>
+    ${imp?html`<div className="alert warn" style=${{marginTop:12}}><div className="grow small">Sauvegarde du ${fmtDT(imp.exportedAt)} : ${COLS.map(c=>(imp.data[c]||[]).length+' '+c).join(', ')}. Les enregistrements de même identifiant seront remplacés, les autres conservés.</div><button className="btn sm p" disabled=${busy} onClick=${doImport}>${busy?'Import…':'Confirmer l\'import'}</button><button className="btn sm" onClick=${()=>setImp(null)}>Annuler</button></div>`:null}
+    ${!S.canDownload?html`<details style=${{marginTop:12}}><summary className="small">Téléchargement indisponible ici : afficher la sauvegarde à copier</summary><textarea readOnly style=${{minHeight:160,fontFamily:'var(--f-mono)',fontSize:11}} value=${backup()}></textarea></details>`:null}</div>
+   <div className="card"><h2>Architecture et limites</h2><div className="small" style=${{display:'flex',flexDirection:'column',gap:8}}>
+    <div><b>Stockage :</b> base Supabase hébergée en Europe. Toute personne disposant du lien consulte les données à jour, sans compte. Seules les adresses inscrites dans la liste des éditeurs peuvent modifier, après connexion par lien envoyé par mail.</div>
+    <div><b>Profils :</b> les cinq vues adaptent l'interface. Les droits réels sont fixés côté serveur : lecture publique, modification réservée aux éditeurs, dépôt d'idées ouvert à tous.</div>
+    <div><b>Historique :</b> le journal et les validations sont inaltérables côté serveur : on peut ajouter des entrées, personne ne peut les modifier ni les supprimer.</div>
+    <div><b>Évolution :</b> la base et le fichier de l'application peuvent être repris tels quels par la DSI sur ses propres serveurs.</div></div></div>
+  </div></div>`;
+}
+
+/* ============ APPLICATION ============ */
+const VUES={
+ pilote:{l:'Pilote FOAD',nav:['tableau','registre','projets','demandes','simulateur','assistant','composants','gouvernance','catalogue','bilan','journal','parametres']},
+ direction:{l:'Direction / hiérarchie',nav:['tableau','registre','projets','bilan','catalogue']},
+ concepteur:{l:'Concepteur pédagogique',nav:['projets','registre','simulateur','assistant','composants','gouvernance','catalogue']},
+ demandeur:{l:'Service demandeur',nav:['demandes','catalogue']},
+ visiteur:{l:'Visiteur',nav:['catalogue','idee']}};
+const NAV={tableau:['Tableau de bord','dash','Pilotage'],registre:['Registre des FOAD','reg','Pilotage'],projets:['Projets (Kanban)','kan','Pilotage'],demandes:['Demandes','dem','Pilotage'],
+ simulateur:['Simulateur de charge','sim','Conception'],assistant:['Aide au choix du format','sim','Conception'],composants:['Composants','cmp','Conception'],
+ gouvernance:['Gouvernance','gov','Référentiels'],catalogue:['Catalogue public','cat','Diffusion'],idee:['Proposer une idée','dem','Diffusion'],bilan:['Bilan hiérarchique','rep','Diffusion'],journal:['Journal','log','Administration'],parametres:['Paramètres','set','Administration']};
+const ROUTES=Object.keys(NAV).concat(['fiche']);
+
+function App(){
+ const [S,api]=useStore();
+ const params=useMemo(()=>merge(DEFAULT_PARAMS,S.params||{}),[S.params]);
+ const [vue,setVue]=useState(()=>lsGet('fp.vue','pilote'));
+ const [route,setRoute]=useState(()=>{const h=location.hash.slice(1);return ROUTES.includes(h)?h:null});
+ const [fiche,setFiche]=useState(null);
+ const [selComps,setSelComps]=useState([]);
+ const [msg,setMsg]=useState(null);
+ const tRef=useRef();
+ const toast=m=>{setMsg(m);clearTimeout(tRef.current);tRef.current=setTimeout(()=>setMsg(null),4200)};
+ useEffect(()=>lsSet('fp.vue',vue),[vue]);
+ useEffect(()=>{const f=()=>{const h=location.hash.slice(1);if(ROUTES.includes(h)&&h!=='fiche')setRoute(h)};window.addEventListener('hashchange',f);return ()=>window.removeEventListener('hashchange',f)},[]);
+ const allowed=VUES[vue].nav;
+ const cur=route==='fiche'&&fiche?'fiche':(route&&(allowed.includes(route)||route==='idee')?route:allowed[0]);
+ const go=r=>{if(r==='fiche-new'){setFiche('new');setRoute('fiche');window.scrollTo(0,0);return}setRoute(r);try{location.hash=r}catch(e){}window.scrollTo(0,0)};
+ const openFiche=(id)=>{setFiche(id);setRoute('fiche');window.scrollTo(0,0)};
+ const ro=!S.canWrite||vue==='direction'||vue==='visiteur';
+ const demCount=S.data.demandes.filter(d=>['Déposée','En instruction'].includes(d.statut)).length;
+ const props={S,params,api,toast,go,openFiche,vue,ro};
+ let body;
+ if(cur==='fiche')body=html`<${Fiche} key=${fiche} ...${props} id=${fiche} close=${()=>go('registre')} ro=${ro||vue==='demandeur'} openFiche=${(id,replace)=>{setFiche(id)}}/>`;
+ else if(cur==='tableau')body=html`<${Dashboard} ...${props} vue=${vue==='direction'?'direction':'pilote'}/>`;
+ else if(cur==='registre')body=html`<${Registre} ...${props}/>`;
+ else if(cur==='projets')body=html`<${Kanban} ...${props}/>`;
+ else if(cur==='demandes')body=html`<${Demandes} key="dem" ...${props}/>`;
+ else if(cur==='idee')body=html`<${Demandes} key="idee" ...${props} idea=${true}/>`;
+ else if(cur==='simulateur')body=html`<${Simulateur} ...${props} selComps=${selComps} setSelComps=${setSelComps}/>`;
+ else if(cur==='assistant')body=html`<${Assistant}/>`;
+ else if(cur==='composants')body=html`<${Composants} ...${props} selComps=${selComps} setSelComps=${setSelComps} ro=${ro||vue==='demandeur'}/>`;
+ else if(cur==='gouvernance')body=html`<${Gouvernance} ...${props} ro=${ro||vue==='concepteur'}/>`;
+ else if(cur==='catalogue')body=html`<${Catalogue} ...${props}/>`;
+ else if(cur==='bilan')body=html`<${Bilan} ...${props}/>`;
+ else if(cur==='journal')body=html`<${JournalPage} ...${props}/>`;
+ else if(cur==='parametres')body=html`<${Parametres} ...${props}/>`;
+ const groups=[];allowed.forEach(k=>{const g=NAV[k][2];let G=groups.find(x=>x.g===g);if(!G)groups.push(G={g,items:[]});G.items.push(k)});
+ const modeTxt=S.mode==='db'?(S.stale?'Mise à jour en direct interrompue : rechargez la page':'Base en ligne, mise à jour en direct'):S.mode==='error'?'Base injoignable ('+S.dbError+')':'Connexion à la base…';
+ const modeCol=S.mode==='db'&&!S.stale&&!S.dbError?'var(--ok)':S.mode==='loading'?'var(--faint)':'var(--warn)';
+ return html`<div className="app">
+  <aside className="side">
+   <div className="brand"><b>FOAD <em>PILOT</em> 85</b><span>SDIS de la Vendée</span></div>
+   <nav className="nav" aria-label="Navigation principale">${groups.map(G=>html`<${React.Fragment} key=${G.g}><div className="grp">${G.g}</div>${G.items.map(k=>html`<button key=${k} className=${cur===k||(cur==='fiche'&&k==='registre')?'on':''} onClick=${()=>go(k)}><${Ico} n=${NAV[k][1]}/>${NAV[k][0]}${k==='demandes'&&demCount&&vue==='pilote'?html`<span className="count">${demCount}</span>`:null}</button>`)}<//>`)}</nav>
+   <div className="side-foot">
+    <label htmlFor="vue" className="small">Vue</label>
+    <select id="vue" value=${vue} onChange=${e=>{setVue(e.target.value);setRoute(null);setFiche(null)}}>${Object.entries(VUES).map(([k,v])=>html`<option key=${k} value=${k}>${v.l}</option>`)}</select>
+    <small>La vue adapte l'interface. Les droits dépendent de la connexion éditeur.</small>
+    <div className="mode"><span className="dot" style=${{background:modeCol}}></span><span>${modeTxt}</span></div>
+    <${Login} S=${S} api=${api} toast=${toast}/>
+   </div>
+  </aside>
+  <main>${body}</main>
+  ${msg?html`<div className="toast" role="status">${msg}</div>`:null}
+ </div>`;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+})();
+</script>
+
+</body>
+</html>
