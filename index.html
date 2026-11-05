@@ -168,6 +168,44 @@ select.conf{padding:1px 4px;cursor:pointer}
 .compl{display:flex;align-items:center;gap:8px}.compl .prog{width:90px}
 .check{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--line)}
 .check span small{display:block;color:var(--faint)}
+.tip{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1px solid var(--line-2);background:var(--surface);color:var(--info);font-size:11px;font-weight:700;font-family:var(--f-body);cursor:help;margin-left:5px;vertical-align:middle;flex:none;line-height:1;text-transform:none;letter-spacing:0}
+.tip:hover,.tip:focus-visible{border-color:var(--info);background:var(--info-soft);outline:none}
+.bub{position:fixed;z-index:80;width:290px;max-width:calc(100vw - 16px);background:var(--fg);color:var(--bg);font-weight:400;font-size:12.5px;line-height:1.45;padding:9px 11px;border-radius:6px;text-align:left;pointer-events:none;white-space:normal;text-transform:none;letter-spacing:0}
+.bub b{display:block;margin-bottom:2px}
+.lx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.lx{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.lx b{font-family:var(--f-display);font-size:14.5px}
+.lx p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.chain div{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--surface);font-size:13px}
+.chain div b{display:block;font-family:var(--f-display);font-size:14px;margin-bottom:3px}
+.chain div span.n{font-family:var(--f-mono);color:var(--red);font-size:12px}
+.sim-grp{grid-column:1/-1;font-family:var(--f-display);font-weight:700;font-size:13px;margin-top:6px;padding-top:10px;border-top:1px solid var(--line)}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.trio label{font-size:11.5px;color:var(--muted)}
+@media (max-width:700px){.chain{grid-template-columns:1fr 1fr}}
+.scrim{position:fixed;inset:0;z-index:60;background:rgba(10,17,29,.6);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding-block:calc(24px + env(safe-area-inset-top,0px)) 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.dialog{background:var(--surface);border:1px solid var(--line);border-radius:12px;width:100%;max-width:920px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.dialog h2{font-family:var(--f-display);font-size:22px;margin:0;text-wrap:balance}
+.dialog p{margin:0}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.pcard{font:inherit;color:var(--fg);text-align:left;cursor:pointer;display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface)}
+.pcard:hover{border-color:var(--info);background:var(--info-soft)}
+.pcard:focus-visible{outline:2px solid var(--info);outline-offset:1px}
+.pcard.on{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
+.pcard .pi{width:38px;height:38px;border-radius:8px;background:var(--nav);color:#fff;display:grid;place-items:center;flex:none}
+.pcard.pilot .pi{background:var(--red)}
+.pcard .pi .ico{width:19px;height:19px}
+.pcard b{display:block;font-size:14px;line-height:1.3}
+.pcard .d{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.dfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+.prof-chip{display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:var(--nav-2);color:var(--nav-on);line-height:1.25}
+.prof-chip .ico{flex:none}
+.mx th,.mx td{text-align:center;padding:6px 8px}
+.mx th:first-child,.mx td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1;min-width:190px}
+.mx th{white-space:normal;min-width:92px;line-height:1.25;vertical-align:bottom}
+.mx tr.sec td{background:var(--surface-2);font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mx select{font-size:11.5px;padding:3px 4px}
 @media (max-width:1100px){.filters{grid-template-columns:repeat(3,minmax(0,1fr))}.filters>:first-child{grid-column:1/-1}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.split{grid-template-columns:1fr}}
 @media (max-width:900px){
   .app{grid-template-columns:1fr}
@@ -210,12 +248,24 @@ const ST_CONCEPTION=['Non démarrée','En cours','Terminée','Suspendue'];
 const ST_PUBLICATION=['Non publiée','En préparation','Publiée','Retirée'];
 const ST_VALID=['Non sollicité','En attente','Accordé','Accordé avec réserves','Refusé','À reprendre'];
 const CIRCUIT=['Cadrage validé','Contenu technique validé','Contenu pédagogique validé','Conformité réglementaire vérifiée','Tests fonctionnels réalisés','Expérimentation terminée','Corrections intégrées','Autorisation de diffusion délivrée'];
+const CIRCUIT_TIPS={'Cadrage validé':'Le besoin, le public, les objectifs et le calendrier sont approuvés avant de fabriquer.','Contenu technique validé':'L\'expert métier confirme que le contenu est exact et conforme à la doctrine.','Contenu pédagogique validé':'Le responsable pédagogique confirme que la FOAD est claire, progressive et que l\'évaluation mesure bien les objectifs.',
+ 'Conformité réglementaire vérifiée':'Les textes cités sont à jour et la FOAD respecte les règles de formation applicables.','Tests fonctionnels réalisés':'Tout fonctionne : navigation, quiz, vidéos, achèvement, sur ordinateur, tablette et téléphone.','Expérimentation terminée':'experimentation',
+ 'Corrections intégrées':'Les remarques des relecteurs et de l\'expérimentation ont été prises en compte.','Autorisation de diffusion délivrée':'diffusion'};
+const ETAPE_TIPS={'À qualifier':'Fiche reprise d\'un existant, dont les informations restent à vérifier.','Idée':'Une proposition, pas encore une demande formelle.','Demande déposée':'Un service a déposé une demande complète.','Cadrage':'Définition du besoin, du public, des objectifs et des moyens.','Arbitrage':'En attente d\'une décision de la hiérarchie (priorité, moyens, format).',
+ 'Conception':'Fabrication en cours : scénario, rédaction, mise en forme.','Relecture métier':'L\'expert métier relit et corrige le contenu.','Expérimentation':'experimentation','Corrections':'Prise en compte des remarques.','Validation':'Passage dans le circuit de validation avant diffusion.','Publication':'Mise en ligne sur ENASIS en cours.',
+ 'Exploitation':'En ligne et suivie par les agents.','Révision':'revision','Archivage':'Retirée d\'ENASIS et conservée pour mémoire.','Abandonné':'Projet arrêté.'};
 const PRIORITES=['Haute','Moyenne','Basse'];
 const REVISIONS=['Correction mineure','Actualisation documentaire','Révision pédagogique','Révision réglementaire','Refonte complète'];
 const NATURE_REGLE=['Texte réglementaire vérifié','Décision locale validée','Procédure interne formalisée','Recommandation de bonne pratique','Proposition à arbitrer','Information à vérifier'];
 const CAT_REGLE=['Textes et références','Modalités de formation','Indemnisation et valorisation','Qualité et validation'];
-const FAMILLES=['Bannières','Blocs d\'information','Blocs importants','Alertes','Accordéons','Cartes','Chronologies','Quiz','Mises en situation','Schémas','Images annotées','Tableaux','Vidéos','Animations','Infographies','Arbres décisionnels','Composants HTML','Composants Storyline','Modèles Rise','Badges','Attestations','Charte graphique'];
+const FAMILLES=['Bannières','Blocs d\'information','Blocs importants','Alertes','Accordéons','Cartes','Chronologies','Quiz','Mises en situation','Schémas','Images annotées','Tableaux','Vidéos','Animations','Infographies','Arbres décisionnels','Composants HTML','Composants Storyline','Modèles Rise','Badges','Attestations','Charte graphique','Textes et mise en page','Images et galeries','Audio','Activités ENASIS','Ressources ENASIS','Suivi et certification','Outils de production'];
 const ST_DEMANDE=['Brouillon','Déposée','En instruction','Acceptée','Réorientée','Refusée'];
+const ENASIS_TIPS={scorm:'scorm',config:'Nom du cours, résumé, catégorie et format d\'affichage dans ENASIS.',inscr:'Comment les agents s\'inscrivent : automatiquement, par cohorte, ou en s\'inscrivant eux-mêmes.',groupes:'Regrouper les inscrits (par centre, par promotion) pour suivre et filtrer les résultats.',
+ restr:'Limiter l\'accès selon une date, un groupe ou une autre formation déjà terminée.',achev:'achevement',quiz:'Nombre de tentatives, score minimum, affichage des corrections.',progr:'Imposer ou non un ordre de lecture dans Rise (pages verrouillées tant que la précédente n\'est pas vue).',
+ durees:'La durée annoncée dans ENASIS et dans la FOAD doit être la même.',videos:'Lecture sur tous les écrans, poids raisonnable, sous-titres si possible.',badges:'Badge ou attestation délivrés automatiquement à la fin.',notif:'Messages automatiques envoyés aux agents : inscription, relance, félicitations.',
+ devices:'Vérifier l\'affichage et le fonctionnement sur ordinateur, tablette et téléphone.',liens:'Tous les liens vers des documents ou sites externes s\'ouvrent.',acces:'Tester avec un compte d\'agent ordinaire que l\'accès fonctionne comme prévu.',publi:'Rendre le cours visible.',
+ comm:'Informer les agents concernés : message, note, relais par les chefs de centre.',rapports:'Vérifier que les rapports de suivi remontent bien les achèvements.'};
+const WHERE_TIPS={'Rise':'Se règle dans Rise avant l\'export.','Moodle':'Se règle dans les paramètres du cours ENASIS (Moodle).','Moodle + Rise':'Se règle à la fois dans Rise et dans ENASIS.','Rise + Moodle':'Se règle à la fois dans Rise et dans ENASIS.','ENASIS':'Propre à l\'organisation de la plateforme ENASIS.'};
 const ENASIS_CHECK=[
  ['scorm','Export SCORM','Rise'],['config','Configuration du cours','Moodle'],['inscr','Paramètres d\'inscription','Moodle'],['groupes','Groupes','Moodle'],
  ['restr','Restrictions d\'accès','Moodle'],['achev','Conditions d\'achèvement','Moodle + Rise'],['quiz','Paramètres des quiz','Rise'],['progr','Progression','Rise'],
@@ -225,15 +275,45 @@ const ENASIS_CHECK=[
 const DEFAULT_PARAMS={
  domaines:['NexSIS 18-112','Incendie','SSUAP','Opérations diverses','Encadrement / commandement','SIC','Prévention / prévision','Outils numériques','Administration / RH','Tronc commun'],
  fonctions:['Équipier incendie','Équipier SSUAP','Équipier opérations diverses','Chef d\'agrès une équipe','Chef d\'agrès tout engin','Chef de groupe','Opérateur CTA-CODIS','Référent CIS','Référent départemental','Formateur'],
- ratios:{simple:30,intermediaire:60,avance:110,expert:180},
- phases:{cadrage:8,scenarisation:15,redaction:25,rise:25,tests:7,corrections:8,publication:4,documentation:5,maintenance:3},
- unit:{video:5,interaction:1,quiz:2,html:4,storyline:16,sequence:1,audioMin:0.5,relecteur:2,cycle:12,integrationBase:2,integrationHtml:0.5,graphLeger:6,graphFort:20},
- qualite:{bonnes:0.8,partielles:1,absentes:1.35},
- fourchette:{bas:0.8,haut:1.35},
+ sim:{
+  ratios:{simple:10,intermediaire:16,avance:24,expert:34},
+  degressivite:0.8,
+  repartition:{scenarisation:30,redaction:35,rise:35},
+  fixes:{cadrage:4,integration:1,publication:2,documentation:2,maintenance:1},
+  qualite:{bonnes:0.75,partielles:1,absentes:1.4},
+  modele:0.85,
+  u:{sequence:0.5,interaction:0.25,question:0.2,visuel:1.5,videoCreer:8,videoRetravailler:3,videoPrete:0.5,audioMin:0.4,htmlCreer:6,htmlAdapter:1.5,htmlReutil:0.25,integrationParComposant:0.25,slCreer:12,slAdapter:4,relecteur:1,cyclePct:15,testsPct:10,testsMin:1},
+  fourchette:{bas:0.85,haut:1.25}},
  tauxHoraire:null,
  seuilAlerte:30,
- revisionMois:12
+ revisionMois:12,
+ profils:{}
 };
+/* Profils : libellés fixes, accès paramétrables (Paramètres > Profils et accès) */
+const FICHE_TABS=[['ident','Identification'],['public','Public et formation'],['projet','Projet'],['valid','Validation'],['publication','Publication ENASIS'],['economie','Économie'],['usage','Utilisation'],['maintenance','Maintenance'],['histo','Historique']];
+const ALL_TABS=FICHE_TABS.map(t=>t[0]);
+const PROFILS=[
+ {id:'direction',l:'Direction, hiérarchie, chef de centre ou de groupement',d:'Synthèse, arbitrages attendus et bilans',i:'brief'},
+ {id:'gfor',l:'Membre du GFOR',d:'Pilotage du portefeuille, demandes et validations',i:'users'},
+ {id:'service-formation',l:'Affecté en service formation de groupement',d:'FOAD préalables aux sessions locales et demandes du territoire',i:'office'},
+ {id:'formateur',l:'Formateur, responsable de formation, expert métier ou référent',d:'FOAD disponibles, préalables à vos sessions et contenus de votre spécialité',i:'school'},
+ {id:'ecreateur',l:'e-créateur',d:'Projets, simulateur de charge et composants',i:'pen'},
+ {id:'eaccompagnateur',l:'e-accompagnateur',d:'Contenus, durées et conditions d\'achèvement pour accompagner les apprenants',i:'chat'},
+ {id:'admin-enasis',l:'Administrateur ENASIS',d:'Publications, paramétrage et incidents',i:'monitor'},
+ {id:'agent-cs',l:'Agent en CS, service ou groupement',d:'Formations disponibles et idées de formation, PATS compris',i:'house'},
+ {id:'exterieur',l:'Extérieur au SDIS de la Vendée',d:'Catalogue des FOAD du SDIS 85',i:'globe'}];
+const PILOTE={id:'pilote',l:'Pilote FOAD (vue complète)',d:'Toutes les pages, réservé aux éditeurs connectés',i:'key'};
+const DEFAULT_PROFILS={
+ 'direction':{actif:true,registre:'allege',pages:['tableau','projets','bilan','catalogue'],home:'tableau',dash:'direction',tabs:['ident','public','projet','valid','economie','usage']},
+ 'gfor':{actif:true,registre:'complet',pages:['tableau','registre','projets','demandes','gouvernance','catalogue','bilan'],home:'tableau',dash:'pilote',tabs:ALL_TABS},
+ 'service-formation':{actif:true,registre:'allege',pages:['registre','demandes','catalogue','idee'],home:'catalogue',dash:'direction',tabs:['ident','public','publication','maintenance']},
+ 'formateur':{actif:true,registre:'allege',pages:['catalogue','registre','idee'],home:'catalogue',dash:'direction',tabs:['ident','public','maintenance']},
+ 'ecreateur':{actif:true,registre:'complet',pages:['projets','registre','simulateur','assistant','composants','gouvernance','catalogue'],home:'projets',dash:'pilote',tabs:['ident','public','projet','valid','publication','economie','maintenance','histo']},
+ 'eaccompagnateur':{actif:true,registre:'allege',pages:['catalogue','registre','idee'],home:'catalogue',dash:'direction',tabs:['ident','public','publication','usage','maintenance']},
+ 'admin-enasis':{actif:true,registre:'complet',pages:['publications','registre','catalogue'],home:'publications',dash:'pilote',tabs:['ident','valid','publication','usage','maintenance','histo']},
+ 'agent-cs':{actif:true,registre:'allege',pages:['catalogue','idee'],home:'catalogue',dash:'direction',tabs:['ident','public']},
+ 'exterieur':{actif:true,registre:'allege',pages:['catalogue'],home:'catalogue',dash:'direction',tabs:['ident','public']}};
+const profConf=(params,id)=>({...(DEFAULT_PROFILS[id]||{}),...((params.profils||{})[id]||{})});
 const COLS=['foad','demandes','validations','regles','composants','journal'];
 
 /* ============ OUTILS ============ */
@@ -247,7 +327,8 @@ const fmtH=h=>h==null||h===''||isNaN(h)?'—':(Math.round(h*10)/10).toLocaleStri
 const fmtMin=m=>{if(isEmpty(m))return '—';m=+m;return m>=60?(Math.floor(m/60)+' h'+(m%60?' '+String(m%60).padStart(2,'0'):'')):m+' min'};
 const num=v=>isEmpty(v)?null:+v;
 const daysTo=d=>d?Math.round((new Date(d+'T12:00:00')-new Date(today()+'T12:00:00'))/864e5):null;
-const merge=(a,b)=>{const o={...a};for(const k in b){o[k]=(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k]))?{...(a[k]||{}),...b[k]}:b[k]}return o};
+const isObj=v=>v&&typeof v==='object'&&!Array.isArray(v);
+const merge=(a,b)=>{const o={...a};for(const k in (b||{})){o[k]=isObj(b[k])&&isObj(a[k])?merge(a[k],b[k]):b[k]}return o};
 const clone=o=>JSON.parse(JSON.stringify(o));
 const LS='foadpilot85.local.v1';
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
@@ -271,7 +352,19 @@ const P={
  set:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.7-1.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z',
  log:'M12 8v4l3 2M21 12a9 9 0 1 1-9-9 9 9 0 0 1 9 9z',
  plus:'M12 5v14M5 12h14',
- dl:'M12 3v12M7 10l5 5 5-5M5 21h14'
+ dl:'M12 3v12M7 10l5 5 5-5M5 21h14',
+ pub:'M12 21V9M7 14l5-5 5 5M5 3h14',
+ brief:'M3 8h18v12H3zM8 8V5h8v3M3 13h18',
+ users:'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M16 3.5a4 4 0 0 1 0 7M22 21a7 7 0 0 0-4-6.3',
+ school:'M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5',
+ pen:'M4 20l4-1 11-11-3-3L5 16zM14 6l3 3',
+ chat:'M4 5h16v11H8l-4 4z',
+ monitor:'M3 4h18v12H3zM8 20h8M12 16v4',
+ house:'M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6',
+ globe:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18',
+ office:'M4 21V4h11v17M15 9h5v12M8 8h3M8 12h3M8 16h3',
+ book:'M4 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM20 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z',
+ key:'M15 7a4 4 0 1 1-3.5 6L4 20.5V17h3v-3h3l1.5-1.5'
 };
 const Ico=({n})=>html`<svg className="ico" viewBox="0 0 24 24" aria-hidden="true"><path d=${P[n]}/></svg>`;
 const Badge=({tone,children,title})=>html`<span className=${'badge '+(tone||'')} title=${title||undefined}>${children}</span>`;
@@ -282,7 +375,7 @@ const SB_KEY='sb_publishable_fwDEURtKdlIwWG4XD_LWMA_xiO6pKy7';
 const sb=window.supabase.createClient(SB_URL,SB_KEY);
 function useStore(){
  const blank={foad:[],demandes:[],validations:[],regles:[],composants:[],journal:[]};
- const [st,setSt]=useState({mode:'loading',data:blank,params:null,me:null,canWrite:false,stale:false,dbError:null,canDownload:true});
+ const [st,setSt]=useState({mode:'loading',data:blank,params:null,me:null,canWrite:false,authReady:false,stale:false,dbError:null,canDownload:true});
  const R=useRef({me:null,editor:false});
  useEffect(()=>{
   let alive=true;
@@ -298,7 +391,7 @@ function useStore(){
    }).subscribe(status=>{if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')setSt(s=>({...s,stale:true}));if(status==='SUBSCRIBED')setSt(s=>({...s,stale:false}))});
   const onAuth=async session=>{const email=(session&&session.user&&session.user.email)||null;let ed=false;
    if(email){try{const {data}=await sb.rpc('is_editor');ed=!!data}catch(e){}}
-   R.current.me=email;R.current.editor=ed;if(alive)setSt(s=>({...s,me:email,canWrite:ed}))};
+   R.current.me=email;R.current.editor=ed;if(alive)setSt(s=>({...s,me:email,canWrite:ed,authReady:true}))};
   sb.auth.getSession().then(({data})=>onAuth(data.session));
   const {data:sub}=sb.auth.onAuthStateChange((_e,session)=>{setTimeout(()=>onAuth(session),0)});
   return ()=>{alive=false;sb.removeChannel(ch);sub.subscription.unsubscribe()};
@@ -368,40 +461,139 @@ function nextCode(list){const n=list.map(f=>parseInt((f.code||'').replace(/\D/g,
 
 /* ============ SIMULATEUR : moteur de calcul ============ */
 const COMPLEX=[
- {k:'simple',lv:'Simple',c:'var(--ok)',d:'Texte, images, quiz standards'},
- {k:'intermediaire',lv:'Intermédiaire',c:'#d4a106',d:'Interactions multiples, scénarisation spécifique'},
- {k:'avance',lv:'Avancé',c:'var(--warn)',d:'Vidéos, composants personnalisés, évaluations élaborées'},
- {k:'expert',lv:'Expert',c:'var(--bad)',d:'Simulations, programmation avancée, validations multiples'}];
-const PHASES=[['cadrage','Cadrage'],['scenarisation','Scénarisation'],['redaction','Rédaction'],['rise','Développement Rise'],['sl','Développement Storyline / HTML'],['graph','Création graphique'],['av','Audio / vidéo'],['integration','Intégration'],['tests','Tests'],['corrections','Corrections'],['publication','Publication'],['documentation','Documentation'],['maintenance','Maintenance initiale']];
+ {k:'simple',lv:'Simple',c:'var(--ok)',d:'Surtout du texte et des images, quelques quiz simples. Peu de mise en scène.'},
+ {k:'intermediaire',lv:'Intermédiaire',c:'#d4a106',d:'Plusieurs blocs interactifs, des cas concrets, une mise en forme travaillée.'},
+ {k:'avance',lv:'Avancé',c:'var(--warn)',d:'Scénario construit (fil rouge, mises en situation), évaluation élaborée.'},
+ {k:'expert',lv:'Expert',c:'var(--bad)',d:'Simulations, nombreux embranchements, plusieurs validations métier.'}];
+const PHASES=[['cadrage','Cadrage'],['scenarisation','Scénarisation'],['redaction','Rédaction et questions'],['rise','Mise en forme dans Rise'],['dev','Développements sur mesure'],['graph','Création graphique'],['av','Vidéo et audio'],['integration','Intégration'],['tests','Tests'],['corrections','Relectures et corrections'],['publication','Publication sur ENASIS'],['documentation','Documentation'],['maintenance','Maintenance initiale']];
+const FIXED_PHASES=['cadrage','integration','publication','documentation','maintenance'];
+const SIM_DEFAULT={duree:45,sequences:4,complexite:'intermediaire',qualite:'partielles',modele:true,interactions:8,questions:10,visuels:2,videoCreer:0,videoRetravailler:0,videoPrete:0,audio:0,htmlCreer:0,htmlAdapter:0,htmlReutil:0,slCreer:0,slAdapter:0,relecteurs:2,cycles:2};
 function simulate(inp,p,comps){
- const R=p.ratios,U=p.unit,Q=p.qualite,PH=p.phases;
- const dureeH=(+inp.duree||0)/60;
- const base=dureeH*(R[inp.complexite]||0);
- const lines={};const why={};
- const add=(k,v,t)=>{lines[k]=(lines[k]||0)+v;(why[k]=why[k]||[]).push(t)};
- const q=Q[inp.qualite]||1;
- const reuse=1-(+inp.reutil||0)/100;
- Object.entries(PH).forEach(([k,pct])=>{
-  let v=base*pct/100,t=`${pct} % × base ${fmtH(base)}`;
-  if(k==='scenarisation'||k==='redaction'){v*=q;t+=` × ressources ${q}`}
-  if(k==='rise'){v*=reuse;if(inp.reutil>0)t+=` × réutilisation ${reuse.toFixed(2)}`}
-  add(k,v,t)});
- if(+inp.sequences){add('scenarisation',inp.sequences*U.sequence,`${inp.sequences} séquences × ${U.sequence} h`)}
- if(+inp.interactions){add('rise',inp.interactions*U.interaction*reuse,`${inp.interactions} interactions × ${U.interaction} h`)}
- if(+inp.quiz){add('rise',inp.quiz*U.quiz,`${inp.quiz} quiz × ${U.quiz} h`)}
- if(+inp.html){add('sl',inp.html*U.html*reuse,`${inp.html} composants HTML × ${U.html} h${inp.reutil>0?' × réutilisation':''}`);add('integration',inp.html*U.integrationHtml,`${inp.html} × ${U.integrationHtml} h`)}
- if(inp.storyline){add('sl',U.storyline,`Storyline : forfait ${U.storyline} h`)}
- if(inp.graph==='leger')add('graph',U.graphLeger,`Graphisme léger : ${U.graphLeger} h`);
- if(inp.graph==='fort')add('graph',U.graphFort,`Graphisme important : ${U.graphFort} h`);
- if(+inp.videos)add('av',inp.videos*U.video,`${inp.videos} vidéos × ${U.video} h`);
- if(+inp.audio)add('av',inp.audio*U.audioMin,`${inp.audio} min d'audio × ${U.audioMin} h`);
- add('integration',U.integrationBase,`Forfait ${U.integrationBase} h`);
- if(+inp.relecteurs)add('corrections',inp.relecteurs*U.relecteur,`${inp.relecteurs} relecteurs × ${U.relecteur} h`);
+ const C=p.sim,U=C.u;const n=k=>Math.max(0,+inp[k]||0);
+ const lines={},why={};const add=(k,v,t)=>{if(!v)return;lines[k]=(lines[k]||0)+v;(why[k]=why[k]||[]).push(t)};
+ const D=n('duree')/60;const Deq=D>0?Math.pow(D,C.degressivite):0;
+ const ratio=C.ratios[inp.complexite]||0;const prod=ratio*Deq;
+ const q=C.qualite[inp.qualite]||1;const mod=inp.modele?C.modele:1;
+ Object.entries(C.fixes).forEach(([k,v])=>add(k,+v,'Temps fixe par projet : '+fmtH(+v)));
+ const R=C.repartition;
+ add('scenarisation',prod*R.scenarisation/100*q,`${R.scenarisation} % du temps de base${q!==1?' × ressources '+q:''}`);
+ add('redaction',prod*R.redaction/100*q,`${R.redaction} % du temps de base${q!==1?' × ressources '+q:''}`);
+ add('rise',prod*R.rise/100*mod,`${R.rise} % du temps de base${mod!==1?' × modèle existant '+mod:''}`);
+ add('scenarisation',n('sequences')*U.sequence,`${n('sequences')} séquence(s) × ${fmtH(U.sequence)}`);
+ add('redaction',n('questions')*U.question,`${n('questions')} question(s) × ${fmtH(U.question)}`);
+ add('rise',n('interactions')*U.interaction,`${n('interactions')} bloc(s) interactif(s) × ${fmtH(U.interaction)}`);
+ add('graph',n('visuels')*U.visuel,`${n('visuels')} visuel(s) × ${fmtH(U.visuel)}`);
+ add('av',n('videoCreer')*U.videoCreer,`${n('videoCreer')} vidéo(s) à créer × ${fmtH(U.videoCreer)}`);
+ add('av',n('videoRetravailler')*U.videoRetravailler,`${n('videoRetravailler')} vidéo(s) à retravailler × ${fmtH(U.videoRetravailler)}`);
+ add('av',n('videoPrete')*U.videoPrete,`${n('videoPrete')} vidéo(s) prête(s) × ${fmtH(U.videoPrete)}`);
+ add('av',n('audio')*U.audioMin,`${n('audio')} min d'audio × ${fmtH(U.audioMin)}`);
+ add('dev',n('htmlCreer')*U.htmlCreer,`${n('htmlCreer')} composant(s) à créer × ${fmtH(U.htmlCreer)}`);
+ add('dev',n('htmlAdapter')*U.htmlAdapter,`${n('htmlAdapter')} composant(s) à adapter × ${fmtH(U.htmlAdapter)}`);
+ add('dev',n('htmlReutil')*U.htmlReutil,`${n('htmlReutil')} composant(s) réutilisé(s) × ${fmtH(U.htmlReutil)}`);
+ add('dev',n('slCreer')*U.slCreer,`${n('slCreer')} activité(s) Storyline à créer × ${fmtH(U.slCreer)}`);
+ add('dev',n('slAdapter')*U.slAdapter,`${n('slAdapter')} activité(s) Storyline à adapter × ${fmtH(U.slAdapter)}`);
+ (comps||[]).forEach(c=>{const h=num(c.tempsReutil)??num(c.tempsCreation);if(h)add('dev',h,`Composant du catalogue « ${c.nom} » : ${fmtH(h)}`)});
+ const nbComp=n('htmlCreer')+n('htmlAdapter')+n('htmlReutil')+n('slCreer')+n('slAdapter')+(comps||[]).length;
+ add('integration',nbComp*U.integrationParComposant,`${nbComp} élément(s) sur mesure à intégrer × ${fmtH(U.integrationParComposant)}`);
+ const production=['scenarisation','redaction','rise','dev','graph','av'].reduce((t,k)=>t+(lines[k]||0),0);
+ add('tests',Math.max(U.testsMin,production*U.testsPct/100),`${U.testsPct} % de la production (minimum ${fmtH(U.testsMin)})`);
+ add('corrections',n('relecteurs')*U.relecteur,`${n('relecteurs')} relecteur(s) × ${fmtH(U.relecteur)} pour consolider leurs remarques`);
  const cyc=Math.max(0,(+inp.cycles||1)-1);
- if(cyc)add('corrections',base*cyc*U.cycle/100,`${cyc} cycle(s) suppl. × ${U.cycle} % de la base`);
- (comps||[]).forEach(c=>{const h=num(c.tempsReutil)??num(c.tempsCreation);if(h)add(c.format==='Storyline'?'sl':c.format==='HTML/CSS/JS'?'sl':'rise',h,`Composant « ${c.nom} » : ${h} h`)});
+ add('corrections',production*cyc*U.cyclePct/100,`${cyc} tour(s) de correction supplémentaire(s) × ${U.cyclePct} % de la production`);
  const central=Object.values(lines).reduce((a,b)=>a+b,0);
- return {base,lines,why,central,bas:central*p.fourchette.bas,haut:central*p.fourchette.haut,ratio:dureeH?central/dureeH:null};
+ return {D,Deq,ratio,prod,production,lines,why,central,bas:central*C.fourchette.bas,haut:central*C.fourchette.haut,parHeure:D?central/D:null};
+}
+
+/* ============ LEXIQUE ET AIDES AU SURVOL ============ */
+const GLOSS={
+ foad:{t:'FOAD',c:'La formation',d:'Formation ouverte et à distance : un module que l\'agent suit seul sur ENASIS, à son rythme, sur ordinateur, tablette ou téléphone.'},
+ parcours:{t:'Parcours',c:'La formation',d:'Un ensemble de plusieurs modules à suivre dans un ordre donné, par exemple pour préparer une fonction.'},
+ module:{t:'Module',c:'La formation',d:'Une FOAD autonome sur un sujet précis, de quelques minutes à quelques heures.'},
+ microlearning:{t:'Microlearning',c:'La formation',d:'Un module très court (5 à 10 minutes) sur une seule notion, facile à suivre entre deux activités et à mettre à jour.'},
+ sequence:{t:'Séquence',c:'La formation',d:'Une partie de la FOAD qui traite un objectif précis. Dans Rise, une séquence correspond à une leçon. Exemple : « Se connecter à NexSIS », puis « Créer une intervention ».'},
+ objectif:{t:'Objectif pédagogique',c:'La formation',d:'Ce que l\'agent saura faire à la fin, formulé avec un verbe d\'action : « identifier », « réaliser », « choisir »…'},
+ competence:{t:'Compétence visée',c:'La formation',d:'La capacité professionnelle que la FOAD contribue à construire. Une FOAD apporte surtout des connaissances ; la compétence se confirme en pratique.'},
+ prerequis:{t:'Prérequis',c:'La formation',d:'Ce que l\'agent doit déjà savoir ou avoir suivi avant de commencer.'},
+ articulation:{t:'Articulation avec le présentiel',c:'La formation',d:'Autonome : la FOAD se suffit à elle-même. Préalable : à suivre avant une session en salle ou sur plateau. Complément : à suivre après, pour réviser ou approfondir.'},
+ hybride:{t:'Formation hybride',c:'La formation',d:'Une formation qui combine une partie à distance (la théorie) et une partie en présentiel (la pratique).'},
+ classevirtuelle:{t:'Classe virtuelle',c:'La formation',d:'Une session en visioconférence avec un formateur, à heure fixe, pour échanger et poser des questions.'},
+ fmpa:{t:'FMPA',c:'La formation',d:'Formation de maintien et de perfectionnement des acquis : les formations annuelles qui entretiennent les compétences des sapeurs-pompiers.'},
+ caractere:{t:'Caractère',c:'La formation',d:'Obligatoire : l\'agent concerné doit la suivre. Recommandé : vivement conseillé. Facultatif : au choix de l\'agent.'},
+ dureeTheo:{t:'Durée théorique',c:'La formation',d:'Le temps moyen nécessaire pour suivre la FOAD en entier, annoncé à l\'agent.'},
+ dureeMin:{t:'Durée minimale exigée',c:'La formation',d:'Un temps minimum de connexion éventuellement demandé avant de valider la FOAD. À ne renseigner que si une règle l\'impose.'},
+ evaluation:{t:'Évaluation',c:'La formation',d:'La façon de vérifier ce que l\'agent a retenu : quiz final, questions au fil du module, mise en situation…'},
+ seuil:{t:'Seuil de réussite',c:'La formation',d:'Le score minimum à obtenir à l\'évaluation, par exemple 80 %.'},
+ achevement:{t:'Conditions d\'achèvement',c:'La formation',d:'Ce qui fait passer la FOAD à « terminée » dans ENASIS : avoir tout consulté, avoir réussi le quiz, ou les deux.'},
+ enasis:{t:'ENASIS',c:'Les outils',d:'La plateforme de formation en ligne des sapeurs-pompiers. Les agents y suivent les FOAD et leur progression y est enregistrée.'},
+ moodle:{t:'Moodle',c:'Les outils',d:'Le logiciel sur lequel ENASIS est construit. Il gère les cours, les inscriptions, les groupes, les badges et les rapports de suivi.'},
+ rise:{t:'Rise 360',c:'Les outils',d:'Le logiciel d\'Articulate qui sert à fabriquer la plupart des FOAD. On assemble des blocs (texte, images, quiz, onglets…) en pages qui défilent, lisibles sur tous les écrans.'},
+ storyline:{t:'Storyline',c:'Les outils',d:'Le second logiciel d\'Articulate, pour des activités plus poussées : simulation d\'un logiciel, mise en situation avec des choix et leurs conséquences. Plus long à produire que Rise.'},
+ scorm:{t:'SCORM',c:'Les outils',d:'Le format de « colis » dans lequel on exporte une FOAD depuis Rise pour la déposer sur ENASIS. Il permet à ENASIS d\'enregistrer la progression, le score et l\'achèvement de chaque agent.'},
+ html:{t:'Composant personnalisé (HTML)',c:'Les outils',d:'Un bloc programmé sur mesure et inséré dans Rise quand les blocs standards ne suffisent pas : quiz particulier, schéma animé, tableau interactif. HTML est le langage des pages web ; il faut savoir programmer pour en créer.'},
+ h5p:{t:'H5P',c:'Les outils',d:'Des activités interactives prêtes à l\'emploi (quiz, images cliquables, vidéos interactives) que l\'on crée directement dans ENASIS, sans autre logiciel.'},
+ interaction:{t:'Bloc interactif',c:'La conception',d:'Un bloc standard de Rise sur lequel l\'agent clique pour découvrir le contenu : accordéon, onglets, cartes à retourner, étapes, image annotée. Il se crée sans programmer.'},
+ composant:{t:'Composant réutilisable',c:'La conception',d:'Un élément déjà fabriqué (bannière, encadré, quiz, modèle de page) que l\'on reprend dans une nouvelle FOAD. Les réutiliser fait gagner du temps et garde une présentation homogène.'},
+ cadrage:{t:'Cadrage',c:'La conception',d:'La première étape : comprendre le besoin avec le demandeur, fixer le public, les objectifs, la durée, les ressources et le calendrier.'},
+ scenarisation:{t:'Scénarisation',c:'La conception',d:'Construire le déroulé de la FOAD : ordre des séquences, fil rouge, cas pratiques, place des questions.'},
+ storyboard:{t:'Rédaction',c:'La conception',d:'Écrire les textes, consignes, questions et explications des bonnes réponses, avec l\'expert métier.'},
+ expert:{t:'Expert métier',c:'Les acteurs',d:'Le spécialiste du sujet (un officier, un formateur, un référent) qui apporte le contenu et vérifie son exactitude.'},
+ ecreateur:{t:'e-créateur',c:'Les acteurs',d:'La personne qui conçoit et fabrique la FOAD : scénario, mise en forme dans Rise, tests et publication.'},
+ eaccompagnateur:{t:'e-accompagnateur',c:'Les acteurs',d:'La personne qui aide les apprenants pendant qu\'ils suivent une FOAD : questions, relances, difficultés techniques.'},
+ respPeda:{t:'Responsable pédagogique',c:'Les acteurs',d:'La personne garante de la qualité pédagogique de la FOAD et de sa cohérence avec le reste de la formation.'},
+ gfor:{t:'GFOR',c:'Les acteurs',d:'Le groupement formation du SDIS de la Vendée.'},
+ publics:{t:'SPP, SPV, PATS, SSSM',c:'Les acteurs',d:'Sapeurs-pompiers professionnels, sapeurs-pompiers volontaires, personnels administratifs, techniques et spécialisés, service de santé et de secours médical.'},
+ etape:{t:'Étape du cycle',c:'Le suivi',d:'Où en est le projet, de l\'idée à l\'archivage. C\'est différent du statut de publication : une FOAD peut être en exploitation et en révision en même temps.'},
+ statutConception:{t:'Statut de conception',c:'Le suivi',d:'Où en est la fabrication : non démarrée, en cours, terminée ou suspendue.'},
+ statutPublication:{t:'Statut de publication',c:'Le suivi',d:'Si la FOAD est en ligne sur ENASIS : non publiée, en préparation, publiée ou retirée.'},
+ version:{t:'Version',c:'Le suivi',d:'Le numéro de la version de la FOAD (1.0, 1.1, 2.0…). Chaque validation porte sur une version précise : si on modifie le contenu, il faut revalider.'},
+ experimentation:{t:'Expérimentation',c:'Le suivi',d:'Un test de la FOAD avec un petit groupe d\'agents avant la diffusion à tous, pour corriger ce qui ne va pas.'},
+ diffusion:{t:'Autorisation de diffusion',c:'Le suivi',d:'La décision qui permet de mettre la FOAD à disposition des agents. L\'autorité qui la délivre est propre à chaque FOAD.'},
+ revision:{t:'Révision',c:'Le suivi',d:'La mise à jour d\'une FOAD publiée : simple correction, actualisation d\'un document, refonte pédagogique ou mise en conformité avec un nouveau texte.'},
+ referentiel:{t:'Référentiel associé',c:'Le suivi',d:'Le texte ou document de référence sur lequel s\'appuie le contenu : guide de doctrine (GDO), guide technique (GTO), référentiel de formation, procédure interne…'},
+ kanban:{t:'Tableau des projets',c:'Le suivi',d:'Chaque colonne est une étape du cycle de vie. Les cartes représentent les projets et se déplacent de gauche à droite au fil de l\'avancement.'}
+};
+const FIELD_TIPS={type:'Parcours : plusieurs modules liés. Module : une FOAD autonome. Microlearning : 5 à 10 minutes sur une notion. Ressource : document ou fiche réflexe. Évaluation : un test seul.',
+ version:'version',referentiel:'referentiel',competences:'competence',objectifs:'objectif',respPeda:'respPeda',expert:'expert',concepteur:'ecreateur',
+ publics:'publics',prerequis:'prerequis',nature:'Le cadre dans lequel la FOAD s\'inscrit : intégration d\'un nouvel agent, prise de poste, maintien des acquis (FMPA), nouveauté réglementaire ou d\'outil…',
+ caractere:'caractere',dureeTheo:'dureeTheo',dureeMin:'dureeMin',autonomie:'articulation',evaluation:'evaluation',seuil:'seuil',achevement:'achevement',
+ dureePresentiel:'La durée de la séance en salle ou sur plateau qui suit ou précède la FOAD, s\'il y en a une.',
+ etape:'etape',statutConception:'statutConception',statutPublication:'statutPublication',priorite:'Haute : à traiter en premier. Elle sert à trier les projets dans le tableau.',
+ progression:'Avancement estimé de la fabrication, de 0 à 100 %.',chargeRestante:'Le nombre d\'heures de travail qu\'il reste à fournir, selon le concepteur.',
+ decisionAttendue:'Si une décision de la hiérarchie est nécessaire pour avancer, décrivez-la ici : elle remontera dans le tableau de bord.',blocages:'Ce qui empêche d\'avancer. Une alerte rouge s\'affiche tant que ce champ est rempli.',
+ decisionDiffusion:'diffusion',autoriteDiffusion:'diffusion',lienEnasis:'L\'adresse de la FOAD sur ENASIS, à copier depuis la barre d\'adresse du navigateur.',versionDiffusee:'version',
+ acces:'Qui peut s\'inscrire : tous les agents, certains groupes, inscription manuelle ou automatique…',dateExperimentation:'experimentation',
+ tempsPrevu:'Le temps de fabrication estimé, en heures de travail. Le simulateur de charge peut le calculer.',tempsReel:'Le temps de fabrication réellement passé, pour comparer avec la prévision.',
+ modalites:'Quand et comment les agents suivent la FOAD : sur leur temps de service, hors service, en garde…',indemnisation:'Les règles de rémunération ou de valorisation du temps passé, notamment pour les SPV. À ne renseigner qu\'avec une source.',
+ usageSource:'Réelles : chiffres issus d\'un export ENASIS. Estimées : ordres de grandeur, exclus des bilans de résultats.',inscrits:'Agents inscrits à la FOAD sur ENASIS.',acheves:'achevement',
+ typeRevision:'revision',depReglementaires:'Les textes ou procédures dont dépend le contenu. Si l\'un d\'eux change, l\'assistant de révision retrouvera cette FOAD.',depTechniques:'Les outils ou versions dont dépend la FOAD (NexSIS version X, composant HTML…).',
+ anomalies:'Les problèmes connus signalés par les agents ou les tests.',format:'html',compat:'Où ce composant fonctionne : dans Rise, dans Storyline, sur ENASIS, sur téléphone.',
+ tempsCreation:'Le temps pour fabriquer ce composant la première fois.',tempsReutil:'Le temps pour le reprendre dans une nouvelle FOAD. C\'est ce temps que le simulateur ajoute.'};
+const tipText=k=>{const v=FIELD_TIPS[k]??k;const g=GLOSS[v];return g?{t:g.t,d:g.d}:(typeof v==='string'&&v.length>20?{t:null,d:v}:null)};
+function Tip({k,text,title}){
+ const [r,setR]=useState(null);
+ const info=text?{t:title||null,d:text}:(GLOSS[k]?{t:GLOSS[k].t,d:GLOSS[k].d}:tipText(k));
+ if(!info)return null;
+ const show=e=>setR(e.currentTarget.getBoundingClientRect());
+ let st=null;if(r){const w=Math.min(290,window.innerWidth-16);const left=Math.min(Math.max(8,r.left+r.width/2-w/2),window.innerWidth-w-8);st=r.top>170?{left,bottom:window.innerHeight-r.top+6,width:w}:{left,top:r.bottom+6,width:w}}
+ return html`<span className="tip" tabIndex="0" role="button" aria-label=${'Aide : '+(info.t?info.t+'. ':'')+info.d} onMouseEnter=${show} onMouseLeave=${()=>setR(null)} onFocus=${show} onBlur=${()=>setR(null)} onClick=${e=>{e.preventDefault();e.stopPropagation();r?setR(null):show(e)}}>?${r?html`<span className="bub" role="tooltip" style=${st}>${info.t?html`<b>${info.t}</b>`:null}${info.d}</span>`:null}</span>`;
+}
+function Lexique(){
+ const [q,setQ]=useState('');
+ const cats=[...new Set(Object.values(GLOSS).map(g=>g.c))];
+ const items=Object.values(GLOSS).filter(g=>!q.trim()||(g.t+' '+g.d).toLowerCase().includes(q.trim().toLowerCase()));
+ return html`<div>
+  <${Head} eyebrow="Aide" title="Lexique" sub="Les mots de la formation à distance expliqués simplement. Dans l'outil, le petit « ? » à côté d'un terme affiche la même explication."/>
+  <div className="card" style=${{marginBottom:14}}><h2>Comment une FOAD arrive jusqu'aux agents</h2>
+   <div className="chain">
+    <div><span className="n">1</span><b>Le besoin</b>Un service exprime un besoin. L'e-créateur le cadre avec un expert métier : public, objectifs, durée.</div>
+    <div><span className="n">2</span><b>La fabrication</b>Le contenu est mis en forme dans Rise, le logiciel de création. Les activités complexes passent par Storyline ou des composants programmés.</div>
+    <div><span className="n">3</span><b>Le colis SCORM</b>La FOAD terminée et validée est exportée dans un format standard qui permet de suivre la progression de chaque agent.</div>
+    <div><span className="n">4</span><b>La mise en ligne</b>Le colis est déposé sur ENASIS. Les agents s'y inscrivent, la suivent, et leur achèvement est enregistré.</div>
+   </div></div>
+  <input id="lx-q" placeholder="Chercher un mot : SCORM, séquence, Rise…" value=${q} onChange=${e=>setQ(e.target.value)} style=${{marginBottom:14}} aria-label="Chercher dans le lexique"/>
+  ${cats.map(c=>{const it=items.filter(g=>g.c===c);if(!it.length)return null;return html`<div key=${c} style=${{marginBottom:16}}><h2 style=${{fontFamily:'var(--f-display)',fontSize:16,margin:'0 0 8px'}}>${c}</h2><div className="lx-grid">${it.map(g=>html`<div key=${g.t} className="lx"><b>${g.t}</b><p>${g.d}</p></div>`)}</div></div>`})}
+  ${items.length?null:html`<div className="empty-state">Aucun terme ne correspond.</div>`}
+ </div>`;
 }
 
 /* ============ CHAMPS DE FICHE ============ */
@@ -440,7 +632,7 @@ function Field({def,value,conf,onChange,onConf,params,ro}){
  else if(def.t==='bool')input=html`<label className="row small"><input type="checkbox" id=${id} checked=${!!value} disabled=${dis} onChange=${e=>onChange(e.target.checked)}/> Oui</label>`;
  else input=html`<input id=${id} type=${def.t==='number'?'number':def.t==='date'?'date':'text'} value=${value??''} disabled=${dis} onChange=${e=>onChange(def.t==='number'?(e.target.value===''?'':+e.target.value):e.target.value)}/>`;
  return html`<div className=${'field'+(def.wide?' wide':'')+(empty?' empty':'')}>
-  <div className="flabel"><label htmlFor=${id}>${def.l}${def.req?html`<b className="req" title="Information clé">*</b>`:null}</label>
+  <div className="flabel"><span><label htmlFor=${id}>${def.l}${def.req?html`<b className="req" title="Information clé">*</b>`:null}</label><${Tip} k=${def.tip||def.k}/></span>
    ${def.noConf?null:empty?html`<span className="conf c-none">Non renseigné</span>`:
     dis?html`<span className=${'conf c-'+(conf||'connu')}>${({connu:'Connu',suppose:'Supposé',a_confirmer:'À confirmer'})[conf||'connu']}</span>`:
     html`<select className=${'conf c-'+(conf||'connu')} aria-label=${'Fiabilité : '+def.l} value=${conf||'connu'} onChange=${e=>onConf(e.target.value)}><option value="connu">Connu</option><option value="suppose">Supposé</option><option value="a_confirmer">À confirmer</option></select>`}
@@ -566,12 +758,35 @@ function Registre({S,params,openFiche,go,toast,api,ro}){
  </div>`;
 }
 
+/* ============ REGISTRE ALLÉGÉ (profils de consultation) ============ */
+const etatSimple=f=>f.statutPublication==='Publiée'?['Disponible','ok']:f.etape==='Archivage'||f.statutPublication==='Retirée'?['Retirée','']:['Validation','Publication','Expérimentation','Corrections'].includes(f.etape)?['Bientôt disponible','info']:G_CONCEPTION.includes(f.etape)?['En conception','info']:['À l\'étude',''];
+function RegistreLight({S,params,openFiche}){
+ const [q,setQ]=useState('');const [dom,setDom]=useState('');const [pub,setPub]=useState('');const [et,setEt]=useState('');
+ let rows=S.data.foad.filter(f=>f.etape!=='Abandonné');
+ if(q.trim())rows=rows.filter(f=>[f.titre,f.domaine,f.objectifs,f.description].join(' ').toLowerCase().includes(q.trim().toLowerCase()));
+ if(dom)rows=rows.filter(f=>f.domaine===dom);if(pub)rows=rows.filter(f=>(f.publics||[]).includes(pub));if(et)rows=rows.filter(f=>etatSimple(f)[0]===et);
+ rows=rows.slice().sort((a,b)=>(a.titre||'').localeCompare(b.titre||'','fr'));
+ return html`<div>
+  <${Head} eyebrow="Registre" title="Toutes les FOAD du SDIS 85" sub=${rows.length+' formation(s), disponibles ou en projet. Cliquez sur une ligne pour le détail.'}/>
+  <div className="filters" style=${{gridTemplateColumns:'2fr repeat(3,minmax(0,1fr))'}}>
+   <input id="rl-q" placeholder="Rechercher une formation" value=${q} onChange=${e=>setQ(e.target.value)} aria-label="Recherche"/>
+   <select id="rl-d" value=${dom} onChange=${e=>setDom(e.target.value)} aria-label="Domaine"><option value="">Tous domaines</option>${params.domaines.map(d=>html`<option key=${d}>${d}</option>`)}</select>
+   <select id="rl-p" value=${pub} onChange=${e=>setPub(e.target.value)} aria-label="Public"><option value="">Tous publics</option>${PUBLICS.map(d=>html`<option key=${d}>${d}</option>`)}</select>
+   <select id="rl-e" value=${et} onChange=${e=>setEt(e.target.value)} aria-label="État"><option value="">Tous états</option>${['Disponible','Bientôt disponible','En conception','À l\'étude','Retirée'].map(d=>html`<option key=${d}>${d}</option>`)}</select>
+  </div>
+  ${rows.length?html`<div className="tbl-wrap"><table><thead><tr><th>Formation</th><th>Domaine</th><th>Public</th><th className="num">Durée</th><th>Caractère</th><th>Articulation</th><th>État</th></tr></thead><tbody>
+   ${rows.map(f=>{const e=etatSimple(f);return html`<tr key=${f.id} className="click" onClick=${()=>openFiche(f.id)}><td style=${{minWidth:220}}><b>${f.titre}</b></td><td>${f.domaine||'—'}</td><td>${(f.publics||[]).join(', ')||'—'}</td><td className="num">${fmtMin(f.dureeTheo)}</td><td>${f.caractere||'—'}</td><td>${f.autonomie||'—'}</td><td><${Badge} tone=${e[1]}>${e[0]}<//></td></tr>`})}</tbody></table></div>`
+  :html`<div className="empty-state">Aucune formation ne correspond à la recherche.</div>`}
+ </div>`;
+}
+
 /* ============ FICHE FOAD ============ */
 function blankFoad(list){return {code:nextCode(list),titre:'',etape:'À qualifier',statutConception:'Non démarrée',statutPublication:'Non publiée',version:'',valid:{},validVersion:{},conf:{},actions:[],enasis:{},histEtapes:[]}}
-function Fiche({S,params,id,api,toast,close,ro,openFiche}){
+function Fiche({S,params,id,api,toast,close,ro,openFiche,tabsAllowed,initialTab}){
+ const tabs=FICHE_TABS.filter(([k])=>!tabsAllowed||tabsAllowed.includes(k)||id==='new');
  const src=id==='new'?null:S.data.foad.find(f=>f.id===id);
  const [d,setD]=useState(()=>src?clone(src):blankFoad(S.data.foad));
- const [tab,setTab]=useState('ident');
+ const [tab,setTab]=useState(()=>tabs.some(t=>t[0]===initialTab)?initialTab:(tabs[0]||['ident'])[0]);
  const [dirty,setDirty]=useState(false);
  const [confirmDel,setConfirmDel]=useState(false);
  const fid=id==='new'?null:id;
@@ -595,12 +810,11 @@ function Fiche({S,params,id,api,toast,close,ro,openFiche}){
  const dup=async()=>{const n=clone(d);n.code=nextCode(S.data.foad);n.titre=d.titre+' (copie)';n.valid={};n.validVersion={};n.statutPublication='Non publiée';n.etape='Idée';n.histEtapes=[];n.datePublication='';n.lienEnasis='';const nid=uid('F');
   try{await api.save('foad',nid,n);await api.log(nid,'création','Duplication de '+d.code);toast('Fiche dupliquée');openFiche(nid,true)}catch(e){toast('Duplication refusée : '+(e.message||e.code))}};
  const del=async()=>{try{await api.remove('foad',fid);await api.log(fid,'suppression','Suppression de la fiche '+d.code+' « '+d.titre+' »');toast('Fiche supprimée');close()}catch(e){toast('Suppression refusée : '+(e.message||e.code))}};
- const tabs=[['ident','Identification'],['public','Public et formation'],['projet','Projet'],['valid','Validation'],['publication','Publication ENASIS'],['economie','Économie'],['usage','Utilisation'],['maintenance','Maintenance'],['histo','Historique']];
  const vals=S.data.validations.filter(v=>v.foad===fid).sort((a,b)=>(b.at||'').localeCompare(a.at||''));
  const journal=S.data.journal.filter(j=>j.foad===fid).sort((a,b)=>(b.at||'').localeCompare(a.at||''));
  const cout=!isEmpty(d.coutEstime)?d.coutEstime:(params.tauxHoraire&&(d.tempsReel||d.tempsPrevu))?Math.round((d.tempsReel||d.tempsPrevu)*params.tauxHoraire):null;
  return html`<div>
-  <button className="backbtn" onClick=${close}>← Registre</button>
+  <button className="backbtn" onClick=${close}>← Retour</button>
   <${Head} eyebrow=${d.code+(d.version?' · v'+d.version:'')} title=${d.titre||'Nouvelle fiche FOAD'}>
    ${ro?null:html`${fid?html`<button className="btn" onClick=${dup}>Dupliquer</button>`:null}
    <button className="btn p" onClick=${save} disabled=${!dirty&&!!fid}>${dirty||!fid?'Enregistrer':'Enregistré'}</button>`}
@@ -636,8 +850,8 @@ function Actions({d,set,ro}){
 function EnasisCheck({d,set,ro}){
  const e=d.enasis||{};const n=ENASIS_CHECK.filter(([k])=>e[k]).length;
  return html`<div style=${{marginTop:16}}><h3>Checklist de publication ENASIS · ${n}/${ENASIS_CHECK.length}</h3>
-  <p className="small muted">La colonne de droite distingue ce qui relève de l'export Rise, du paramétrage Moodle et de l'environnement ENASIS.</p>
-  <div className="grid g2" style=${{gap:'0 16px'}}>${ENASIS_CHECK.map(([k,l,w])=>html`<label key=${k} className="check"><input type="checkbox" checked=${!!e[k]} disabled=${ro} onChange=${()=>set('enasis',{...e,[k]:!e[k]})}/><span className="grow">${l}</span><${Badge} tone=${w.includes('Rise')?'info':w==='ENASIS'?'red':''}>${w}<//></label>`)}</div></div>`;
+  <p className="small muted">L'étiquette de droite indique où se fait le réglage : dans Rise avant l'export, dans les paramètres du cours sur ENASIS (Moodle), ou dans l'organisation propre à ENASIS. Le « ? » explique chaque point.</p>
+  <div className="grid g2" style=${{gap:'0 16px'}}>${ENASIS_CHECK.map(([k,l,w])=>html`<div key=${k} className="check"><input type="checkbox" id=${'en-'+k} checked=${!!e[k]} disabled=${ro} onChange=${()=>set('enasis',{...e,[k]:!e[k]})}/><span className="grow"><label htmlFor=${'en-'+k}>${l}</label><${Tip} k=${ENASIS_TIPS[k]} text=${GLOSS[ENASIS_TIPS[k]]?null:ENASIS_TIPS[k]}/></span><span title=${WHERE_TIPS[w]||''}><${Badge} tone=${w.includes('Rise')?'info':w==='ENASIS'?'red':''}>${w}<//></span></div>`)}</div></div>`;
 }
 
 /* ============ MODULE 9 — VALIDATION ============ */
@@ -659,7 +873,7 @@ function Validations({S,d,fid,api,toast,ro,dirty}){
  const sv=(k,x)=>setV(o=>({...o,[k]:x}));
  return html`<div className="split">
   <div className="card"><h2>Circuit de validation</h2><div className="circuit">
-   ${CIRCUIT.map(c=>{const s=(d.valid||{})[c]||'Non sollicité';const ver=(d.validVersion||{})[c];return html`<div key=${c} className="st"><span>${c}</span><span className="mono small muted">${ver?'v'+ver:''}</span><${Badge} tone=${validTone(s)}>${s}<//></div>`})}
+   ${CIRCUIT.map(c=>{const s=(d.valid||{})[c]||'Non sollicité';const ver=(d.validVersion||{})[c];const ct=CIRCUIT_TIPS[c];return html`<div key=${c} className="st"><span>${c}<${Tip} k=${ct} text=${GLOSS[ct]?null:ct}/></span><span className="mono small muted">${ver?'v'+ver:''}</span><${Badge} tone=${validTone(s)}>${s}<//></div>`})}
   </div>
   <h3 style=${{marginTop:18}}>Historique des décisions</h3>
   ${vals.length?html`<div className="tbl-wrap"><table><thead><tr><th>Date</th><th>Étape</th><th>Version</th><th>Décision</th><th>Validateur</th></tr></thead><tbody>${vals.map(x=>html`<tr key=${x.id}><td>${fmtD(x.date)}</td><td>${x.etapeValidation}${x.reserves?html`<div className="small muted">Réserves : ${x.reserves}</div>`:null}${x.commentaire?html`<div className="small muted">${x.commentaire}</div>`:null}</td><td className="mono">${x.version}</td><td><${Badge} tone=${validTone(x.decision)}>${x.decision}<//></td><td>${x.validateur}<div className="small muted">${x.fonction}</div>${x.justificatif?html`<div className="small muted">Justificatif : ${x.justificatif}</div>`:null}</td></tr>`)}</tbody></table></div>`:html`<div className="muted small">Aucune décision tracée.</div>`}
@@ -713,7 +927,7 @@ function Kanban({S,params,api,toast,openFiche,ro}){
   <//>
   <div className="kanban">${cols.map(c=>{const items=fo.filter(f=>f.etape===c);return html`<div key=${c} className=${'col'+(over===c?' over':'')}
     onDragOver=${e=>{if(ro)return;e.preventDefault();setOver(c)}} onDragLeave=${()=>setOver(null)} onDrop=${e=>{e.preventDefault();setOver(null);move(e.dataTransfer.getData('text/plain'),c)}}>
-    <h4>${c}<span className="mono muted">${items.length}</span></h4>
+    <h4><span>${c}<${Tip} k=${ETAPE_TIPS[c]} text=${GLOSS[ETAPE_TIPS[c]]?null:ETAPE_TIPS[c]}/></span><span className="mono muted">${items.length}</span></h4>
     ${items.map(f=>{const al=alertsFor(f,S.data.validations,params);return html`<div key=${f.id} className=${'kcard p-'+(f.priorite||'none')} draggable=${!ro} onDragStart=${e=>e.dataTransfer.setData('text/plain',f.id)}>
      <div className="row"><span className="mono small muted">${f.code}</span>${f.priorite?html`<${Badge} tone=${f.priorite==='Haute'?'red':f.priorite==='Moyenne'?'warn':''}>${f.priorite}<//>`:null}</div>
      <b>${f.titre}</b>
@@ -836,64 +1050,105 @@ function Assistant(){
 }
 
 /* ============ MODULE 6 — SIMULATEUR ============ */
+const SIM_HELP={
+ duree:'La durée que mettra un agent pour suivre la FOAD en entier, en minutes.',
+ sequences:'sequence',
+ qualite:'Bonnes : documents validés, il reste surtout à mettre en forme. Partielles : une base existe mais doit être complétée. Absentes : tout le contenu est à écrire avec l\'expert métier.',
+ modele:'Si la FOAD reprend un modèle Rise ou la charte graphique existante, la mise en forme va plus vite.',
+ interactions:'interaction',
+ questions:'Nombre total de questions de quiz ou d\'évaluation, dans toute la FOAD. Le temps compte la rédaction de la question, des réponses et de l\'explication.',
+ visuels:'Schémas, infographies ou images à dessiner ou à retoucher spécialement. Les photos déjà prêtes ne comptent pas.',
+ video:'À créer : écriture, tournage et montage d\'une vidéo courte (2 à 4 min). À retravailler : une vidéo existe mais il faut la couper, la sous-titrer ou la remonter. Prête : il suffit de l\'insérer.',
+ audio:'Minutes de voix off à enregistrer et à caler sur le contenu.',
+ html:'html',
+ sl:'storyline',
+ relecteurs:'Nombre de personnes qui relisent et renvoient des remarques : expert métier, responsable pédagogique, hiérarchie…',
+ cycles:'Combien d\'allers-retours de corrections sont prévus. Le premier tour est compris, chaque tour en plus ajoute du temps.'};
 function Simulateur({S,params,api,toast,selComps,setSelComps,ro}){
- const [inp,setInp]=useState(()=>lsGet('fp.sim',{duree:45,sequences:4,complexite:'intermediaire',qualite:'partielles',videos:0,interactions:8,quiz:2,html:0,storyline:false,graph:'leger',audio:0,relecteurs:2,cycles:2,reutil:0}));
+ const [inp,setInp]=useState(()=>({...SIM_DEFAULT,...lsGet('fp.sim2',{})}));
  const [target,setTarget]=useState('');
- useEffect(()=>lsSet('fp.sim',inp),[inp]);
+ useEffect(()=>lsSet('fp.sim2',inp),[inp]);
+ const C=params.sim;
  const comps=S.data.composants.filter(c=>selComps.includes(c.id));
  const r=simulate(inp,params,comps);
  const s=(k,v)=>setInp(o=>({...o,[k]:v}));
- const N=(k,l,h)=>html`<div className="field"><label className="small muted" htmlFor=${'sim-'+k}>${l}</label><input id=${'sim-'+k} type="number" min="0" value=${inp[k]} onChange=${e=>s(k,e.target.value===''?0:+e.target.value)}/>${h?html`<div className="hint">${h}</div>`:null}</div>`;
+ const T=k=>{const h=SIM_HELP[k];return html`<${Tip} k=${GLOSS[h]?h:null} text=${GLOSS[h]?null:h}/>`};
+ const N=(k,l,help)=>html`<div className="field"><div className="flabel"><span><label htmlFor=${'sim-'+k}>${l}</label>${T(help||k)}</span></div><input id=${'sim-'+k} type="number" min="0" value=${inp[k]} onChange=${e=>s(k,e.target.value===''?0:+e.target.value)}/></div>`;
+ const Trio=(title,help,keys)=>html`<div className="field wide"><div className="flabel"><span><label>${title}</label>${T(help)}</span></div><div className="trio">${keys.map(([k,l])=>html`<div key=${k}><label htmlFor=${'sim-'+k}>${l}</label><input id=${'sim-'+k} type="number" min="0" value=${inp[k]} onChange=${e=>s(k,e.target.value===''?0:+e.target.value)}/></div>`)}</div></div>`;
  const attach=async()=>{const f=S.data.foad.find(x=>x.id===target);if(!f)return;
   const est={date:today(),bas:Math.round(r.bas),central:Math.round(r.central),haut:Math.round(r.haut),complexite:inp.complexite,entrees:inp,composants:comps.map(c=>c.nom)};
   try{await api.save('foad',f.id,{...f,estimation:est,tempsPrevu:Math.round(r.central),conf:{...(f.conf||{}),tempsPrevu:'suppose'}});await api.log(f.id,'estimation','Simulateur : '+est.bas+' / '+est.central+' / '+est.haut+' h (temps prévu fixé à '+est.central+' h)');toast('Estimation rattachée à '+f.code)}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
+ const fixes=FIXED_PHASES.reduce((t,k)=>t+(+C.fixes[k]||0),0);
  return html`<div>
-  <${Head} eyebrow="Module 6" title="Simulateur de charge de conception" sub="Hypothèses de gestion paramétrables dans Paramètres. Ce ne sont pas des normes réglementaires."/>
-  <div className="card" style=${{marginBottom:14}}><h2>Niveau de complexité</h2><div className="scale">${COMPLEX.map(c=>html`<button key=${c.k} className=${inp.complexite===c.k?'on':''} aria-pressed=${inp.complexite===c.k} onClick=${()=>s('complexite',c.k)}><span className="lv"><span className="sw" style=${{background:c.c}}></span>${c.lv}</span><span className="small muted">${c.d}</span><span className="mono small">${params.ratios[c.k]} h / h de FOAD</span></button>`)}</div></div>
-  <div className="split"><div className="card"><h2>Caractéristiques</h2><div className="form">
-   ${N('duree','Durée finale de la FOAD (min)')}${N('sequences','Nombre de séquences')}
-   <div className="field"><label className="small muted" htmlFor="sim-q">Qualité des ressources initiales</label><select id="sim-q" value=${inp.qualite} onChange=${e=>s('qualite',e.target.value)}><option value="bonnes">Bonnes, validées</option><option value="partielles">Partielles</option><option value="absentes">Absentes, à produire</option></select></div>
-   <div className="field"><label className="small muted" htmlFor="sim-g">Besoin de graphismes</label><select id="sim-g" value=${inp.graph} onChange=${e=>s('graph',e.target.value)}><option value="aucun">Aucun</option><option value="leger">Léger</option><option value="fort">Important</option></select></div>
-   ${N('videos','Nombre de vidéos')}${N('interactions','Nombre d\'interactions')}${N('quiz','Nombre de quiz')}${N('html','Composants HTML personnalisés')}
-   ${N('audio','Audio à enregistrer (min)')}${N('relecteurs','Nombre de relecteurs')}${N('cycles','Cycles de correction')}
-   <div className="field"><label className="small muted" htmlFor="sim-r">Blocs réutilisables disponibles</label><select id="sim-r" value=${inp.reutil} onChange=${e=>s('reutil',+e.target.value)}><option value="0">Aucun</option><option value="15">Quelques-uns (−15 %)</option><option value="30">Nombreux (−30 %)</option></select></div>
-   <label className="row small"><input type="checkbox" id="sim-sl" checked=${inp.storyline} onChange=${e=>s('storyline',e.target.checked)}/> Besoin Storyline</label>
+  <${Head} eyebrow="Module 6" title="Simulateur de charge de conception" sub="Estime le temps de travail pour fabriquer une FOAD (pas le temps que l'agent passera à la suivre). Ce sont des hypothèses de gestion, réglables dans Paramètres, pas des normes."/>
+  <div className="card" style=${{marginBottom:14}}><h2>Niveau de complexité<${Tip} text="Il règle le temps de base consacré au contenu (scénario, textes, mise en forme). Les vidéos, quiz, composants et relectures s'ajoutent ensuite, ligne par ligne."/></h2><div className="scale">${COMPLEX.map(c=>html`<button key=${c.k} className=${inp.complexite===c.k?'on':''} aria-pressed=${inp.complexite===c.k} onClick=${()=>s('complexite',c.k)}><span className="lv"><span className="sw" style=${{background:c.c}}></span>${c.lv}</span><span className="small muted">${c.d}</span><span className="mono small">${C.ratios[c.k]} h de base par heure de FOAD</span></button>`)}</div></div>
+  <div className="split"><div className="card"><h2>Ce que contiendra la FOAD</h2><div className="form">
+   ${N('duree','Durée pour l\'agent (min)')}${N('sequences','Nombre de séquences')}
+   <div className="field"><div className="flabel"><span><label htmlFor="sim-q">Ressources de départ</label>${T('qualite')}</span></div><select id="sim-q" value=${inp.qualite} onChange=${e=>s('qualite',e.target.value)}><option value="bonnes">Bonnes, déjà validées</option><option value="partielles">Partielles, à compléter</option><option value="absentes">Absentes, tout à écrire</option></select></div>
+   <div className="field"><div className="flabel"><span><label htmlFor="sim-mod">Modèle existant</label>${T('modele')}</span></div><label className="row small" style=${{minHeight:36}}><input type="checkbox" id="sim-mod" checked=${!!inp.modele} onChange=${e=>s('modele',e.target.checked)}/> Partir d'un modèle Rise ou de la charte</label></div>
+   <div className="sim-grp">Contenu et interactivité</div>
+   ${N('interactions','Blocs interactifs Rise')}${N('questions','Questions de quiz')}${N('visuels','Visuels à créer ou retoucher')}${N('audio','Voix off à enregistrer (min)')}
+   ${Trio('Vidéos','video',[['videoCreer','À créer'],['videoRetravailler','À retravailler'],['videoPrete','Prêtes à insérer']])}
+   <div className="sim-grp">Développements sur mesure</div>
+   ${Trio('Composants personnalisés (HTML)','html',[['htmlCreer','À créer'],['htmlAdapter','À adapter'],['htmlReutil','Réutilisés tels quels']])}
+   <div className="field wide"><div className="flabel"><span><label>Activités Storyline</label>${T('sl')}</span></div><div className="trio">${[['slCreer','À créer'],['slAdapter','À adapter']].map(([k,l])=>html`<div key=${k}><label htmlFor=${'sim-'+k}>${l}</label><input id=${'sim-'+k} type="number" min="0" value=${inp[k]} onChange=${e=>s(k,e.target.value===''?0:+e.target.value)}/></div>`)}</div></div>
+   <div className="sim-grp">Relectures</div>
+   ${N('relecteurs','Nombre de relecteurs')}${N('cycles','Tours de correction')}
   </div>
-  ${comps.length?html`<div style=${{marginTop:12}}><h3>Composants sélectionnés dans le catalogue</h3><div className="chips">${comps.map(c=>html`<button key=${c.id} className="chip on" onClick=${()=>setSelComps(selComps.filter(x=>x!==c.id))}>${c.nom} ×</button>`)}</div></div>`:html`<p className="small muted" style=${{marginTop:12}}>Astuce : sélectionnez des composants dans le catalogue pour les ajouter au calcul.</p>`}
+  ${comps.length?html`<div style=${{marginTop:12}}><h3>Composants du catalogue ajoutés</h3><div className="chips">${comps.map(c=>html`<button key=${c.id} className="chip on" onClick=${()=>setSelComps(selComps.filter(x=>x!==c.id))}>${c.nom} ×</button>`)}</div></div>`:html`<p className="small muted" style=${{marginTop:12}}>Vous pouvez aussi cocher des composants dans la page Composants : leur temps de réutilisation s'ajoute ici.</p>`}
   </div>
   <div className="card"><h2>Estimation</h2>
    <div className="range3"><div><span className="small muted">Basse</span><b>${fmtH(r.bas)}</b></div><div className="c"><span className="small muted">Centrale</span><b>${fmtH(r.central)}</b></div><div><span className="small muted">Haute</span><b>${fmtH(r.haut)}</b></div></div>
-   <p className="small muted">Base : ${fmtMin(inp.duree)} × ${params.ratios[inp.complexite]} h/h = ${fmtH(r.base)}${r.ratio?' · ratio global '+Math.round(r.ratio)+' h par heure de FOAD':''}${params.tauxHoraire?' · coût central ≈ '+Math.round(r.central*params.tauxHoraire).toLocaleString('fr-FR')+' €':''}</p>
-   <div className="tbl-wrap sim-out"><table><thead><tr><th>Phase</th><th className="num">Basse</th><th className="num">Centrale</th><th className="num">Haute</th></tr></thead><tbody>
-    ${PHASES.filter(([k])=>r.lines[k]).map(([k,l])=>html`<tr key=${k}><td>${l}<div className="small muted">${r.why[k].join(' + ')}</div></td><td className="num">${fmtH(r.lines[k]*params.fourchette.bas)}</td><td className="num"><b>${fmtH(r.lines[k])}</b></td><td className="num">${fmtH(r.lines[k]*params.fourchette.haut)}</td></tr>`)}
+   <div className="note" style=${{marginTop:10}}>
+    <b>Comment c'est calculé</b><br/>
+    1. Temps fixes par projet, quelle que soit la durée : ${fmtH(fixes)} (cadrage, intégration, publication, documentation, maintenance).<br/>
+    2. Temps de base du contenu : ${C.ratios[inp.complexite]} h par heure de FOAD, avec un effet dégressif. ${fmtMin(inp.duree)} compte pour ${(Math.round(r.Deq*100)/100).toLocaleString('fr-FR')} h au lieu de ${(Math.round(r.D*100)/100).toLocaleString('fr-FR')} h, soit ${fmtH(r.prod)}.<br/>
+    3. Chaque élément renseigné à gauche s'ajoute, puis les tests et les relectures.<br/>
+    ${r.parHeure?html`Résultat : environ ${Math.round(r.parHeure)} h de travail par heure de FOAD.`:null}${params.tauxHoraire?' Coût central ≈ '+Math.round(r.central*params.tauxHoraire).toLocaleString('fr-FR')+' €.':''}
+   </div>
+   <div className="tbl-wrap sim-out" style=${{marginTop:10}}><table><thead><tr><th>Étape</th><th className="num">Basse</th><th className="num">Centrale</th><th className="num">Haute</th></tr></thead><tbody>
+    ${PHASES.filter(([k])=>r.lines[k]).map(([k,l])=>html`<tr key=${k}><td>${l}${FIXED_PHASES.includes(k)?html` <${Badge}>fixe<//>`:null}<div className="small muted">${r.why[k].join(' + ')}</div></td><td className="num">${fmtH(r.lines[k]*C.fourchette.bas)}</td><td className="num"><b>${fmtH(r.lines[k])}</b></td><td className="num">${fmtH(r.lines[k]*C.fourchette.haut)}</td></tr>`)}
    </tbody></table></div>
    ${ro?null:html`<div className="row" style=${{marginTop:12}}><select id="sim-target" className="grow" style=${{width:'auto'}} value=${target} onChange=${e=>setTarget(e.target.value)} aria-label="FOAD cible"><option value="">Rattacher à une fiche…</option>${S.data.foad.filter(f=>!TERMINAUX.includes(f.etape)).map(f=>html`<option key=${f.id} value=${f.id}>${f.code} · ${f.titre}</option>`)}</select><button className="btn p" disabled=${!target} onClick=${attach}>Rattacher</button></div>`}
   </div></div></div>`;
 }
 
 /* ============ MODULE 7 — COMPOSANTS ============ */
-const CMP_FIELDS=[{k:'nom',l:'Nom',t:'text',req:true},{k:'famille',l:'Famille',t:'select',opts:FAMILLES},{k:'format',l:'Format',t:'select',opts:['Bloc Rise natif','HTML/CSS/JS','Storyline','H5P','Image / média','Modèle Rise']},{k:'complexite',l:'Complexité',t:'select',opts:COMPLEX.map(c=>c.lv)},
+const CMP_FORMATS=['Bloc Rise natif','Composant codé (HTML/CSS/JS)','Storyline','H5P','Activité ENASIS (Moodle)','Outil Articulate','Modèle Rise','Image / média'];
+const CMP_DISPO=['Disponible','À développer','À vérifier sur ENASIS'];
+const CMP_TOOLS=[['','Tous'],['Bloc Rise natif','Rise'],['Storyline','Storyline'],['H5P','H5P'],['Activité ENASIS (Moodle)','ENASIS'],['Composant codé (HTML/CSS/JS)','Codé sur mesure'],['Outil Articulate','Outils Articulate'],['Modèle Rise','Modèles']];
+const normFormat=f=>f==='HTML/CSS/JS'?'Composant codé (HTML/CSS/JS)':f;
+const CMP_FIELDS=[{k:'nom',l:'Nom',t:'text',req:true},{k:'famille',l:'Famille',t:'select',opts:FAMILLES},{k:'format',l:'Outil',t:'select',opts:CMP_FORMATS,tip:'Bloc Rise natif : créé directement dans Rise, sans programmer. Composant codé : programmé sur mesure (HTML, CSS, JavaScript). Storyline : activité créée avec Storyline. H5P : activité interactive créée dans ENASIS. Activité ENASIS : outil propre à la plateforme (test, forum, badge…). Outil Articulate : service d\'aide à la production.'},{k:'disponibilite',l:'Disponibilité',t:'select',opts:CMP_DISPO,tip:'Disponible : utilisable tout de suite. À développer : idée de composant à créer. À vérifier sur ENASIS : dépend des modules activés sur la plateforme.'},{k:'complexite',l:'Complexité',t:'select',opts:COMPLEX.map(c=>c.lv)},
  {k:'description',l:'Description',t:'ta',wide:true},{k:'tempsCreation',l:'Temps de création (h)',t:'number'},{k:'tempsReutil',l:'Temps de réutilisation (h)',t:'number'},{k:'compat',l:'Compatibilité',t:'multi',opts:['Rise','Storyline','ENASIS / Moodle','Mobile']},{k:'version',l:'Version',t:'text'},
  {k:'limites',l:'Limites techniques',t:'ta'},{k:'consignes',l:'Consignes d\'intégration',t:'ta'},{k:'responsable',l:'Responsable de maintenance',t:'text'},{k:'lien',l:'Lien vers le modèle ou le code',t:'text'}];
 function Composants({S,params,api,toast,selComps,setSelComps,go,ro}){
- const [ed,setEd]=useState(null);const [q,setQ]=useState('');const [fam,setFam]=useState('');
- let rows=S.data.composants.slice().sort((a,b)=>(a.nom||'').localeCompare(b.nom||''));
- if(q)rows=rows.filter(c=>[c.nom,c.description,c.famille].join(' ').toLowerCase().includes(q.toLowerCase()));
+ const [ed,setEd]=useState(null);const [q,setQ]=useState('');const [fam,setFam]=useState('');const [tool,setTool]=useState(lsGet('fp.cmp.tool',''));const [dispo,setDispo]=useState('');
+ useEffect(()=>lsSet('fp.cmp.tool',tool),[tool]);
+ const all=S.data.composants.map(c=>({...c,format:normFormat(c.format)}));
+ let rows=all.slice().sort((a,b)=>(a.famille||'').localeCompare(b.famille||'','fr')||(a.nom||'').localeCompare(b.nom||'','fr'));
+ if(tool)rows=rows.filter(c=>c.format===tool);
+ if(q)rows=rows.filter(c=>[c.nom,c.description,c.famille,c.consignes].join(' ').toLowerCase().includes(q.toLowerCase()));
  if(fam)rows=rows.filter(c=>c.famille===fam);
+ if(dispo)rows=rows.filter(c=>(c.disponibilite||'Disponible')===dispo);
+ const fams=[...new Set(all.filter(c=>!tool||c.format===tool).map(c=>c.famille).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr'));
  const save=async()=>{if(!(ed.nom||'').trim()){toast('Le nom est obligatoire.');return}const id=ed.id||uid('C');try{await api.save('composants',id,ed);await api.log(null,'composant',(ed.id?'Modification':'Ajout')+' du composant « '+ed.nom+' »');setEd(null);toast('Composant enregistré')}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
  const del=async()=>{try{await api.remove('composants',ed.id);await api.log(null,'composant','Suppression du composant « '+ed.nom+' »');setEd(null)}catch(e){toast(e.message||e.code)}};
- if(ed)return html`<div><button className="backbtn" onClick=${()=>setEd(null)}>← Catalogue des composants</button><${Head} eyebrow="Composant" title=${ed.nom||'Nouveau composant'}>${ro?null:html`${ed.id?html`<button className="btn danger" onClick=${del}>Supprimer</button>`:null}<button className="btn p" onClick=${save}>Enregistrer</button>`}<//>
+ if(ed)return html`<div><button className="backbtn" onClick=${()=>setEd(null)}>← Composants et ressources</button><${Head} eyebrow=${ed.format||'Composant'} title=${ed.nom||'Nouveau composant'}>${ro?null:html`${ed.id?html`<button className="btn danger" onClick=${del}>Supprimer</button>`:null}<button className="btn p" onClick=${save}>Enregistrer</button>`}<//>
   <div className="card"><div className="form">${CMP_FIELDS.map(f=>html`<${Field} key=${f.k} def=${{...f,noConf:true}} value=${ed[f.k]} params=${params} ro=${ro} onChange=${v=>setEd({...ed,[f.k]:v})}/>`)}</div></div></div>`;
+ const dTone=d=>d==='À développer'?'info':d==='À vérifier sur ENASIS'?'warn':'ok';
  return html`<div>
-  <${Head} eyebrow="Module 7" title="Composants et ressources" sub=${S.data.composants.length+' composant(s). Sélectionnez-en pour les intégrer au simulateur de charge.'}>
-   ${selComps.length?html`<button className="btn" onClick=${()=>go('simulateur')}>Simuler avec ${selComps.length} composant(s)</button>`:null}
-   ${ro?null:html`<button className="btn p" onClick=${()=>setEd({compat:[]})}><${Ico} n="plus"/> Nouveau composant</button>`}
+  <${Head} eyebrow="Module 7" title="Composants et ressources" sub=${all.length+' éléments : ce que permettent Rise, Storyline, H5P et ENASIS, et les composants codés du service. Cochez-en pour les ajouter au simulateur de charge.'}>
+   ${selComps.length?html`<button className="btn" onClick=${()=>go('simulateur')}>Simuler avec ${selComps.length} élément(s)</button>`:null}
+   ${ro?null:html`<button className="btn p" onClick=${()=>setEd({compat:[],disponibilite:'Disponible'})}><${Ico} n="plus"/> Nouveau composant</button>`}
   <//>
-  <div className="row" style=${{marginBottom:12}}><input id="cmp-q" className="grow" style=${{width:'auto',flex:1}} placeholder="Rechercher un composant" value=${q} onChange=${e=>setQ(e.target.value)}/><select id="cmp-f" style=${{width:'auto'}} value=${fam} onChange=${e=>setFam(e.target.value)} aria-label="Famille"><option value="">Toutes familles</option>${FAMILLES.map(f=>html`<option key=${f}>${f}</option>`)}</select></div>
-  ${rows.length?html`<div className="tbl-wrap"><table><thead><tr><th></th><th>Nom</th><th>Famille</th><th>Format</th><th>Complexité</th><th className="num">Création</th><th className="num">Réutilisation</th><th>Compatibilité</th><th>Version</th></tr></thead><tbody>
+  <div className="chips" style=${{marginBottom:10}}>${CMP_TOOLS.map(([v,l])=>{const n=v?all.filter(c=>c.format===v).length:all.length;return n||!v?html`<button key=${l} className=${'chip'+(tool===v?' on':'')} aria-pressed=${tool===v} onClick=${()=>{setTool(v);setFam('')}}>${l} · ${n}</button>`:null})}</div>
+  <div className="row" style=${{marginBottom:12}}><input id="cmp-q" className="grow" style=${{width:'auto',flex:1,minWidth:200}} placeholder="Rechercher : accordéon, glisser-déposer, badge…" value=${q} onChange=${e=>setQ(e.target.value)}/>
+   <select id="cmp-f" style=${{width:'auto'}} value=${fam} onChange=${e=>setFam(e.target.value)} aria-label="Famille"><option value="">Toutes familles</option>${fams.map(f=>html`<option key=${f}>${f}</option>`)}</select>
+   <select id="cmp-d" style=${{width:'auto'}} value=${dispo} onChange=${e=>setDispo(e.target.value)} aria-label="Disponibilité"><option value="">Toute disponibilité</option>${CMP_DISPO.map(f=>html`<option key=${f}>${f}</option>`)}</select></div>
+  ${rows.length?html`<div className="tbl-wrap"><table><thead><tr><th></th><th>Élément</th><th>Outil</th><th>Famille</th><th>Complexité</th><th className="num">Création<${Tip} k="tempsCreation"/></th><th className="num">Réutilisation<${Tip} k="tempsReutil"/></th><th>Disponibilité</th></tr></thead><tbody>
    ${rows.map(c=>html`<tr key=${c.id} className="click" onClick=${()=>setEd(clone(c))}><td onClick=${e=>e.stopPropagation()}><input type="checkbox" aria-label=${'Sélectionner '+c.nom} checked=${selComps.includes(c.id)} onChange=${()=>setSelComps(selComps.includes(c.id)?selComps.filter(x=>x!==c.id):selComps.concat([c.id]))}/></td>
-    <td><b>${c.nom}</b><div className="small muted">${c.description||''}</div></td><td>${c.famille||'—'}</td><td>${c.format||'—'}</td><td>${c.complexite||'—'}</td><td className="num">${fmtH(c.tempsCreation)}</td><td className="num">${fmtH(c.tempsReutil)}</td><td>${(c.compat||[]).join(', ')||'—'}</td><td className="mono">${c.version||'—'}</td></tr>`)}</tbody></table></div>`
-  :html`<div className="empty-state">Aucun composant.</div>`}
+    <td style=${{minWidth:260}}><b>${c.nom}</b><div className="small muted">${c.description||''}</div></td><td className="small">${(CMP_TOOLS.find(t=>t[0]===c.format)||[0,c.format||'—'])[1]}</td><td className="small">${c.famille||'—'}</td><td className="small">${c.complexite||'—'}</td><td className="num">${fmtH(c.tempsCreation)}</td><td className="num">${fmtH(c.tempsReutil)}</td><td><${Badge} tone=${dTone(c.disponibilite||'Disponible')}>${c.disponibilite||'Disponible'}<//></td></tr>`)}</tbody></table></div>`
+  :html`<div className="empty-state">${all.length?'Aucun élément ne correspond aux filtres.':'Le catalogue est vide. Importez le fichier de composants depuis Paramètres, ou créez un premier composant.'}</div>`}
  </div>`;
 }
 
@@ -935,7 +1190,7 @@ function Gouvernance({S,params,api,toast,ro,openFiche}){
 }
 
 /* ============ MODULE 14 — CATALOGUE PUBLIC ============ */
-function Catalogue({S,params,go,vue}){
+function Catalogue({S,params,go,vue,canPropose}){
  const [q,setQ]=useState('');const [dom,setDom]=useState('');
  let rows=S.data.foad.filter(f=>f.publicCatalogue&&!['Archivage','Abandonné'].includes(f.etape));
  if(q)rows=rows.filter(f=>[f.titre,f.objectifs,f.domaine].join(' ').toLowerCase().includes(q.toLowerCase()));
@@ -949,7 +1204,7 @@ function Catalogue({S,params,go,vue}){
   <div className="row"><${Badge} tone=${f.statutPublication==='Publiée'?'ok':''}>${f.statutPublication==='Publiée'?'Disponible':'À venir'}<//>${f.statutPublication==='Publiée'&&f.lienPublic&&f.lienEnasis&&/^https?:/.test(f.lienEnasis)?html`<a className="btn sm" href=${f.lienEnasis} target="_blank" rel="noopener">Accéder sur ENASIS</a>`:null}</div></div>`;
  return html`<div>
   <${Head} eyebrow="Catalogue" title="Formations à distance du SDIS 85" sub="Seules les fiches dont la diffusion au catalogue est autorisée apparaissent ici, sans les informations internes de pilotage.">
-   <button className="btn p" onClick=${()=>go('idee')}>Proposer une idée</button>
+   ${canPropose?html`<button className="btn p" onClick=${()=>go('idee')}>Proposer une idée</button>`:null}
   <//>
   <div className="row" style=${{marginBottom:12}}><input id="cat-q" className="grow" style=${{width:'auto',flex:1}} placeholder="Rechercher une formation" value=${q} onChange=${e=>setQ(e.target.value)}/><select id="cat-d" style=${{width:'auto'}} value=${dom} onChange=${e=>setDom(e.target.value)} aria-label="Domaine"><option value="">Tous domaines</option>${params.domaines.map(d=>html`<option key=${d}>${d}</option>`)}</select></div>
   <h2 style=${{fontFamily:'var(--f-display)',fontSize:17}}>Disponibles</h2>
@@ -957,7 +1212,7 @@ function Catalogue({S,params,go,vue}){
   ${venir.length?html`<h2 style=${{fontFamily:'var(--f-display)',fontSize:17,marginTop:22}}>À venir</h2><div className="cat-grid">${venir.map(Card)}</div>`:null}
   <div className="card" style=${{marginTop:22}}><h2>Comment proposer une FOAD ?</h2>
    <div className="steps"><div>Vous déposez une idée ou une demande complète.</div><div>Le pilote FOAD instruit le besoin et choisit le format avec vous.</div><div>Arbitrage hiérarchique si nécessaire.</div><div>Conception avec un expert métier de votre service.</div><div>Relecture, expérimentation, corrections.</div><div>Validation et autorisation de diffusion.</div><div>Mise en ligne sur ENASIS et suivi.</div></div>
-   <div className="row" style=${{marginTop:12}}><button className="btn p" onClick=${()=>go('idee')}>Proposer une idée</button>${vue!=='visiteur'?html`<button className="btn" onClick=${()=>go('demandes')}>Déposer une demande complète</button>`:null}</div></div>
+   <div className="row" style=${{marginTop:12}}>${canPropose?html`<button className="btn p" onClick=${()=>go('idee')}>Proposer une idée</button>`:html`<span className="small muted">Pour proposer une formation au SDIS 85, contactez le service conception pédagogique.</span>`}${vue!=='visiteur'?html`<button className="btn" onClick=${()=>go('demandes')}>Déposer une demande complète</button>`:null}</div></div>
  </div>`;
 }
 
@@ -1008,9 +1263,9 @@ function Parametres({S,params,api,toast,ro}){
  const [p,setP]=useState(clone(params));const [imp,setImp]=useState(null);const [busy,setBusy]=useState(false);
  useEffect(()=>setP(clone(params)),[JSON.stringify(params)]);
  const list=(k,l)=>html`<div className="field"><label className="small muted" htmlFor=${'par-'+k}>${l} (une valeur par ligne)</label><textarea id=${'par-'+k} style=${{minHeight:160}} value=${(p[k]||[]).join('\n')} onChange=${e=>setP({...p,[k]:e.target.value.split('\n').map(s=>s.trim()).filter(Boolean)})}></textarea></div>`;
- const n=(grp,k,l)=>html`<div className="field"><label className="small muted" htmlFor=${'par-'+grp+k}>${l}</label><input id=${'par-'+grp+k} type="number" step="0.05" value=${p[grp][k]} onChange=${e=>setP({...p,[grp]:{...p[grp],[k]:+e.target.value}})}/></div>`;
- const phSum=Object.values(p.phases).reduce((a,b)=>a+b,0);
- const save=async()=>{if(phSum!==100){toast('La répartition des phases doit totaliser 100 % (actuellement '+phSum+' %).');return}try{await api.saveParams(p);await api.log(null,'paramètres','Paramètres modifiés');toast('Paramètres enregistrés')}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
+ const n=(grp,k,l)=>html`<div className="field"><label className="small muted" htmlFor=${'par-'+grp+k}>${l}</label><input id=${'par-'+grp+k} type="number" step="0.05" value=${(p.sim[grp]||{})[k]} onChange=${e=>setP({...p,sim:{...p.sim,[grp]:{...p.sim[grp],[k]:+e.target.value}}})}/></div>`;
+ const repSum=Object.values(p.sim.repartition).reduce((a,b)=>a+b,0);
+ const save=async()=>{if(repSum!==100){toast('La répartition du temps de base doit totaliser 100 % (actuellement '+repSum+' %).');return}try{await api.saveParams(p);await api.log(null,'paramètres','Paramètres modifiés');toast('Paramètres enregistrés')}catch(e){toast('Enregistrement refusé : '+(e.message||e.code))}};
  const backup=()=>JSON.stringify({app:'FOAD PILOT 85',schema:1,exportedAt:nowIso(),params,data:S.data},null,1);
  const exp=async()=>{try{await api.download('foad-pilot-85-sauvegarde-'+today()+'.json',backup());toast('Sauvegarde proposée au téléchargement')}catch(e){if(e.code!=='declined')toast(e.message||'Téléchargement impossible')}};
  const onFile=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j.data)throw 0;setImp(j)}catch(x){toast('Fichier non reconnu : il doit s\'agir d\'une sauvegarde FOAD PILOT 85 (JSON).')}};r.readAsText(f)};
@@ -1018,91 +1273,162 @@ function Parametres({S,params,api,toast,ro}){
  return html`<div>
   <${Head} eyebrow="Module 15" title="Paramètres et administration" sub="Les listes et barèmes sont stockés dans la base et s'appliquent à toute l'application sans modifier le code.">${ro?null:html`<button className="btn p" onClick=${save}>Enregistrer les paramètres</button>`}<//>
   <div className="grid g2">
+   <${ProfilsMatrix} p=${p} setP=${setP} ro=${ro}/>
    <div className="card"><h2>Listes de référence</h2><div className="grid g2">${list('domaines','Domaines')}${list('fonctions','Fonctions / publics')}</div></div>
-   <div className="card"><h2>Barème du simulateur</h2><p className="small muted">Heures de conception par heure de FOAD finale, selon la complexité.</p>
-    <div className="grid g2">${n('ratios','simple','Simple')}${n('ratios','intermediaire','Intermédiaire')}${n('ratios','avance','Avancé')}${n('ratios','expert','Expert')}</div>
-    <h3 style=${{marginTop:12}}>Fourchette et coût</h3><div className="grid g2">${n('fourchette','bas','Coefficient bas')}${n('fourchette','haut','Coefficient haut')}
+   <div className="card"><h2>Réglages généraux</h2><div className="grid g2">
      <div className="field"><label className="small muted" htmlFor="par-taux">Taux horaire chargé (€/h)</label><input id="par-taux" type="number" value=${p.tauxHoraire??''} placeholder="Non paramétré" onChange=${e=>setP({...p,tauxHoraire:e.target.value===''?null:+e.target.value})}/></div>
      <div className="field"><label className="small muted" htmlFor="par-rev">Périodicité de révision par défaut (mois)</label><input id="par-rev" type="number" value=${p.revisionMois} onChange=${e=>setP({...p,revisionMois:+e.target.value})}/></div>
      <div className="field"><label className="small muted" htmlFor="par-seuil">Seuil d'alerte des échéances (jours)</label><input id="par-seuil" type="number" value=${p.seuilAlerte} onChange=${e=>setP({...p,seuilAlerte:+e.target.value})}/></div></div></div>
-   <div className="card"><h2>Répartition de la base par phase <span className=${'badge '+(phSum===100?'ok':'bad')}>${phSum} %</span></h2><div className="grid g3">${Object.keys(p.phases).map(k=>n('phases',k,(PHASES.find(x=>x[0]===k)||[k,k])[1]+' (%)'))}</div></div>
-   <div className="card"><h2>Temps unitaires (h)</h2><div className="grid g3">
-    ${[['sequence','Par séquence'],['interaction','Par interaction'],['quiz','Par quiz'],['html','Par composant HTML'],['storyline','Forfait Storyline'],['video','Par vidéo'],['audioMin','Par minute d\'audio'],['graphLeger','Graphisme léger'],['graphFort','Graphisme important'],['relecteur','Par relecteur'],['cycle','Cycle de correction (% base)'],['integrationBase','Intégration forfait'],['integrationHtml','Intégration par HTML']].map(([k,l])=>n('unit',k,l))}
-    ${n('qualite','bonnes','Ressources bonnes ×')}${n('qualite','partielles','Ressources partielles ×')}${n('qualite','absentes','Ressources absentes ×')}</div></div>
+   <div className="card"><h2>Simulateur : temps de base</h2><p className="small muted">Heures de travail sur le contenu (scénario, textes, mise en forme) pour une heure de FOAD, selon la complexité.</p>
+    <div className="grid g2">${n('ratios','simple','Simple')}${n('ratios','intermediaire','Intermédiaire')}${n('ratios','avance','Avancé')}${n('ratios','expert','Expert')}</div>
+    <div className="field" style=${{marginTop:10}}><label className="small muted" htmlFor="par-deg">Dégressivité (1 = proportionnel à la durée, 0,8 = dégressif, 0,6 = très dégressif)</label><input id="par-deg" type="number" step="0.05" min="0.4" max="1" value=${p.sim.degressivite} onChange=${e=>setP({...p,sim:{...p.sim,degressivite:+e.target.value}})}/></div>
+    <h3 style=${{marginTop:12}}>Répartition du temps de base <span className=${'badge '+(repSum===100?'ok':'bad')}>${repSum} %</span></h3><div className="grid g3">${n('repartition','scenarisation','Scénarisation (%)')}${n('repartition','redaction','Rédaction (%)')}${n('repartition','rise','Mise en forme Rise (%)')}</div></div>
+   <div className="card"><h2>Simulateur : temps fixes par projet (h)</h2><p className="small muted">Comptés une fois, quelle que soit la durée de la FOAD.</p><div className="grid g3">${n('fixes','cadrage','Cadrage')}${n('fixes','integration','Intégration')}${n('fixes','publication','Publication ENASIS')}${n('fixes','documentation','Documentation')}${n('fixes','maintenance','Maintenance initiale')}</div>
+    <h3 style=${{marginTop:12}}>Coefficients</h3><div className="grid g3">${n('qualite','bonnes','Ressources bonnes ×')}${n('qualite','partielles','Ressources partielles ×')}${n('qualite','absentes','Ressources absentes ×')}
+     <div className="field"><label className="small muted" htmlFor="par-mod">Modèle existant ×</label><input id="par-mod" type="number" step="0.05" value=${p.sim.modele} onChange=${e=>setP({...p,sim:{...p.sim,modele:+e.target.value}})}/></div>${n('fourchette','bas','Fourchette basse ×')}${n('fourchette','haut','Fourchette haute ×')}</div></div>
+   <div className="card"><h2>Simulateur : temps unitaires (h)</h2><div className="grid g3">
+    ${[['sequence','Par séquence'],['interaction','Par bloc interactif'],['question','Par question'],['visuel','Par visuel'],['videoCreer','Vidéo à créer'],['videoRetravailler','Vidéo à retravailler'],['videoPrete','Vidéo prête'],['audioMin','Par minute de voix off'],['htmlCreer','Composant à créer'],['htmlAdapter','Composant à adapter'],['htmlReutil','Composant réutilisé'],['integrationParComposant','Intégration par élément sur mesure'],['slCreer','Activité Storyline à créer'],['slAdapter','Activité Storyline à adapter'],['relecteur','Par relecteur'],['cyclePct','Tour de correction (% production)'],['testsPct','Tests (% production)'],['testsMin','Tests minimum']].map(([k,l])=>n('u',k,l))}</div></div>
    <div className="card"><h2>Sauvegarde et import</h2><p className="small muted">La sauvegarde JSON contient toutes les fiches, demandes, validations, règles, composants, le journal et les paramètres.</p>
     <div className="row"><button className="btn" onClick=${exp} disabled=${!S.canDownload}><${Ico} n="dl"/> Exporter la sauvegarde</button>${ro?null:html`<label className="btn">Importer une sauvegarde<input type="file" accept=".json,application/json" hidden onChange=${onFile}/></label>`}</div>
     ${imp?html`<div className="alert warn" style=${{marginTop:12}}><div className="grow small">Sauvegarde du ${fmtDT(imp.exportedAt)} : ${COLS.map(c=>(imp.data[c]||[]).length+' '+c).join(', ')}. Les enregistrements de même identifiant seront remplacés, les autres conservés.</div><button className="btn sm p" disabled=${busy} onClick=${doImport}>${busy?'Import…':'Confirmer l\'import'}</button><button className="btn sm" onClick=${()=>setImp(null)}>Annuler</button></div>`:null}
     ${!S.canDownload?html`<details style=${{marginTop:12}}><summary className="small">Téléchargement indisponible ici : afficher la sauvegarde à copier</summary><textarea readOnly style=${{minHeight:160,fontFamily:'var(--f-mono)',fontSize:11}} value=${backup()}></textarea></details>`:null}</div>
    <div className="card"><h2>Architecture et limites</h2><div className="small" style=${{display:'flex',flexDirection:'column',gap:8}}>
     <div><b>Stockage :</b> base Supabase hébergée en Europe. Toute personne disposant du lien consulte les données à jour, sans compte. Seules les adresses inscrites dans la liste des éditeurs peuvent modifier, après connexion par lien envoyé par mail.</div>
-    <div><b>Profils :</b> les cinq vues adaptent l'interface. Les droits réels sont fixés côté serveur : lecture publique, modification réservée aux éditeurs, dépôt d'idées ouvert à tous.</div>
+    <div><b>Profils :</b> le profil choisi à l'ouverture adapte les pages et onglets affichés. Les droits réels sont fixés côté serveur : lecture publique, modification réservée aux éditeurs, dépôt d'idées ouvert à tous.</div>
     <div><b>Historique :</b> le journal et les validations sont inaltérables côté serveur : on peut ajouter des entrées, personne ne peut les modifier ni les supprimer.</div>
     <div><b>Évolution :</b> la base et le fichier de l'application peuvent être repris tels quels par la DSI sur ses propres serveurs.</div></div></div>
   </div></div>`;
 }
 
+/* ============ MODULE 10 — PUBLICATIONS ENASIS ============ */
+function Publications({S,params,openFiche}){
+ const [f,setF]=useState('afaire');
+ const rows=S.data.foad.filter(x=>x.etape!=='Abandonné').map(x=>({...x,_n:ENASIS_CHECK.filter(([k])=>(x.enasis||{})[k]).length,_d:(x.valid||{})['Autorisation de diffusion délivrée']||'Non sollicité'}));
+ const sets={
+  afaire:rows.filter(x=>x.statutPublication!=='Publiée'&&(x.statutPublication==='En préparation'||diffusionOk(x)||['Validation','Publication'].includes(x.etape))),
+  pub:rows.filter(x=>x.statutPublication==='Publiée'),
+  incid:rows.filter(x=>!isEmpty(x.incidents)||!isEmpty(x.anomalies)),
+  rev:rows.filter(x=>x.statutPublication==='Publiée'&&(x.revisionNecessaire||(daysTo(x.prochaineRevision)??1)<=(params.seuilAlerte||30)))};
+ const tabs=[['afaire','À publier'],['pub','Publiées'],['rev','Révision à prévoir'],['incid','Incidents et anomalies']];
+ const list=sets[f];
+ return html`<div>
+  <${Head} eyebrow="Module 10" title="Publications ENASIS" sub="Ce qui attend une mise en ligne, ce qui est en ligne et ce qui pose problème. Cliquez sur une ligne pour ouvrir la checklist de la fiche."/>
+  <div className="kpis">${tabs.map(([k,l])=>html`<${Kpi} key=${k} v=${sets[k].length} l=${l} tone=${k==='incid'&&sets[k].length?'bad':k==='rev'&&sets[k].length?'warn':k==='pub'?'ok':'info'} onClick=${()=>setF(k)}/>`)}</div>
+  <div className="tabs">${tabs.map(([k,l])=>html`<button key=${k} className=${f===k?'on':''} onClick=${()=>setF(k)}>${l} (${sets[k].length})</button>`)}</div>
+  ${list.length?html`<div className="tbl-wrap"><table><thead><tr><th>Code</th><th>Intitulé</th><th>Publication</th><th>Diffusion</th><th className="num">Checklist</th><th>Version diffusée</th><th>Publiée le</th><th>Révision</th><th>Lien ENASIS</th></tr></thead><tbody>
+   ${list.map(x=>html`<tr key=${x.id} className="click" onClick=${()=>openFiche(x.id,'publication')}><td className="mono">${x.code}</td><td style=${{minWidth:200}}><b>${x.titre}</b>${!isEmpty(x.incidents)||!isEmpty(x.anomalies)?html`<div className="small" style=${{color:'var(--bad)'}}>${x.incidents||x.anomalies}</div>`:null}</td>
+    <td><${Badge} tone=${pubTone(x.statutPublication)}>${x.statutPublication||'Non publiée'}<//></td><td><${Badge} tone=${validTone(x._d)}>${x._d}<//></td>
+    <td className="num"><${Badge} tone=${x._n===ENASIS_CHECK.length?'ok':x._n?'warn':''}>${x._n}/${ENASIS_CHECK.length}<//></td><td className="mono">${x.versionDiffusee||'—'}</td><td>${fmtD(x.datePublication)}</td><td>${fmtD(x.prochaineRevision)}</td>
+    <td>${x.lienEnasis&&/^https?:/.test(x.lienEnasis)?html`<a href=${x.lienEnasis} target="_blank" rel="noopener" onClick=${e=>e.stopPropagation()}>Ouvrir</a>`:html`<span className="muted">—</span>`}</td></tr>`)}</tbody></table></div>`
+  :html`<div className="empty-state">Aucune FOAD dans cette catégorie.</div>`}
+ </div>`;
+}
+
+/* ============ CHOIX DU PROFIL ============ */
+function ProfilePicker({profiles,current,onPick,onClose,S,api,toast}){
+ const first=useRef();
+ useEffect(()=>{try{first.current&&first.current.focus()}catch(e){}},[]);
+ useEffect(()=>{const k=e=>{if(e.key==='Escape'&&onClose)onClose()};window.addEventListener('keydown',k);return ()=>window.removeEventListener('keydown',k)},[onClose]);
+ return html`<div className="scrim"><div className="dialog" role="dialog" aria-modal="true" aria-labelledby="pp-t">
+  <div><div className="eyebrow">FOAD PILOT 85 · SDIS de la Vendée</div><h2 id="pp-t">Quel est votre profil ?</h2>
+   <p className="muted" style=${{marginTop:4}}>L'outil affiche uniquement les pages utiles à votre profil. Vous pourrez en changer à tout moment.</p></div>
+  <div className="pgrid">${profiles.map((p,i)=>html`<button key=${p.id} ref=${i===0?first:undefined} className=${'pcard'+(p.id===current?' on':'')+(p.id==='pilote'?' pilot':'')} onClick=${()=>onPick(p.id)}>
+   <span className="pi"><${Ico} n=${p.i}/></span><span><b>${p.l}</b><span className="d">${p.d}</span></span></button>`)}</div>
+  <div className="dfoot"><span className="small muted">Votre choix est mémorisé sur ce navigateur. Il adapte l'affichage, pas les droits de modification.</span>
+   <div className="row">${onClose?html`<button className="btn" onClick=${onClose}>Annuler</button>`:null}${S.me?null:html`<div style=${{maxWidth:260}}><${Login} S=${S} api=${api} toast=${toast}/></div>`}</div></div>
+ </div></div>`;
+}
+
+/* ============ MATRICE DES PROFILS (Paramètres) ============ */
+const PAGE_KEYS=['tableau','registre','projets','publications','demandes','simulateur','assistant','composants','gouvernance','catalogue','idee','bilan','journal','parametres'];
+function ProfilsMatrix({p,setP,ro}){
+ const conf=id=>({...DEFAULT_PROFILS[id],...((p.profils||{})[id]||{})});
+ const upd=(id,patch)=>setP({...p,profils:{...(p.profils||{}),[id]:{...conf(id),...patch}}});
+ const tog=(id,key,v)=>{const c=conf(id);const arr=c[key]||[];upd(id,{[key]:arr.includes(v)?arr.filter(x=>x!==v):arr.concat([v])})};
+ const cell=(id,key,v)=>html`<td><input type="checkbox" aria-label=${v} checked=${(conf(id)[key]||[]).includes(v)} disabled=${ro} onChange=${()=>tog(id,key,v)}/></td>`;
+ return html`<div className="card" style=${{gridColumn:'1/-1'}}><h2>Profils et accès</h2>
+  <p className="small muted">Cochez ce que chaque profil voit. La page « Proposer une idée » reste accessible à tous par lien direct. Le profil « Pilote FOAD » voit toujours tout. Enregistrez avec le bouton en haut de page.</p>
+  <div className="tbl-wrap mx"><table><thead><tr><th>Élément</th>${PROFILS.map(x=>html`<th key=${x.id}>${x.l}</th>`)}</tr></thead><tbody>
+   <tr><td>Proposé à l'ouverture</td>${PROFILS.map(x=>html`<td key=${x.id}><input type="checkbox" aria-label="Actif" checked=${conf(x.id).actif!==false} disabled=${ro} onChange=${()=>upd(x.id,{actif:conf(x.id).actif===false})}/></td>`)}</tr>
+   <tr className="sec"><td colSpan=${PROFILS.length+1}>Pages visibles</td></tr>
+   ${PAGE_KEYS.map(k=>html`<tr key=${k}><td>${NAV[k][0]}</td>${PROFILS.map(x=>html`<${React.Fragment} key=${x.id}>${cell(x.id,'pages',k)}<//>`)}</tr>`)}
+   <tr><td>Page d'arrivée</td>${PROFILS.map(x=>{const c=conf(x.id);return html`<td key=${x.id}><select aria-label="Page d'arrivée" value=${c.home} disabled=${ro} onChange=${e=>upd(x.id,{home:e.target.value})}>${(c.pages||[]).map(k=>html`<option key=${k} value=${k}>${NAV[k][0]}</option>`)}</select></td>`})}</tr>
+   <tr><td>Registre</td>${PROFILS.map(x=>html`<td key=${x.id}><select aria-label="Version du registre" value=${conf(x.id).registre||'allege'} disabled=${ro} onChange=${e=>upd(x.id,{registre:e.target.value})}><option value="allege">Allégé</option><option value="complet">Complet</option></select></td>`)}</tr>
+   <tr><td>Tableau de bord</td>${PROFILS.map(x=>html`<td key=${x.id}><select aria-label="Version du tableau de bord" value=${conf(x.id).dash} disabled=${ro} onChange=${e=>upd(x.id,{dash:e.target.value})}><option value="direction">Synthèse</option><option value="pilote">Détaillé</option></select></td>`)}</tr>
+   <tr className="sec"><td colSpan=${PROFILS.length+1}>Onglets visibles dans une fiche FOAD</td></tr>
+   ${FICHE_TABS.map(([k,l])=>html`<tr key=${k}><td>${l}</td>${PROFILS.map(x=>html`<${React.Fragment} key=${x.id}>${cell(x.id,'tabs',k)}<//>`)}</tr>`)}
+  </tbody></table></div></div>`;
+}
+
 /* ============ APPLICATION ============ */
-const VUES={
- pilote:{l:'Pilote FOAD',nav:['tableau','registre','projets','demandes','simulateur','assistant','composants','gouvernance','catalogue','bilan','journal','parametres']},
- direction:{l:'Direction / hiérarchie',nav:['tableau','registre','projets','bilan','catalogue']},
- concepteur:{l:'Concepteur pédagogique',nav:['projets','registre','simulateur','assistant','composants','gouvernance','catalogue']},
- demandeur:{l:'Service demandeur',nav:['demandes','catalogue']},
- visiteur:{l:'Visiteur',nav:['catalogue','idee']}};
 const NAV={tableau:['Tableau de bord','dash','Pilotage'],registre:['Registre des FOAD','reg','Pilotage'],projets:['Projets (Kanban)','kan','Pilotage'],demandes:['Demandes','dem','Pilotage'],
  simulateur:['Simulateur de charge','sim','Conception'],assistant:['Aide au choix du format','sim','Conception'],composants:['Composants','cmp','Conception'],
- gouvernance:['Gouvernance','gov','Référentiels'],catalogue:['Catalogue public','cat','Diffusion'],idee:['Proposer une idée','dem','Diffusion'],bilan:['Bilan hiérarchique','rep','Diffusion'],journal:['Journal','log','Administration'],parametres:['Paramètres','set','Administration']};
+ gouvernance:['Gouvernance','gov','Référentiels'],publications:['Publications ENASIS','pub','Diffusion'],catalogue:['Catalogue des FOAD','cat','Diffusion'],idee:['Proposer une idée','dem','Diffusion'],bilan:['Bilan hiérarchique','rep','Diffusion'],journal:['Journal','log','Administration'],parametres:['Paramètres','set','Administration'],lexique:['Lexique','book','Aide']};
 const ROUTES=Object.keys(NAV).concat(['fiche']);
 
 function App(){
  const [S,api]=useStore();
  const params=useMemo(()=>merge(DEFAULT_PARAMS,S.params||{}),[S.params]);
- const [vue,setVue]=useState(()=>lsGet('fp.vue','pilote'));
+ const [profil,setProfil]=useState(()=>{let q=null;try{q=new URLSearchParams(location.search).get('profil')}catch(e){}
+  const ok=id=>id&&(id==='pilote'||PROFILS.some(p=>p.id===id));if(ok(q)){lsSet('fp.profil',q);return q}const st=lsGet('fp.profil',null);return ok(st)?st:null});
+ const [picker,setPicker]=useState(false);
  const [route,setRoute]=useState(()=>{const h=location.hash.slice(1);return ROUTES.includes(h)?h:null});
- const [fiche,setFiche]=useState(null);
+ const [fiche,setFiche]=useState(null);const [ficheTab,setFicheTab]=useState(null);const [back,setBack]=useState(null);
  const [selComps,setSelComps]=useState([]);
  const [msg,setMsg]=useState(null);
  const tRef=useRef();
  const toast=m=>{setMsg(m);clearTimeout(tRef.current);tRef.current=setTimeout(()=>setMsg(null),4200)};
- useEffect(()=>lsSet('fp.vue',vue),[vue]);
  useEffect(()=>{const f=()=>{const h=location.hash.slice(1);if(ROUTES.includes(h)&&h!=='fiche')setRoute(h)};window.addEventListener('hashchange',f);return ()=>window.removeEventListener('hashchange',f)},[]);
- const allowed=VUES[vue].nav;
- const cur=route==='fiche'&&fiche?'fiche':(route&&(allowed.includes(route)||route==='idee')?route:allowed[0]);
- const go=r=>{if(r==='fiche-new'){setFiche('new');setRoute('fiche');window.scrollTo(0,0);return}setRoute(r);try{location.hash=r}catch(e){}window.scrollTo(0,0)};
- const openFiche=(id)=>{setFiche(id);setRoute('fiche');window.scrollTo(0,0)};
- const ro=!S.canWrite||vue==='direction'||vue==='visiteur';
+ const offered=PROFILS.filter(p=>profConf(params,p.id).actif!==false).concat(S.canWrite?[PILOTE]:[]);
+ const eff=profil==='pilote'?(S.canWrite||!S.authReady?'pilote':null):(profil&&PROFILS.some(p=>p.id===profil)?profil:null);
+ const meta=eff==='pilote'?PILOTE:PROFILS.find(p=>p.id===eff);
+ const conf=eff==='pilote'?{pages:PAGE_KEYS,home:'tableau',dash:'pilote',tabs:ALL_TABS}:eff?profConf(params,eff):{pages:['catalogue'],home:'catalogue',dash:'direction',tabs:['ident','public']};
+ const allowed=PAGE_KEYS.filter(k=>(conf.pages||[]).includes(k)).concat(['lexique']);
+ const home=allowed.includes(conf.home)?conf.home:(allowed[0]||'catalogue');
+ const cur=route==='fiche'&&fiche?'fiche':(route&&(allowed.includes(route)||route==='idee')?route:home);
+ const go=r=>{setPicker(false);if(r==='fiche-new'){setBack(cur);setFiche('new');setFicheTab(null);setRoute('fiche');window.scrollTo(0,0);return}setRoute(r);try{location.hash=r}catch(e){}window.scrollTo(0,0)};
+ const openFiche=(id,tab)=>{if(cur!=='fiche')setBack(cur);setFiche(id);setFicheTab(typeof tab==='string'?tab:null);setRoute('fiche');window.scrollTo(0,0)};
+ const pick=id=>{setProfil(id);lsSet('fp.profil',id);setPicker(false);setFiche(null);setRoute(r=>r==='idee'?r:null);try{if(location.hash&&location.hash!=='#idee')history.replaceState(null,'',location.pathname+location.search)}catch(e){}window.scrollTo(0,0)};
+ const ro=!S.canWrite;
+ const isPilot=eff==='pilote';
  const demCount=S.data.demandes.filter(d=>['Déposée','En instruction'].includes(d.statut)).length;
+ const vue=isPilot||S.canWrite?'pilote':'demandeur';
  const props={S,params,api,toast,go,openFiche,vue,ro};
  let body;
- if(cur==='fiche')body=html`<${Fiche} key=${fiche} ...${props} id=${fiche} close=${()=>go('registre')} ro=${ro||vue==='demandeur'} openFiche=${(id,replace)=>{setFiche(id)}}/>`;
- else if(cur==='tableau')body=html`<${Dashboard} ...${props} vue=${vue==='direction'?'direction':'pilote'}/>`;
- else if(cur==='registre')body=html`<${Registre} ...${props}/>`;
+ if(cur==='fiche')body=html`<${Fiche} key=${fiche+(ficheTab||'')} ...${props} id=${fiche} tabsAllowed=${conf.tabs} initialTab=${ficheTab} close=${()=>go(back&&back!=='fiche'?back:home)} openFiche=${id=>{setFiche(id)}}/>`;
+ else if(cur==='tableau')body=html`<${Dashboard} ...${props} vue=${conf.dash==='pilote'?'pilote':'direction'}/>`;
+ else if(cur==='registre')body=isPilot||conf.registre==='complet'?html`<${Registre} ...${props}/>`:html`<${RegistreLight} ...${props}/>`;
  else if(cur==='projets')body=html`<${Kanban} ...${props}/>`;
+ else if(cur==='publications')body=html`<${Publications} ...${props}/>`;
  else if(cur==='demandes')body=html`<${Demandes} key="dem" ...${props}/>`;
  else if(cur==='idee')body=html`<${Demandes} key="idee" ...${props} idea=${true}/>`;
  else if(cur==='simulateur')body=html`<${Simulateur} ...${props} selComps=${selComps} setSelComps=${setSelComps}/>`;
  else if(cur==='assistant')body=html`<${Assistant}/>`;
- else if(cur==='composants')body=html`<${Composants} ...${props} selComps=${selComps} setSelComps=${setSelComps} ro=${ro||vue==='demandeur'}/>`;
- else if(cur==='gouvernance')body=html`<${Gouvernance} ...${props} ro=${ro||vue==='concepteur'}/>`;
- else if(cur==='catalogue')body=html`<${Catalogue} ...${props}/>`;
+ else if(cur==='composants')body=html`<${Composants} ...${props} selComps=${selComps} setSelComps=${setSelComps}/>`;
+ else if(cur==='gouvernance')body=html`<${Gouvernance} ...${props}/>`;
+ else if(cur==='catalogue')body=html`<${Catalogue} ...${props} vue=${allowed.includes('demandes')?'agent':'visiteur'} canPropose=${allowed.includes('idee')||allowed.includes('demandes')}/>`;
  else if(cur==='bilan')body=html`<${Bilan} ...${props}/>`;
  else if(cur==='journal')body=html`<${JournalPage} ...${props}/>`;
  else if(cur==='parametres')body=html`<${Parametres} ...${props}/>`;
+ else if(cur==='lexique')body=html`<${Lexique}/>`;
  const groups=[];allowed.forEach(k=>{const g=NAV[k][2];let G=groups.find(x=>x.g===g);if(!G)groups.push(G={g,items:[]});G.items.push(k)});
+ const single=false;
  const modeTxt=S.mode==='db'?(S.stale?'Mise à jour en direct interrompue : rechargez la page':'Base en ligne, mise à jour en direct'):S.mode==='error'?'Base injoignable ('+S.dbError+')':'Connexion à la base…';
  const modeCol=S.mode==='db'&&!S.stale&&!S.dbError?'var(--ok)':S.mode==='loading'?'var(--faint)':'var(--warn)';
+ const showPicker=picker||!eff;
  return html`<div className="app">
   <aside className="side">
    <div className="brand"><b>FOAD <em>PILOT</em> 85</b><span>SDIS de la Vendée</span></div>
-   <nav className="nav" aria-label="Navigation principale">${groups.map(G=>html`<${React.Fragment} key=${G.g}><div className="grp">${G.g}</div>${G.items.map(k=>html`<button key=${k} className=${cur===k||(cur==='fiche'&&k==='registre')?'on':''} onClick=${()=>go(k)}><${Ico} n=${NAV[k][1]}/>${NAV[k][0]}${k==='demandes'&&demCount&&vue==='pilote'?html`<span className="count">${demCount}</span>`:null}</button>`)}<//>`)}</nav>
+   ${meta?html`<div className="prof-chip"><${Ico} n=${meta.i}/><span className="grow small">${meta.l}</span></div>`:null}
+   ${single?null:html`<nav className="nav" aria-label="Navigation principale">${groups.map(G=>html`<${React.Fragment} key=${G.g}><div className="grp">${G.g}</div>${G.items.map(k=>html`<button key=${k} className=${cur===k||(cur==='fiche'&&k===back)?'on':''} onClick=${()=>go(k)}><${Ico} n=${NAV[k][1]}/>${NAV[k][0]}${k==='demandes'&&demCount&&S.canWrite?html`<span className="count">${demCount}</span>`:null}</button>`)}<//>`)}</nav>`}
    <div className="side-foot">
-    <label htmlFor="vue" className="small">Vue</label>
-    <select id="vue" value=${vue} onChange=${e=>{setVue(e.target.value);setRoute(null);setFiche(null)}}>${Object.entries(VUES).map(([k,v])=>html`<option key=${k} value=${k}>${v.l}</option>`)}</select>
-    <small>La vue adapte l'interface. Les droits dépendent de la connexion éditeur.</small>
+    <button className="btn sm" onClick=${()=>setPicker(true)}>Changer de profil</button>
     <div className="mode"><span className="dot" style=${{background:modeCol}}></span><span>${modeTxt}</span></div>
-    <${Login} S=${S} api=${api} toast=${toast}/>
+    ${S.me||isPilot?html`<${Login} S=${S} api=${api} toast=${toast}/>`:null}
    </div>
   </aside>
   <main>${body}</main>
+  ${showPicker?html`<${ProfilePicker} profiles=${offered} current=${eff} onPick=${pick} onClose=${eff?()=>setPicker(false):null} S=${S} api=${api} toast=${toast}/>`:null}
   ${msg?html`<div className="toast" role="status">${msg}</div>`:null}
  </div>`;
 }
